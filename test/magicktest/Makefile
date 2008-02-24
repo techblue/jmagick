@@ -1,6 +1,7 @@
 include ../../Make.def
 
-JAVA_SRC_FILES	=	MagickWindow.java Test.java Loop.java
+# JAVA_SRC_FILES	=	MagickWindow.java Test.java Loop.java
+JAVA_SRC_FILES	=	Test.java Loop.java
 CLEAN_LIST	=	copy.jpg blank.jpg copy_pics.jpg rotated.jpg \
 			sheared.jpg quantized.png scaled.jpg cropped.jpg \
 			chopped.jpg sharpened.jpg despeckled.jpg \
@@ -14,10 +15,10 @@ include ../../Make.rules
 # For Mac OS X, DYLD_LIBRARY_PATH sets the shared library path
 
 test: default-target
-	LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH) test.Test
+	LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH) magicktest.Test
 
 test2: default-target
-	LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH) test.Loop pics.jpg
+	LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH) magicktest.Loop pics.jpg
 
 rutest: default-target
 	LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH) test.RUTest
