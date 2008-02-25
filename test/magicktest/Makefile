@@ -14,8 +14,12 @@ include ../../Make.rules
 # For Solaris and Linux, LD_LIBRARY_PATH sets the shared library path
 # For Mac OS X, DYLD_LIBRARY_PATH sets the shared library path
 
-test: default-target
-	LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH) magicktest.Test
+#test: default-target Testtools.class MainTestCase.class
+test:
+	cd ../..; LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH):test:lib/junit.jar junit.textui.TestRunner magicktest.MainTestCase
+
+simpletest: default-target
+	mkdir ../simpletest; cp pics.jpg ../simpletest; cd ../simpletest; LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH) magicktest.Test
 
 test2: default-target
 	LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH) magicktest.Loop pics.jpg

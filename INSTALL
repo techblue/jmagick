@@ -68,9 +68,15 @@ INSTALL NOTES
     runtime loader can find it or you must set the environment variable
     LD_LIBRARY_PATH. jmagick.jar must be in your Java class path.
 
- 8. Examples and some tests can be found in src/test. Simply:
+ 8. Examples and some simple tests can be found in test/magicktest. Simply:
+
+       > make simpletest
+
+    For a more rigorous JUnit test, make sure to copy/link junit.jar to lib/
+		and run:
 
        > make test
+
 
  9. To generate Javadoc documentation in HTML, run:
 

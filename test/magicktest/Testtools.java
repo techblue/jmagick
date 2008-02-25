@@ -11,9 +11,9 @@ import magick.*;
 
 public class Testtools
 {
-	public static String path_input = "magicktest"+File.separator+"input"+File.separator;
-	public static String path_actual_output = "magicktest"+File.separator+"actual_output"+File.separator;
-	public static String path_correct_output = "magicktest"+File.separator+"correct_output"+File.separator;
+	public static String path_input = "test"+File.separator+"magicktest"+File.separator+File.separator;
+	public static String path_actual_output = "test"+File.separator+"actual_output"+File.separator;
+	public static String path_correct_output = "test"+File.separator+"correct_output"+File.separator;
 
 	/**
 	 * This flag makes all file comparisons pass and avoids that files are deleted in magictest/actual_output/
@@ -121,6 +121,7 @@ public class Testtools
 
 	public static void writeAndCompare(MagickImage image, ImageInfo info, String fileName) throws Exception
 	{
+		new File(path_actual_output).mkdirs();
 		// Delete old files to make sure they dont interfere
 		new File(path_actual_output+fileName).delete();
 

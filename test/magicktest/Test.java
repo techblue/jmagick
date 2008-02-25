@@ -21,7 +21,10 @@ import java.io.FileOutputStream;
 
 /**
  * For testing JMagick functions.
+ * This 'test' should be possible to run with 'make simpletest'
+ * These tests are also available as real JUnit test cases in the class MainTestCase
  *
+ * @see MainTestCase
  * @author Eric Yeo
  */
 public class Test {
