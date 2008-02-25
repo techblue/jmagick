@@ -242,6 +242,31 @@ public class MagickImage extends Magick {
 
 
     /**
+     * Blurs an image. We convolve the image with a Gaussian operator of
+     * the given radius and standard deviation (sigma). For reasonable
+     * results, the radius should be larger than sigma. Use a radius of 0
+     * and BlurImage() selects a suitable radius for you.
+     *
+     * @param channel The channel(s) to which the blurring should apply
+	 				 (see ChannelType)
+     * @param raduis The radius of the gaussian, in pixels, not counting
+     *               the center pixel
+     * @param sigma The standard deviation of the gaussian, in pixels
+     *
+     * @return A blurred image.
+     * @exception MagickException on error
+     */
+    public native MagickImage blurImageChannel(int channel, double raduis, double sigma)
+	throws MagickException;
+
+    /**
+     * Trim edges that are the background color from the image.
+     * @exception MagickException on error
+     */
+    public native MagickImage trimImage()
+      throws MagickException;
+
+/**
      * Return the storage class of the image.
      *
      * @return the store class as defined in ClassType

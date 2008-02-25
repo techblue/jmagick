@@ -28,84 +28,84 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_initMultiImage
 
     arrayLen = (*env)->GetArrayLength(env, images);
     if (arrayLen < 1) {
-	throwMagickException(env, "No images specified");
-	return;
+        throwMagickException(env, "No images specified");
+        return;
     }
 
     /* Get the first element in the array and clone it. */
     obj = (*env)->GetObjectArrayElement(env, images, 0);
     if (obj == NULL) {
-	throwMagickException(env, "First image in array null");
-	return;
+        throwMagickException(env, "First image in array null");
+        return;
     }
     image = (Image*) getHandle(env, obj, "magickImageHandle", &fieldID);
     if (image == NULL) {
-	throwMagickException(env, "Unable to obtain image handle");
-	return;
+        throwMagickException(env, "Unable to obtain image handle");
+        return;
     }
 
     GetExceptionInfo(&exception);
     newImage = CloneImage(image, 0, 0, 0, &exception);
     if (newImage == NULL) {
-	throwMagickApiException(env, "Unable to clone image", &exception);
-	DestroyExceptionInfo(&exception);
-	return;
+        throwMagickApiException(env, "Unable to clone image", &exception);
+        DestroyExceptionInfo(&exception);
+        return;
     }
 
     /* Move the lastImage pointer to the last image of the list. */
     for (lastImage = newImage;
-	 lastImage->next != NULL;
-	 lastImage = lastImage->next)
-	;
+         lastImage->next != NULL;
+         lastImage = lastImage->next)
+        ;
 
     /* Move the newImage pointer to the head of the list. */
     for (; newImage->previous != NULL; newImage = newImage->previous)
-	;
+        ;
 
     /* Clone the other images in the array and append to list */
     for (i = 1; i < arrayLen; i++) {
 
-	/* Get the next image in the array */
-	obj = (*env)->GetObjectArrayElement(env, images, i);
-	if (obj == NULL) {
-	    throwMagickException(env, "Image in array index null");
-	    return;
-	}
-	image = (Image*) getHandle(env, obj, "magickImageHandle", &fieldID);
-	if (image == NULL) {
-	    throwMagickException(env, "Unable to obtain image handle");
-	    return;
-	}
+        /* Get the next image in the array */
+        obj = (*env)->GetObjectArrayElement(env, images, i);
+        if (obj == NULL) {
+            throwMagickException(env, "Image in array index null");
+            return;
+        }
+        image = (Image*) getHandle(env, obj, "magickImageHandle", &fieldID);
+        if (image == NULL) {
+            throwMagickException(env, "Unable to obtain image handle");
+            return;
+        }
 
-	/* Clone the image */
-	GetExceptionInfo(&exception);
-	image = CloneImage(image, 0, 0, 0, &exception);
-	if (image == NULL) {
-	    throwMagickApiException(env, "Unable to clone image", &exception);
-	    DestroyExceptionInfo(&exception);
-	    DestroyImages(newImage);
-	    return;
-	}
+        /* Clone the image */
+        GetExceptionInfo(&exception);
+        image = CloneImage(image, 0, 0, 0, &exception);
+        if (image == NULL) {
+            throwMagickApiException(env, "Unable to clone image", &exception);
+            DestroyExceptionInfo(&exception);
+            DestroyImages(newImage);
+            return;
+        }
 
-	/* Find the head of the list */
-	for (p = image; p->previous != NULL; p = p->previous)
-	    ;
+        /* Find the head of the list */
+        for (p = image; p->previous != NULL; p = p->previous)
+            ;
 
-	/* Link it up */
-	lastImage->next = p;
-	p->previous = lastImage;
+        /* Link it up */
+        lastImage->next = p;
+        p->previous = lastImage;
 
-	/* Move lastImage to the end of the list */
-	for (lastImage = image;
-	     lastImage->next != NULL;
-	     lastImage = lastImage->next)
-	    ;
+        /* Move lastImage to the end of the list */
+        for (lastImage = image;
+             lastImage->next != NULL;
+             lastImage = lastImage->next)
+            ;
     }
 
     /* Set the image handle */
     image = (Image*) getHandle(env, self, "magickImageHandle", &fieldID);
     if (image != NULL) {
-	DestroyImages(image);
+        DestroyImages(image);
     }
     setHandle(env, self, "magickImageHandle", (void*) newImage, &fieldID);
 }
@@ -176,7 +176,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_readImage
     GetExceptionInfo(&exception);
     image = ReadImage(imageInfo, &exception);
     if (image == NULL) {
-	throwMagickApiException(env, "Unable to read image", &exception);
+        throwMagickApiException(env, "Unable to read image", &exception);
 	DestroyExceptionInfo(&exception);
 	return;
     }
@@ -228,7 +228,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_pingImage
 
     image = PingImage(imageInfo, &exception);
     if (image == NULL) {
-	throwMagickApiException(env, "Unable to ping image", &exception);
+        throwMagickApiException(env, "Unable to ping image", &exception);
 	DestroyExceptionInfo(&exception);
 	return;
     }
@@ -434,12 +434,12 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_addNoiseImage
     }
 
     switch (noiseType) {
-	default: noiseEnum = UniformNoise;                break;
-	case 1:  noiseEnum = GaussianNoise;               break;
-	case 2:  noiseEnum = MultiplicativeGaussianNoise; break;
-	case 3:  noiseEnum = ImpulseNoise;                break;
-	case 4:  noiseEnum = LaplacianNoise;              break;
-	case 5:  noiseEnum = PoissonNoise;                break;
+        default: noiseEnum = UniformNoise;                break;
+        case 1:  noiseEnum = GaussianNoise;               break;
+        case 2:  noiseEnum = MultiplicativeGaussianNoise; break;
+        case 3:  noiseEnum = ImpulseNoise;                break;
+        case 4:  noiseEnum = LaplacianNoise;              break;
+        case 5:  noiseEnum = PoissonNoise;                break;
     }
 
     GetExceptionInfo(&exception);
@@ -1684,7 +1684,7 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_colorFloodfillImage
 {
     PixelPacket pixPack;
     Image *image =
-	(Image*) getHandle(env, self, "magickImageHandle", NULL);
+        (Image*) getHandle(env, self, "magickImageHandle", NULL);
     DrawInfo *dInfo;
     if (image == NULL) {
 	throwMagickException(env, "Cannot obtain image handle");
@@ -1693,8 +1693,8 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_colorFloodfillImage
 
     dInfo = (DrawInfo*) getHandle(env, drawInfo, "drawInfoHandle", NULL);
     if (dInfo == NULL) {
-	throwMagickException(env, "Cannot obtain DrawInfo handle");
-	return -1;
+        throwMagickException(env, "Cannot obtain DrawInfo handle");
+        return -1;
     }
 
     if (!getPixelPacket(env, target, &pixPack)) {
@@ -2033,7 +2033,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_sampleImage
  */
 JNIEXPORT jint JNICALL Java_magick_MagickImage_segmentImage
     (JNIEnv *env, jobject self, jint colorspace, jdouble cluster_threshold,
-						 jdouble smoothing_threshold)
+                                                 jdouble smoothing_threshold)
 {
     ColorspaceType colorspaceEnum;
 
@@ -2045,23 +2045,23 @@ JNIEXPORT jint JNICALL Java_magick_MagickImage_segmentImage
     }
 
     switch (colorspace) {
-	case  0: colorspaceEnum = UndefinedColorspace;   break;
-	default: colorspaceEnum = RGBColorspace;         break;
-	case  2: colorspaceEnum = GRAYColorspace;        break;
-	case  3: colorspaceEnum = TransparentColorspace; break;
-	case  4: colorspaceEnum = OHTAColorspace;        break;
-	case  5: colorspaceEnum = XYZColorspace;         break;
-	case  6: colorspaceEnum = YCbCrColorspace;       break;
-	case  7: colorspaceEnum = YCCColorspace;         break;
-	case  8: colorspaceEnum = YIQColorspace;         break;
-	case  9: colorspaceEnum = YPbPrColorspace;       break;
-	case 10: colorspaceEnum = YUVColorspace;         break;
-	case 11: colorspaceEnum = CMYKColorspace;        break;
-	case 12: colorspaceEnum = sRGBColorspace;        break;
+        case  0: colorspaceEnum = UndefinedColorspace;   break;
+        default: colorspaceEnum = RGBColorspace;         break;
+        case  2: colorspaceEnum = GRAYColorspace;        break;
+        case  3: colorspaceEnum = TransparentColorspace; break;
+        case  4: colorspaceEnum = OHTAColorspace;        break;
+        case  5: colorspaceEnum = XYZColorspace;         break;
+        case  6: colorspaceEnum = YCbCrColorspace;       break;
+        case  7: colorspaceEnum = YCCColorspace;         break;
+        case  8: colorspaceEnum = YIQColorspace;         break;
+        case  9: colorspaceEnum = YPbPrColorspace;       break;
+        case 10: colorspaceEnum = YUVColorspace;         break;
+        case 11: colorspaceEnum = CMYKColorspace;        break;
+        case 12: colorspaceEnum = sRGBColorspace;        break;
     }
 
     return SegmentImage(image, colorspaceEnum, 0, cluster_threshold,
-						  smoothing_threshold);
+                                                  smoothing_threshold);
 }
 
 
@@ -2324,24 +2324,24 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_transformImage
     }
 
     if (cropGeometry == NULL) {
-	cropStr = NULL;
+        cropStr = NULL;
     } else {
-	cropStr = (*env)->GetStringUTFChars(env, cropGeometry, 0);
+        cropStr = (*env)->GetStringUTFChars(env, cropGeometry, 0);
     }
 
     if (imageGeometry == NULL) {
-	imageStr = NULL;
+        imageStr = NULL;
     } else {
-	imageStr = (*env)->GetStringUTFChars(env, imageGeometry, 0);
+        imageStr = (*env)->GetStringUTFChars(env, imageGeometry, 0);
     }
 
     TransformImage(&image, cropStr, imageStr);
 
     if (imageGeometry != NULL) {
-	(*env)->ReleaseStringUTFChars(env, imageGeometry, imageStr);
+        (*env)->ReleaseStringUTFChars(env, imageGeometry, imageStr);
     }
     if (cropGeometry != NULL) {
-	(*env)->ReleaseStringUTFChars(env, cropGeometry, cropStr);
+        (*env)->ReleaseStringUTFChars(env, cropGeometry, cropStr);
     }
 
     setHandle(env, self, "magickImageHandle", (void*) image, &fieldID);
@@ -2357,7 +2357,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_transformImage
  */
 JNIEXPORT jobject JNICALL Java_magick_MagickImage_unsharpMaskImage
   (JNIEnv *env, jobject self, jdouble radius, jdouble sigma,
-			      jdouble amount, jdouble threshold)
+                              jdouble amount, jdouble threshold)
 {
     Image *image = NULL, *unsharpedImage = NULL;
     jobject newObj;
@@ -2371,12 +2371,12 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_unsharpMaskImage
 
     GetExceptionInfo(&exception);
     #ifdef DIAGNOSTIC
-	fprintf(stderr, "Kalder UnsharpMaskImage() !!\n");
+        fprintf(stderr, "Kalder UnsharpMaskImage() !!\n");
     #endif
     unsharpedImage = UnsharpMaskImage(image, radius, sigma,
-					     amount, threshold, &exception);
+                                             amount, threshold, &exception);
      #ifdef DIAGNOSTIC
-	 fprintf(stderr, "Kalder UnsharpMaskImage() færdig!!\n");
+         fprintf(stderr, "Kalder UnsharpMaskImage() færdig!!\n");
      #endif
     if (unsharpedImage == NULL) {
 	throwMagickApiException(env, "Cannot unsharp image", &exception);
@@ -2571,7 +2571,7 @@ JNIEXPORT jboolean JNICALL
     (*env)->ReleaseByteArrayElements(env, pixels, pixelArray, 0);
 
     if (result == JNI_FALSE) {
-	throwMagickApiException(env, "Error dispatching image", &exception);
+        throwMagickApiException(env, "Error dispatching image", &exception);
     }
 
     DestroyExceptionInfo(&exception);
@@ -2629,7 +2629,7 @@ JNIEXPORT jboolean JNICALL
     (*env)->ReleaseIntArrayElements(env, pixels, pixelArray, 0);
 
     if (result == JNI_FALSE) {
-	throwMagickApiException(env, "Error dispatching image", &exception);
+        throwMagickApiException(env, "Error dispatching image", &exception);
     }
 
     DestroyExceptionInfo(&exception);
@@ -2688,7 +2688,7 @@ JNIEXPORT jboolean JNICALL
     (*env)->ReleaseFloatArrayElements(env, pixels, pixelArray, 0);
 
     if (result == JNI_FALSE) {
-	throwMagickApiException(env, "Error dispatching image", &exception);
+        throwMagickApiException(env, "Error dispatching image", &exception);
     }
 
     DestroyExceptionInfo(&exception);
@@ -2762,7 +2762,7 @@ JNIEXPORT jint JNICALL Java_magick_MagickImage_getNumberColors
     numberColors=GetNumberColors(image, (FILE *) NULL, &exception);
 
     if (numberColors == 0) {
-	throwMagickApiException(env, "Error in GetNumberColors", &exception);
+        throwMagickApiException(env, "Error in GetNumberColors", &exception);
     }
 
     DestroyExceptionInfo(&exception);
@@ -2785,7 +2785,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_setNumberColors
     image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
     if (image == NULL) {
 	throwMagickException(env,
-			     "No image to set the number of unique colors");
+                             "No image to set the number of unique colors");
 	return;
     }
 
@@ -3110,8 +3110,8 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_setImageAttribute
     }
 
     if (key == NULL) {
-	throwMagickException(env, "Image attribute key is null");
-	return JNI_FALSE;
+        throwMagickException(env, "Image attribute key is null");
+        return JNI_FALSE;
     }
 
     iKey = (*env)->GetStringUTFChars(env, key, 0);
@@ -3144,16 +3144,16 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_blobToImage
 
     /* Obtain the ImageInfo pointer */
     imageInfo = (ImageInfo*) getHandle(env, imageInfoObj,
-				       "imageInfoHandle", NULL);
+                                       "imageInfoHandle", NULL);
     if (imageInfo == NULL) {
-	throwMagickException(env, "Cannot obtain ImageInfo object");
-	return;
+        throwMagickException(env, "Cannot obtain ImageInfo object");
+        return;
     }
 
     /* Check that we do have a blob */
     if (blob == NULL) {
-	throwMagickException(env, "Blob is null");
-	return;
+        throwMagickException(env, "Blob is null");
+        return;
     }
 
     /* Get the array size and array elements */
@@ -3165,16 +3165,16 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_blobToImage
     image = BlobToImage(imageInfo, blobMem, blobSiz, &exception);
     (*env)->ReleaseByteArrayElements(env, blob, blobMem, 0);
     if (image == NULL) {
-	throwMagickApiException(env, "Unable to convert blob to image",
-				&exception);
-	DestroyExceptionInfo(&exception);
-	return;
+        throwMagickApiException(env, "Unable to convert blob to image",
+                                &exception);
+        DestroyExceptionInfo(&exception);
+        return;
     }
 
     /* Get the old image handle and deallocate it (if required). */
     oldImage = (Image*) getHandle(env, self, "magickImageHandle", &fieldID);
     if (oldImage != NULL) {
-	DestroyImages(oldImage);
+        DestroyImages(oldImage);
     }
 
     /* Store the image into the handle. */
@@ -3201,7 +3201,7 @@ JNIEXPORT jbyteArray JNICALL Java_magick_MagickImage_imageToBlob
   /* Obtain the ImageInfo pointer */
   if (imageInfoObj != NULL) {
     imageInfo = (ImageInfo*) getHandle(env, imageInfoObj,
-				       "imageInfoHandle", NULL);
+                                       "imageInfoHandle", NULL);
     if (imageInfo == NULL) {
       throwMagickException(env, "Cannot obtain ImageInfo object");
       return NULL;
@@ -3256,7 +3256,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_nextImage
     }
 
     if (image->next == NULL) {
-	return NULL;
+        return NULL;
     }
 
     nextImage = image->next;
@@ -3283,9 +3283,9 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_hasFrames
     }
 
     if (image->next == NULL) {
-	return JNI_FALSE;
+        return JNI_FALSE;
     } else {
-	return JNI_TRUE;
+        return JNI_TRUE;
     }
 }
 
@@ -3300,8 +3300,8 @@ JNIEXPORT jint JNICALL Java_magick_MagickImage_getNumFrames
     }
 
     while (image != NULL) {
-	count++;
-	image = image->next;
+        count++;
+        image = image->next;
     }
 
     return count;
@@ -3338,9 +3338,9 @@ getIntMethod(Java_magick_MagickImage_getUnits,
  * Signature: (D)V
  */
 setDoubleMethod(Java_magick_MagickImage_setXResolution,
-		x_resolution,
-		"magickImageHandle",
-		Image)
+                x_resolution,
+                "magickImageHandle",
+                Image)
 
 
 
@@ -3350,9 +3350,9 @@ setDoubleMethod(Java_magick_MagickImage_setXResolution,
  * Signature: (D)V
  */
 setDoubleMethod(Java_magick_MagickImage_setYResolution,
-		y_resolution,
-		"magickImageHandle",
-		Image)
+                y_resolution,
+                "magickImageHandle",
+                Image)
 
 
 /*
@@ -3361,9 +3361,9 @@ setDoubleMethod(Java_magick_MagickImage_setYResolution,
  * Signature: ()D
  */
 getDoubleMethod(Java_magick_MagickImage_getXResolution,
-		x_resolution,
-		"magickImageHandle",
-		Image)
+                x_resolution,
+                "magickImageHandle",
+                Image)
 
 /*
  * Class:     magick_MagickImage
@@ -3371,9 +3371,9 @@ getDoubleMethod(Java_magick_MagickImage_getXResolution,
  * Signature: ()D
  */
 getDoubleMethod(Java_magick_MagickImage_getYResolution,
-		y_resolution,
-		"magickImageHandle",
-		Image)
+                y_resolution,
+                "magickImageHandle",
+                Image)
 
 /*
  * Class:     magick_MagickImage
@@ -3396,7 +3396,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_setColorProfile
 
 
     if (profileObj == NULL) {
-	throwMagickException(env, "ProfileInfo cannot be null");
+        throwMagickException(env, "ProfileInfo cannot be null");
        return;
     }
 
@@ -3407,13 +3407,13 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_setColorProfile
 #endif
 
     if (info==NULL) {
-	RemoveImageProfile(image,"icc");
+        RemoveImageProfile(image,"icc");
     } else {
-	StringInfo* profile_info;
-	profile_info = AcquireStringInfo(infoSize);
-	SetStringInfoDatum(profile_info, info);
-	SetImageProfile(image,"icc",profile_info);
-	profile_info=DestroyStringInfo(profile_info);
+        StringInfo* profile_info;
+        profile_info = AcquireStringInfo(infoSize);
+        SetStringInfoDatum(profile_info, info);
+        SetImageProfile(image,"icc",profile_info);
+        profile_info=DestroyStringInfo(profile_info);
     }
 }
 
@@ -3457,8 +3457,8 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_setIptcProfile
 
 
     if (profileObj == NULL) {
-	throwMagickException(env, "ProfileInfo cannot be null");
-	return;
+        throwMagickException(env, "ProfileInfo cannot be null");
+        return;
     }
 
     //name = getStringFieldValue(env, profileObj, "name", NULL);
@@ -3472,12 +3472,12 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_setIptcProfile
 //        RemoveImageProfile(image,"iptc");
 	RemoveImageProfile(image,"8bim");
     } else {
-	StringInfo* profile_info;
-	profile_info = AcquireStringInfo(infoSize);
-	SetStringInfoDatum(profile_info, info);
+        StringInfo* profile_info;
+        profile_info = AcquireStringInfo(infoSize);
+        SetStringInfoDatum(profile_info, info);
 //        SetImageProfile(image,"iptc",profile_info);
 	SetImageProfile(image,"8bim",profile_info);
-	profile_info=DestroyStringInfo(profile_info);
+        profile_info=DestroyStringInfo(profile_info);
     }
 }
 
@@ -3517,7 +3517,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_getGenericProfile
     }
 
     if (image->generic_profiles >= index) {
-	return NULL;
+        return NULL;
     }
 
     return getProfileInfo(env, &image->generic_profile[index]);
@@ -3565,19 +3565,19 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_profileImage
     }
 
     if (profileName == NULL) {
-	cstrProfileName = NULL;
+        cstrProfileName = NULL;
     }
     else {
-	cstrProfileName = (*env)->GetStringUTFChars(env, profileName, 0);
+        cstrProfileName = (*env)->GetStringUTFChars(env, profileName, 0);
     }
 
     if (profileData == NULL) {
-	cProfileData = NULL;
-	cProfileSize = 0;
+        cProfileData = NULL;
+        cProfileSize = 0;
     }
     else {
-	cProfileSize = (*env)->GetArrayLength(env, profileData);
-	cProfileData = (*env)->GetByteArrayElements(env, profileData, 0);
+        cProfileSize = (*env)->GetArrayLength(env, profileData);
+        cProfileData = (*env)->GetByteArrayElements(env, profileData, 0);
     }
 
     /* Note that the clone parameter in ProfileImage is always true
@@ -3588,11 +3588,11 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_profileImage
       ProfileImage(image, cstrProfileName, cProfileData, cProfileSize, 1);
 
     if (profileData != NULL) {
-	(*env)->ReleaseByteArrayElements(env, profileData, cProfileData, 0);
+        (*env)->ReleaseByteArrayElements(env, profileData, cProfileData, 0);
     }
 
     if (profileName != NULL) {
-	(*env)->ReleaseStringUTFChars(env, profileName, cstrProfileName);
+        (*env)->ReleaseStringUTFChars(env, profileName, cstrProfileName);
     }
 
     return (retVal ? JNI_TRUE : JNI_FALSE);
@@ -3622,26 +3622,26 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_montageImages
     }
 
     info = (MontageInfo*)
-	getHandle(env, montageInfo, "montageInfoHandle", NULL);
+        getHandle(env, montageInfo, "montageInfoHandle", NULL);
     if (info == NULL) {
-	throwMagickException(env, "Unable to retrieve MontageInfo handle");
-	return NULL;
+        throwMagickException(env, "Unable to retrieve MontageInfo handle");
+        return NULL;
     }
 
     GetExceptionInfo(&exception);
     montage = MontageImages(image, info, &exception);
     if (montage == NULL) {
-	throwMagickApiException(env, "Failed to create montage", &exception);
-	DestroyExceptionInfo(&exception);
-	return NULL;
+        throwMagickApiException(env, "Failed to create montage", &exception);
+        DestroyExceptionInfo(&exception);
+        return NULL;
     }
     DestroyExceptionInfo(&exception);
 
     newObj = newImageObject(env, montage);
     if (newObj == NULL) {
-	DestroyImages(montage);
-	throwMagickException(env, "Unable to create montage");
-	return NULL;
+        DestroyImages(montage);
+        throwMagickException(env, "Unable to create montage");
+        return NULL;
     }
     return newObj;
 }
@@ -3669,18 +3669,18 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_averageImages
     GetExceptionInfo(&exception);
     average = AverageImages(image, &exception);
     if (average == NULL) {
-	throwMagickApiException(env, "Failed to create average image",
-				&exception);
-	DestroyExceptionInfo(&exception);
-	return NULL;
+        throwMagickApiException(env, "Failed to create average image",
+                                &exception);
+        DestroyExceptionInfo(&exception);
+        return NULL;
     }
     DestroyExceptionInfo(&exception);
 
     newObj = newImageObject(env, average);
     if (newObj == NULL) {
-	DestroyImages(average);
-	throwMagickException(env, "Unable to create average image");
-	return NULL;
+        DestroyImages(average);
+        throwMagickException(env, "Unable to create average image");
+        return NULL;
     }
     return newObj;
 }
@@ -3701,7 +3701,7 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_levelImage
 
     /* Obtain the Image handle */
     image = (Image*) getHandle(env, self,
-			       "magickImageHandle", NULL);
+                               "magickImageHandle", NULL);
     if (image == NULL) {
 	throwMagickException(env, "Cannot obtain Image handle");
 	return JNI_FALSE;
@@ -3728,7 +3728,7 @@ JNIEXPORT jint JNICALL Java_magick_MagickImage_sizeBlob
 
     /* Obtain the Image handle */
     image = (Image*) getHandle(env, self,
-			       "magickImageHandle", NULL);
+                               "magickImageHandle", NULL);
     if (image == NULL) {
 	throwMagickException(env, "Cannot obtain Image handle");
 	return -1;
@@ -3744,9 +3744,9 @@ JNIEXPORT jint JNICALL Java_magick_MagickImage_sizeBlob
  * Signature: (I)V
  */
 setIntMethod(Java_magick_MagickImage_setCompression,
-	     compression,
-	     "magickImageHandle",
-	     Image)
+             compression,
+             "magickImageHandle",
+             Image)
 
 
 
@@ -3756,9 +3756,9 @@ setIntMethod(Java_magick_MagickImage_setCompression,
  * Signature: ()I
  */
 getIntMethod(Java_magick_MagickImage_getCompression,
-	     compression,
-	     "magickImageHandle",
-	     Image)
+             compression,
+             "magickImageHandle",
+             Image)
 
 /*
  * Class:     magick_MagickImage
@@ -3799,37 +3799,37 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_getOnePixel
 
     image = (Image *) getHandle(env, self, "magickImageHandle", NULL);
     if (image == NULL) {
-	throwMagickException(env, "Unable to retrieve image");
-	return NULL;
+        throwMagickException(env, "Unable to retrieve image");
+        return NULL;
     }
 
     pixel = GetOnePixel(image, xPos, yPos);
     if (&pixel == NULL) {
-	throwMagickException(env, "Unable to retrieve pixel");
+        throwMagickException(env, "Unable to retrieve pixel");
     }
 
     pixelPacketClass = (*env)->FindClass(env, "magick/PixelPacket");
     if (pixelPacketClass == 0) {
-	throwMagickException(env,
-			     "Unable to locate class magick.PixelPacket");
-	return NULL;
+        throwMagickException(env,
+                             "Unable to locate class magick.PixelPacket");
+        return NULL;
     }
 
     consMethodID = (*env)->GetMethodID(env, pixelPacketClass,
-				       "<init>", "(IIII)V");
+                                       "<init>", "(IIII)V");
     if (consMethodID == 0) {
-	throwMagickException(env, "Unable to construct magick.PixelPacket");
-	return NULL;
+        throwMagickException(env, "Unable to construct magick.PixelPacket");
+        return NULL;
     }
 
     jPixelPacket = (*env)->NewObject(env, pixelPacketClass, consMethodID,
-				     (jint) pixel.red,
-				     (jint) pixel.green,
-				     (jint) pixel.blue,
-				     (jint) pixel.opacity);
+                                     (jint) pixel.red,
+                                     (jint) pixel.green,
+                                     (jint) pixel.blue,
+                                     (jint) pixel.opacity);
     if (jPixelPacket == NULL) {
-	throwMagickException(env, "Unable to construct magick.PixelPacket");
-	return NULL;
+        throwMagickException(env, "Unable to construct magick.PixelPacket");
+        return NULL;
     }
 
     return jPixelPacket;
@@ -3842,9 +3842,9 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_getOnePixel
  * Signature: (Lmagick/PixelPacket;)V
  */
 setPixelPacketMethod(Java_magick_MagickImage_setBorderColor,
-		     border_color,
-		     "magickImageHandle",
-		     Image)
+                     border_color,
+                     "magickImageHandle",
+                     Image)
 
 /*
  * Class:     magick_MagickImage
@@ -3852,9 +3852,9 @@ setPixelPacketMethod(Java_magick_MagickImage_setBorderColor,
  * Signature: ()Lmagick/PixelPacket;
  */
 getPixelPacketMethod(Java_magick_MagickImage_getBorderColor,
-		     border_color,
-		     "magickImageHandle",
-		     Image)
+                     border_color,
+                     "magickImageHandle",
+                     Image)
 
 
 /*
@@ -3863,9 +3863,9 @@ getPixelPacketMethod(Java_magick_MagickImage_getBorderColor,
  * Signature: (Lmagick/PixelPacket;)V
  */
 setPixelPacketMethod(Java_magick_MagickImage_setBackgroundColor,
-		     background_color,
-		     "magickImageHandle",
-		     Image)
+                     background_color,
+                     "magickImageHandle",
+                     Image)
 
 /*
  * Class:     magick_MagickImage
@@ -3873,9 +3873,9 @@ setPixelPacketMethod(Java_magick_MagickImage_setBackgroundColor,
  * Signature: ()Lmagick/PixelPacket;
  */
 getPixelPacketMethod(Java_magick_MagickImage_getBackgroundColor,
-		     background_color,
-		     "magickImageHandle",
-		     Image)
+                     background_color,
+                     "magickImageHandle",
+                     Image)
 
 /*
  * Class:     magick_MagickImage
@@ -3990,13 +3990,13 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_getColormap__I
 
     image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
     if (image == NULL) {
-	throwMagickException(env, "Unable to obtain image handle");
-	return NULL;
+        throwMagickException(env, "Unable to obtain image handle");
+        return NULL;
     }
 
     if (index >= image->colors) {
-	throwMagickException(env, "Index out of range");
-	return NULL;
+        throwMagickException(env, "Index out of range");
+        return NULL;
     }
 
     pixelPacketClass = (*env)->FindClass(env, "magick/PixelPacket");
@@ -4014,10 +4014,10 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_getColormap__I
     }
 
     jPixelPacket = (*env)->NewObject(env, pixelPacketClass, consMethodID,
-				     (jint) image->colormap[index].red,
-				     (jint) image->colormap[index].green,
-				     (jint) image->colormap[index].blue,
-				     (jint) image->colormap[index].opacity);
+		                     (jint) image->colormap[index].red,
+		                     (jint) image->colormap[index].green,
+		                     (jint) image->colormap[index].blue,
+		                     (jint) image->colormap[index].opacity);
     if (jPixelPacket == NULL) {
 	throwMagickException(env, "Unable to construct magick.PixelPacket");
 	return NULL;
@@ -4046,14 +4046,14 @@ JNIEXPORT jobjectArray JNICALL Java_magick_MagickImage_getColormap__
     /* Get the image handle */
     image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
     if (image == NULL) {
-	throwMagickException(env, "Unable to obtain image handle");
-	return NULL;
+        throwMagickException(env, "Unable to obtain image handle");
+        return NULL;
     }
 
     /* Sanity check */
     if (image->colors <= 0 || image->colormap == NULL) {
-	throwMagickException(env, "Image does not have a colourmap");
-	return NULL;
+        throwMagickException(env, "Image does not have a colourmap");
+        return NULL;
     }
 
     /* Get the PixelPacket object class */
@@ -4074,32 +4074,107 @@ JNIEXPORT jobjectArray JNICALL Java_magick_MagickImage_getColormap__
 
     /* Create the PixelPacket array */
     jPPArray =
-	(*env)->NewObjectArray(env, image->colors, pixelPacketClass, NULL);
+        (*env)->NewObjectArray(env, image->colors, pixelPacketClass, NULL);
     if (jPPArray == NULL) {
-	throwMagickException(env, "Unable to construct PixelPacket[]");
-	return NULL;
+        throwMagickException(env, "Unable to construct PixelPacket[]");
+        return NULL;
     }
 
     /* Construct a PixelPacket for each item in the colourmap */
     for (i = 0; i < image->colors; i++) {
 
-	/* Create the PixelPacket */
-	jPixelPacket =
-	    (*env)->NewObject(env, pixelPacketClass, consMethodID,
-			      (jint) image->colormap[i].red,
-			      (jint) image->colormap[i].green,
-			      (jint) image->colormap[i].blue,
-			      (jint) image->colormap[i].opacity);
-	if (jPixelPacket == NULL) {
-	    throwMagickException(env, "Unable to construct magick.PixelPacket");
-	    return NULL;
-	}
+        /* Create the PixelPacket */
+        jPixelPacket =
+            (*env)->NewObject(env, pixelPacketClass, consMethodID,
+                              (jint) image->colormap[i].red,
+                              (jint) image->colormap[i].green,
+                              (jint) image->colormap[i].blue,
+                              (jint) image->colormap[i].opacity);
+        if (jPixelPacket == NULL) {
+            throwMagickException(env, "Unable to construct magick.PixelPacket");
+            return NULL;
+        }
 
-	/* Set the PixelPacket in the array */
-	(*env)->SetObjectArrayElement(env, jPPArray, i, jPixelPacket);
+        /* Set the PixelPacket in the array */
+        (*env)->SetObjectArrayElement(env, jPPArray, i, jPixelPacket);
     }
 
     return jPPArray;
+}
+
+/*
+ * Class:     magick_MagickImage
+ * Method:    trimImage
+ * Signature: ()Lmagick/MagickImage;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_trimImage
+    (JNIEnv *env, jobject self)
+{
+    Image *image = NULL, *trimmedImage = NULL;
+    jobject newObj;
+    ExceptionInfo exception;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+	throwMagickException(env, "Cannot retrieve image handle");
+	return NULL;
+    }
+
+    GetExceptionInfo(&exception);
+    trimmedImage = TrimImage(image, &exception);
+    if (trimmedImage == NULL) {
+	throwMagickApiException(env, "Cannot trim image", &exception);
+	DestroyExceptionInfo(&exception);
+	return NULL;
+    }
+    DestroyExceptionInfo(&exception);
+
+    newObj = newImageObject(env, trimmedImage);
+    if (newObj == NULL) {
+	DestroyImages(trimmedImage);
+	throwMagickException(env, "Unable to create trimmed image");
+	return NULL;
+    }
+
+    return newObj;
+}
+
+
+/*
+ * Class:     magick_MagickImage
+ * Method:    blurImageChannel
+ * Signature: (DD)Lmagick/MagickImage;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_blurImageChannel
+  (JNIEnv *env, jobject self, int channelType, jdouble radius, jdouble sigma)
+{
+    Image *image = NULL, *blurredImage = NULL;
+    jobject newObj;
+    ExceptionInfo exception;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+	throwMagickException(env, "Cannot retrieve image handle");
+	return NULL;
+    }
+
+    GetExceptionInfo(&exception);
+    blurredImage = BlurImageChannel(image, channelType, radius, sigma, &exception);
+    if (blurredImage == NULL) {
+	throwMagickApiException(env, "Cannot blur image", &exception);
+	DestroyExceptionInfo(&exception);
+	return NULL;
+    }
+    DestroyExceptionInfo(&exception);
+
+    newObj = newImageObject(env, blurredImage);
+    if (newObj == NULL) {
+	DestroyImages(blurredImage);
+	throwMagickException(env, "Unable to create new blurred image");
+	return NULL;
+    }
+
+    return newObj;
 }
 
 
@@ -4118,7 +4193,7 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_signatureImage
 
     /* Obtain the Image handle */
     image = (Image*) getHandle(env, self,
-			       "magickImageHandle", NULL);
+                               "magickImageHandle", NULL);
     if (image == NULL) {
       throwMagickException(env, "Cannot obtain Image handle");
       return JNI_FALSE;
