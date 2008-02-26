@@ -8,7 +8,18 @@ import javax.swing.*;
 import magick.*;
 
 
-
+/**
+ * Utility class intended for testing purposes.
+ * <p>Title: </p>
+ *
+ * <p>Description: </p>
+ *
+ * <p>Copyright: Copyright (c) 2008</p>
+ *
+ * <p>Company: </p>
+ *
+ * @author Jacob Nordfalk
+ */
 public class Testtools
 {
 	public static String path_input = "test"+File.separator+"magicktest"+File.separator+File.separator;
@@ -19,12 +30,12 @@ public class Testtools
 	 * This flag makes all file comparisons pass and avoids that files are deleted in magictest/actual_output/
 	 * Set to true and run tests to generate examples of "correct" output.
 	 * Copy then all files from magictest/actual_output/ to magictest/correct_output/ to define
-	 * the 'golden' result files which the test should conform to.
+	 * the 'correct' result files which the test should conform to.
 	 */
-	public static boolean generate_golden_output = false;
+	public static boolean generate_correct_output = false;
 
 
-	private static boolean generate_golden_output_warned;
+	private static boolean generate_correct_output_warned;
 
 	/**
 	 * Compares two image files pixel by pixel (by invoking the IM command 'compare')
@@ -35,16 +46,21 @@ public class Testtools
 	 */
 	public static void compareImage(String file1, String file2, double maxDiff) throws IOException
 	{
-		//maxDiff = 2; // ekstra streng test!
-		if (generate_golden_output)
+		//maxDiff = 2; // uncomment to make very strict test!
+		if (generate_correct_output)
 		{
-			System.err.println("************************************* WARNING ***********************************************");
-			System.err.println("* With generate_golden_output = true you are generating 'golden' output, instead of testing *");
-			System.err.println("*********************************************************************************************");
+			System.err.println("************************************** WARNING ************************************************");
+			System.err.println("* With generate_correct_output = true you are generating 'correct' output, instead of testing *");
+			System.err.println("***********************************************************************************************");
 			// show popup once
-			if (!generate_golden_output_warned) {
-				JOptionPane.showMessageDialog(null, "generate_golden_output is on, so you are a generating 'golden' output, instead of comparing files");
-				generate_golden_output_warned = true;
+			if (!generate_correct_output_warned) {
+				int ret = JOptionPane.showConfirmDialog(null, "generate_correct_output is on, so you are a generating 'correct' output, instead of comparing files");
+				System.out.println("ret="+ret);
+				if (ret != JOptionPane.OK_OPTION) {
+					System.err.println("generate_correct_output cancelled by user");
+					System.exit(-1);
+				}
+				generate_correct_output_warned = true;
 			}
 			return;
 		}
@@ -68,14 +84,12 @@ public class Testtools
 				{ (char *) NULL, (long) UndefinedMetric }
 			}
 	 */
-		String cmd = "compare -metric MSE "+file1+" "+file2+" tempcompareImage.jpg";
+		String cmd = "compare -metric MSE "+file1+" "+file2+" tempImageDifference.jpg";
 
-		// Jens Jakob need absolute path for compare
-		//if (System.getProperty("user.dir").startsWith("E:")) cmd = "E:\\user\\caramba\\magick-6.2.6-Q8\\"+cmd;
-
-		//cmd = "C:\\Program Files\\ImageMagick-6.3.5-Q8\\"+cmd;
-
-		// Jacob paa Linux: user.home=/home/j
+		// Some may need an absolute path for IM 'compare' command.
+		// Here are some examples:
+		// if (System.getProperty("user.dir").startsWith("E:")) cmd = "E:\\user\\caramba\\magick-6.2.6-Q8\\"+cmd;
+		// cmd = "C:\\Program Files\\ImageMagick-6.3.5-Q8\\"+cmd;
 
 		Process compProces = Runtime.getRuntime().exec(cmd, new String[0]);
 		InputStream std = compProces.getInputStream();
@@ -96,8 +110,6 @@ public class Testtools
 			errsb.append( (char) ch);
 		} while (true);
 
-		System.out.println(cmd + "\n gave stdout: '"+outsb+"'");
-		System.out.println("\n gave stderr: '"+errsb+"'");
 
 		String ret = outsb.toString() + errsb.toString();
 		// parse the first number in output
@@ -110,8 +122,14 @@ public class Testtools
 																	 " which is bigger than max allowed of " + maxDiff + ":\n  " + file1 + " " + file2);
 			}
 		} catch (NumberFormatException ex) {
+			System.err.println("Output of command 'compare' could not be parsed.");
+			System.err.println("Perhaps you need to give full path to IMs 'compare' command?");
+			System.err.println(cmd + " gave stdout: '"+outsb+"'");
+			System.err.println(cmd + " gave stderr: '"+errsb+"'");
 			throw new RuntimeException(ret);
 		}
+		// delete temporary file if no significan difference was found
+		new File("tempImageDifference.jpg").delete();
 	}
 
 
@@ -131,7 +149,7 @@ public class Testtools
 		// compare the pixel data (allowing for a small difference)
 		compareImage(path_actual_output+fileName, path_correct_output+fileName, 20);
 
-		if (!generate_golden_output) {
+		if (!generate_correct_output) {
 
 			// Check that IPCT and ICC data are exactly the same
 			MagickImage correct = new MagickImage(new ImageInfo(path_correct_output+fileName));
@@ -187,7 +205,7 @@ public class Testtools
 	}
 
 	/**
-	 * Display the information about the profile supplied.
+	 * Returns information about the profile supplied.
 	 *
 	 * @param profile the profile for which to display
 	 */
@@ -196,14 +214,6 @@ public class Testtools
 				return "(null)";
 			}
 
-			/*
-			if (profile.getName() == null) {
-					System.out.println("Profile name is null");
-			}
-			else {
-					System.out.println("Profile name is " + profile.getName());
-			}
-			*/
 			if (profile.getInfo() == null) {
 					return "profile info=null";
 			}

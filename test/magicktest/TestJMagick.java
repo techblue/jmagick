@@ -20,6 +20,11 @@ public class TestJMagick extends TestCase {
 	ImageInfo info;
 	MagickImage image;
 
+	/** The version of ImageMagick against which the tests are run.
+	 *  This version number is intended to allow for IM version differences */
+	int IMver = 638;
+
+
 	protected void setUp() throws Exception {
 		super.setUp();
 		info = new ImageInfo();
@@ -50,8 +55,7 @@ public class TestJMagick extends TestCase {
 	 New colour PixelPacket(255,0,0,0)
 	 </pre>
 	 */
-	public void testMain1() throws Exception {
-		int IMver = 1557;
+	public void testDiverseOperations() throws Exception {
 		Rectangle rect = new Rectangle(0, 0, 80, 40);
 		int flags = Magick.parseImageGeometry("60x50", rect);
 		assertEquals("Scaled to ", 60, rect.width);
@@ -109,11 +113,26 @@ public class TestJMagick extends TestCase {
 
 	}
 
-	public void testMain1b() throws Exception {
+	public void testRaise() throws Exception {
 		// Raise image
 		image.raiseImage(new Rectangle(0, 0, 10, 20), true);
 		Testtools.writeAndCompare(image, info, "raised.jpg");
 	}
+
+
+	public void testMontage() throws Exception {
+		// Montage test
+		MagickImage images[] = new MagickImage[2];
+		images[0] = image;
+		images[1] = image.rotateImage(180.0);
+		MagickImage seqImage = new MagickImage(images);
+		MontageInfo montageInfo = new MontageInfo(new ImageInfo());
+		montageInfo.setFileName("montage.jpg");
+		montageInfo.setBorderWidth(5);
+		MagickImage montage = seqImage.montageImages(montageInfo);
+		Testtools.writeAndCompare(montage, new ImageInfo(), "montage.jpg");
+	}
+
 
 	/**
 	 * Test montage.
@@ -123,27 +142,13 @@ public class TestJMagick extends TestCase {
 		// Montage test
 		MagickImage images[] = new MagickImage[2];
 		images[0] = image;
-		images[1] = image;
+		images[1] = image.rotateImage(180.0);
 		MagickImage seqImage = new MagickImage(images);
 		MontageInfo montageInfo = new MontageInfo(new ImageInfo());
-		montageInfo.setFileName("montage.jpg");
 		montageInfo.setTitle("Melbourne");
 		montageInfo.setBorderWidth(5);
 		MagickImage montage = seqImage.montageImages(montageInfo);
-		Testtools.writeAndCompare(montage, new ImageInfo(), "montage.jpg");
-	}
-
-	public void testMontageWOText() throws Exception {
-		// Montage test
-		MagickImage images[] = new MagickImage[2];
-		images[0] = image;
-		images[1] = new MagickImage(new ImageInfo(Testtools.path_input + "pics.jpg")); // xxx
-		MagickImage seqImage = new MagickImage(images);
-		MontageInfo montageInfo = new MontageInfo(new ImageInfo());
-		montageInfo.setFileName("montage.jpg");
-		montageInfo.setBorderWidth(5);
-		MagickImage montage = seqImage.montageImages(montageInfo);
-		Testtools.writeAndCompare(montage, new ImageInfo(), "montage_WOtext.jpg");
+		Testtools.writeAndCompare(montage, new ImageInfo(), "montage_w_text.jpg");
 	}
 
 	/**
@@ -157,10 +162,10 @@ public class TestJMagick extends TestCase {
 	 </pre>
 	 */
 
-	public void testMontageAverage() throws Exception {
+	public void testAverage() throws Exception {
 		MagickImage images[] = new MagickImage[2];
 		images[0] = image;
-		images[1] = image.rotateImage(180.0);//new MagickImage(new ImageInfo(Testtools.path_input + "img_iptc6376_icc560.jpg"));
+		images[1] = image.rotateImage(180.0);
 
 		MagickImage seqImage = new MagickImage(images);
 

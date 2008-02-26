@@ -21,7 +21,7 @@ import java.io.FileOutputStream;
 
 /**
  * For testing JMagick functions.
- * This 'test' should be possible to run with 'make simpletest'
+ * This 'test' should be run with 'make simpletest'. Output images will then go in
  * These tests are also available as real JUnit test cases in the class MainTestCase
  *
  * @see MainTestCase
