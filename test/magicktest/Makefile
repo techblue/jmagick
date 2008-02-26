@@ -16,10 +16,10 @@ include ../../Make.rules
 
 #test: default-target Testtools.class MainTestCase.class
 test:
-	cd ../..; LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH):test:lib/junit.jar junit.textui.TestRunner magicktest.MainTestCase
+	cd ../..; LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH):test:lib/junit.jar junit.textui.TestRunner magicktest.TestJMagick
 
 simpletest: default-target
-	mkdir ../simpletest; cp pics.jpg ../simpletest; cd ../simpletest; LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH) magicktest.Test
+	mkdir ../simpletest; cp pics.jpg ../simpletest; cd ../simpletest; LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH) magicktest.SimpleTest
 
 test2: default-target
 	LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH) magicktest.Loop pics.jpg

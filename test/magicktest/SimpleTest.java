@@ -27,7 +27,7 @@ import java.io.FileOutputStream;
  * @see MainTestCase
  * @author Eric Yeo
  */
-public class Test {
+public class SimpleTest {
 
     /**
      * Display the information about the profile supplied.
@@ -36,18 +36,7 @@ public class Test {
      *            the profile for which to display
      */
     private static void displayProfile(ProfileInfo profile) {
-        if (profile.getName() == null) {
-            System.out.println("Profile name is null");
-        }
-        else {
-            System.out.println("Profile name is " + profile.getName());
-        }
-        if (profile.getInfo() == null) {
-            System.out.println("No profile info");
-        }
-        else {
-            System.out.println("Profile length is " + profile.getInfo().length);
-        }
+			  Testtools.displayProfile(profile);
     }
 
     public static void main(String[] args) {

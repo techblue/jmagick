@@ -15,8 +15,7 @@ import magick.util.*;
  * @author Jacob Nordfalk
  * @see Test
  */
-public class MainTestCase
-		extends TestCase {
+public class TestJMagick extends TestCase {
 
 	ImageInfo info;
 	MagickImage image;
