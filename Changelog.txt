@@ -1,5 +1,9 @@
+2007-02-25  Andy Lewis
+  * Updated ExceptionType and GeometryFlags to reflect IM changes in 6.3.9
+
 2007-02-26  Jacob Nordfalk
-  * Renamed test classes
+  * Renamed test classes and polished the tests
+	* Updated Win32 Makefile.all for Visual Studio 8.
 
 2007-02-25  Andy Lewis
   * Updated CompositeOperator to reflect IM changes made to composite.h since 6.2.9

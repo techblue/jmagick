@@ -21,8 +21,9 @@ public interface GeometryFlags {
     public static final int AspectValue = 0x2000;
     public static final int LessValue = 0x4000;
     public static final int GreaterValue = 0x8000;
-    public static final int AreaValue = 0x10000;
-    public static final int DecimalValue = 0x20000;
+    public static final int MinimumValue = 0x10000;
+    public static final int AreaValue = 0x20000;
+    public static final int DecimalValue = 0x40000;
     public static final int AllValues = 0x7fffffff;
 
 }
