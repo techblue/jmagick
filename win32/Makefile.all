@@ -7,7 +7,7 @@
 #
 # Hint: To be placed in .../src and invoked from there,
 #       nmake -f Makefile.all
-#
+
 # From the Visual Studio .NET 2003 Command Prompt:
 #    copy Makefile.all ..\src
 #    cd ..\src
@@ -39,12 +39,22 @@
 # target that compiler; instead I suppose you use MSYS or Cygwin and
 # the configure script.
 #
-
+#
+# Author: Jacob Nordfalk
+# Date:   Feb 2008
+#
+# Added comments and mkdir commands to make sure make doesent fail 
+# becaurse of missing intermediary or output directories.
+# added invocation of Manifest Tool (mt.exe) and javac -target 1.5
 
 CPP=cl.exe
 LINK32=link.exe
-CPPINC=c:\Program Files\Microsoft Visual Studio .NET 2003\Vc7\Include
-CPPLIB=c:\Program Files\Microsoft Visual Studio .NET 2003\Vc7\Lib
+
+# The C compiler
+#CPPINC=c:\Program Files\Microsoft Visual Studio .NET 2003\Vc7\Include
+#CPPLIB=c:\Program Files\Microsoft Visual Studio .NET 2003\Vc7\Lib
+CPPINC=C:\Program Files\Microsoft Visual Studio 8\VC\include
+CPPLIB=C:\Program Files\Microsoft Visual Studio 8\VC\Lib
 
 OUTDIR=..\lib
 INTDIR=..\obj\magick
@@ -53,17 +63,28 @@ GENDIR=..\generated
 CLSDIR=..\classes
 DOCDIR=..\doc
 
-JDKDIR=c:\Program Files\Java\jdk1.6.0
+# File places for Java:
+JDKDIR=C:\Program Files\Java\jdk1.6.0_01
 JNIINC=$(JDKDIR)\include
 JDKBIN=$(JDKDIR)\bin
 
-MAGICKDIR=C:\Program Files\ImageMagick-6.3.1-Q8
+# File places for standard ImageMagick:
+MAGICKDIR=C:\Program Files\ImageMagick-6.3.6-Q8
 MAGICKINC=$(MAGICKDIR)
 MAGICKLIB=$(MAGICKDIR)\lib\CORE_RL_magick_.lib
 MAGICKINCDIR=$(MAGICKDIR)\include
 
+# If you compile IM yourself this might be better
+#MAGICKDIR=C:\Jacob\IM\c_kompilering\beta\bin
+#MAGICKINC=C:\Jacob\IM\c_kompilering\beta\ImageMagick
+#MAGICKLIB=C:\Jacob\IM\c_kompilering\beta\lib\CORE_RL_magick_.lib
+#MAGICKINCDIR=$(MAGICKDIR)
+
+
 # The jmagick.jar file will be installed here:
 JREEXT=$(JDKDIR)\lib\ext
+#JREEXT=$(MAGICKDIR)
+
 
 # The jmagick.dll file will be installed here:
 MAGICKBIN=$(MAGICKDIR)
@@ -72,7 +93,8 @@ MAGICKBIN=$(MAGICKDIR)
 # It hangs otherwise (re: IT) !?
 
 CPP_FLAGS= \
-    /nologo /MTd /w /GX /Od /Ge /Fo"$(INTDIR)\\" /c \
+#    /nologo /MTd /w /GX /Od /Ge /Fo"$(INTDIR)\\" /c \
+    /nologo /MD /w /GX /Od /Ge /Fo"$(INTDIR)\\" /c \
     /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" \
     /D "JMAGICK_EXPORTS"  /D "_VISUALC_" /I "$(CPPINC)" \
     /I "$(JNIINC)" /I "$(JNIINC)/win32" /I "$(MAGICKINC)" \
@@ -80,7 +102,8 @@ CPP_FLAGS= \
 
 LINK32_FLAGS= \
     "$(MAGICKLIB)" \
-    /nologo /dll /incremental:no /machine:I386 \
+#    /nologo /dll /incremental:no /machine:I386 \
+    /nologo /dll /incremental:no /machine:x86 \
     /libpath:"$(CPPLIB)" \
     /out:"$(OUTDIR)\jmagick.dll" \
     /implib:"$(OUTDIR)\jmagick.lib"
@@ -108,9 +131,8 @@ LINK32_OBJSD="$(INTDIR)\jmagick.obj" \
 
 ALL : CLEAN BUILD
 
-BUILD : CLASSES DOCS HEADERS \
+BUILD : DIRS CLASSES DOCS HEADERS \
     "$(OUTDIR)\jmagick.dll" "$(MAGICKBIN))\jmagick.dll"
-
 
 
 jmagick.obj: "$(SRCDIR)\jmagick.c"
@@ -145,6 +167,8 @@ magick_QuantizeInfo.obj: "$(SRCDIR)\magick_QuantizeInfo.c"
 
 "$(OUTDIR)\jmagick.dll" : $(LINK32_OBJS)
     $(LINK32) $(LINK32_FLAGS) $(LINK32_OBJSD)
+    mt.exe -manifest $@.manifest -outputresource:$@;2 
+
 
 {$(SRCDIR)}.c{$(INTDIR)}.obj::
     $(CPP) $(CPP_FLAGS) $<
@@ -165,6 +189,12 @@ CLEAN :
 
 
 # The following items are always rebuilt ...
+DIRS :
+    -mkdir "$(OUTDIR)"
+    -mkdir "$(INTDIR)"
+    -mkdir "$(GENDIR)"
+    -mkdir "$(DOCDIR)"
+
 
 HEADERS :    $(GENDIR)
     "$(JDKBIN)\javah" -d $(GENDIR) -classpath $(CLSDIR) -jni magick.Magick
@@ -177,7 +207,7 @@ HEADERS :    $(GENDIR)
     "$(JDKBIN)\javah" -d $(GENDIR) -classpath $(CLSDIR) -jni magick.QuantizeInfo
 
 CLASSES :    $(SRCDIR)\*.java $(SRCDIR)\util\*.java
-    "$(JDKBIN)\javac" -d $(CLSDIR) -classpath $(SRCDIR) -sourcepath $(SRCDIR) $(?)
+    "$(JDKBIN)\javac" -target 1.5 -d $(CLSDIR) -classpath $(SRCDIR) -sourcepath $(SRCDIR) $(?)
     "$(JDKBIN)\jar" -cvf $(OUTDIR)/jmagick.jar -C $(CLSDIR) magick
     copy "$(OUTDIR)\jmagick.jar" "$(JREEXT)"
 
