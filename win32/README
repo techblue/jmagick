@@ -1,0 +1,11 @@
+Makefiles for Windows
+~~~~~~~~~~~~~~~~~~~~~
+
+Makefile.VC++ was originally contributed by Ibrahim Tannir.
+
+Makefile.all was contributed by David Oren.
+It was later modified by Sava Slijepcevic.
+
+These files are not currently being actively maintained. Should you
+need to make any modifications to it while compiling JMagick, please
+send a copy of the changes to the JMagick mailing list.
