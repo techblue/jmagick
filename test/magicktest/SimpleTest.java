@@ -277,9 +277,11 @@ public class SimpleTest {
         catch (MagickApiException ex) {
             System.err.println("MagickException: " + ex + ": " + ex.getReason()
                     + ", " + ex.getDescription());
+            ex.printStackTrace();
         }
         catch (MagickException ex) {
             System.err.println("MagickException: " + ex);
+            ex.printStackTrace();
         }
     }
 

@@ -29,6 +29,8 @@ public class TestJMagick extends TestCase {
 		super.setUp();
 		info = new ImageInfo();
 		image = new MagickImage(new ImageInfo(Testtools.path_input + "pics.jpg"));
+                File f = new File(Testtools.path_input + "pics.jpg");
+                System.err.println(""+f.exists());
 	}
 
 	protected void tearDown() throws Exception {
@@ -135,7 +137,7 @@ public class TestJMagick extends TestCase {
 
 
 	/**
-	 * Test montage.
+	 * Test montage with text.
 	 * Expect this test to fail when the font set change
 	 */
 	public void testMontageWithText_failMightBeOk() throws Exception {
@@ -227,7 +229,8 @@ public class TestJMagick extends TestCase {
 	}
 
 	/**
-	 * Test of diverse operations on a small is processed  correctly
+	 * Test of diverse operations on a small is processed correctly
+         * This test might fail if ImageMagick doesent have PNG support.
 	 */
 	public void testQuantizeImage() throws Exception {
 
@@ -272,6 +275,10 @@ public class TestJMagick extends TestCase {
 		Testtools.writeAndCompare(blankImage, info, "transparent.jpg");
 	}
 
+        /**
+         * Test annotate with text.
+         * Expect this test to fail when the font set change
+         */
 	public void testAnnotate_failMightBeOk() throws Exception {
 
 		// Create an image from scratch
