@@ -1394,6 +1394,7 @@ public class MagickImage extends Magick {
     /**
      * Return the number of generic profiles.
      * @return number of generic profiles
+		 * @Deprecated No longer works (after ImageMagick 5.5.7 ?)
      * @throws MagickException if the profile count cannot be retrieved
      */
     public native int getGenericProfileCount()
@@ -1403,6 +1404,7 @@ public class MagickImage extends Magick {
      * Return the generic profile specified by the index.
      * @param i the index of the generic profile to retrieve
      * @return a generic ProfileInfo if found, null otheriwse.
+		 * @Deprecated No longer works (after ImageMagick 5.5.7 ?)
      * @throws MagickException if an error occurs
      */
     public native ProfileInfo getGenericProfile(int i)
@@ -1420,6 +1422,38 @@ public class MagickImage extends Magick {
      */
     public native boolean profileImage(String profileName, byte[] profileData)
         throws MagickException;
+
+
+
+		/**
+		 * SetImageProfile() adds a named profile to the image. If a profile with
+		 * the same name already exists, it is replaced. This method differs from
+		 * the ProfileImage() method in that it does not apply CMS color profiles.
+		 * @param profileName the profile name, for example icc, exif, and 8bim (8bim is the Photoshop wrapper for iptc profiles).
+		 * @param profileData contents of the profile
+		 * @return Returns a true if the profile is successfully set
+		 * @author Jacob Nordfalk
+		 * @since JMagick 6.3.9
+		 * @throws MagickException if an error occurs
+		 * @see http://www.imagemagick.org/api/profile.php#SetImageProfile
+		 */
+		public native boolean setImageProfile(String profileName, byte[] profileData)
+				throws MagickException;
+
+
+		/**
+		 * GetImageProfile() gets a profile associated with an image by name.
+		 * @param profileName name of profile get
+		 * @return contents of the profile
+		 * @author Jacob Nordfalk
+		 * @since JMagick 6.3.9
+		 * @throws MagickException if an error occurs
+		 * @see http://www.imagemagick.org/api/profile.php#GetImageProfile
+		 */
+		public native byte[] getImageProfile(String profileName)
+				throws MagickException;
+
+
 
     /**
      * Create a montage of all the images in the list.

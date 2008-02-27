@@ -1,3 +1,8 @@
+2007-02-27  Jacob Nordfalk
+  * Added methods setImageProfile and getImageProfile
+	* Deprecated old and only partly working profile methods
+	* Introduced package magicktest.BETA for test cases not yet finished
+
 2007-02-25  Andy Lewis
   * Updated ExceptionType and GeometryFlags to reflect IM changes in 6.3.9
 
@@ -9,22 +14,22 @@
   * Updated CompositeOperator to reflect IM changes made to composite.h since 6.2.9
 	* Added methods blurImageChannel() and trimImage()
 
-
 2007-02-22  Jacob Nordfalk
   * First version on SourceForge.net
   * Renamed package test to magicktest and moved utility class MagickWindow to magick.util
   * configure.in now claims version is 6.3.8
-
 
 2008-02-19  Eric O'Laughlen
   * A few tweaks to the output lib names to support version numbers and symlinks.
   For example, it outputs libJMagick-6.2.6.dylib and a link called libJMagick.dylib (.so's on Linux).
   An option to the configure.in offers an arg --with-shared-lib-ext=.dylib.
 
-
 2007-11-26  Jacob Nordfalk
-  * The ImageMagick wasnt initialized from JMagick!
-    Called MagickCoreGenesis and now environment variables also work
+  * The ImageMagick engine wasnt initialized from JMagick!
+    Fixed. Now setting environment variables also work, like:
+		MAGICK_DEBUG=Resource       (IM debugging)
+	  MAGICK_MEMORY_LIMIT=100     (limit mem use to 100MB)
+		(see http://www.imagemagick.org/script/resources.php#environment)
 
 
 2007-06-26  Ian Michell

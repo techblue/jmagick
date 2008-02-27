@@ -1,7 +1,8 @@
-package magicktest;
+package magicktest.BETA;
 
 import junit.framework.*;
 import magick.*;
+import magicktest.*;
 
 public class ProfileTestCases extends TestCase {
 	protected void setUp() throws Exception {

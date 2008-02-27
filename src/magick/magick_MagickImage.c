@@ -3602,6 +3602,137 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_profileImage
 
 
 
+
+
+
+
+	/*
+	 * Class:     magick_MagickImage
+	 * Method:    setImageProfile
+	 */
+	JNIEXPORT jboolean JNICALL Java_magick_MagickImage_setImageProfile
+		(JNIEnv *env, jobject self, jstring profileName, jbyteArray profileData)
+	{
+			Image *image = NULL;
+			const char *cstrProfileName;
+			unsigned char *cProfileData;
+			size_t cProfileSize;
+			unsigned int retVal;
+
+			image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+			if (image == NULL) {
+		throwMagickException(env, "No image to set file name");
+		return JNI_FALSE;
+			}
+
+			if (profileName == NULL) {
+					cstrProfileName = NULL;
+			}
+			else {
+					cstrProfileName = (*env)->GetStringUTFChars(env, profileName, 0);
+			}
+
+			if (profileData == NULL) {
+					cProfileData = NULL;
+					cProfileSize = 0;
+			}
+			else {
+					cProfileSize = (*env)->GetArrayLength(env, profileData);
+					cProfileData = (*env)->GetByteArrayElements(env, profileData, 0);
+			}
+
+
+      if (cProfileData == NULL) {
+				retVal = DeleteImageProfile(image,cstrProfileName);
+      } else {
+					StringInfo * profile_info = NULL;
+					profile_info = AcquireStringInfo(cProfileSize);
+					SetStringInfoDatum(profile_info, cProfileData);
+
+					retVal =
+							SetImageProfile(image, cstrProfileName, profile_info);
+
+					profile_info = DestroyStringInfo(profile_info);
+				}
+
+			if (profileData != NULL) {
+					(*env)->ReleaseByteArrayElements(env, profileData, cProfileData, 0);
+			}
+
+			if (profileName != NULL) {
+					(*env)->ReleaseStringUTFChars(env, profileName, cstrProfileName);
+			}
+
+			return (retVal ? JNI_TRUE : JNI_FALSE);
+	}
+
+
+
+
+
+/*
+ * Class:     magick_MagickImage
+ * Method:    getImageProfile
+ */
+JNIEXPORT jbyteArray JNICALL Java_magick_MagickImage_getImageProfile
+	(JNIEnv *env, jobject self, jstring profileName)
+{
+  Image *image = NULL;
+	const char * cstrProfileName;
+	jbyteArray byteArray;
+
+	image = (Image * ) getHandle(env, self, "magickImageHandle", NULL);
+	if (image == NULL) {
+		throwMagickException(env, "No image to set file name");
+		return JNI_FALSE;
+	}
+
+	if (profileName == NULL) {
+		cstrProfileName = NULL;
+	}
+	else {
+		cstrProfileName = (*env)->GetStringUTFChars(env, profileName, 0);
+	}
+
+	StringInfo* profileInfo = GetImageProfile(image, cstrProfileName);
+
+	if (profileInfo != (const StringInfo * ) NULL && profileInfo -> length > 0) {
+
+		/* Construct the byte array */
+		byteArray = ( * env) -> NewByteArray(env, profileInfo -> length);
+		if (byteArray == NULL) {
+			throwMagickException(env, "Unable to allocate byte array "
+													 "for profile info");
+			return NULL;
+		}
+
+		unsigned char * byteElements;
+		byteElements =
+				( * env) -> GetByteArrayElements(env, byteArray, JNI_FALSE);
+		if (byteElements == NULL) {
+			throwMagickException(env, "Unable to obtain byte array elements "
+													 "for profile info");
+			return NULL;
+		}
+		memcpy(byteElements,
+					 GetStringInfoDatum(profileInfo),
+					 GetStringInfoLength(profileInfo));
+
+		(*env) -> ReleaseByteArrayElements(env, byteArray, byteElements, 0);
+	}
+	else {
+		byteArray = NULL;
+	}
+
+	if (profileName != NULL) {
+		( * env) -> ReleaseStringUTFChars(env, profileName, cstrProfileName);
+	}
+	return byteArray;
+}
+
+
+
+
 /*
  * Class:     magick_MagickImage
  * Method:    montageImages

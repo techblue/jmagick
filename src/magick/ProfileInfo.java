@@ -39,6 +39,7 @@ public class ProfileInfo {
 
     /**
      * Get the profile name.
+		 * @Deprecated After ImageMagick 5.5.7 (?) names are not available
      * @return the profile name
      */
     public String getName()
