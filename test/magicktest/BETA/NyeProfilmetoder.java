@@ -1,7 +1,5 @@
 package magicktest.BETA;
 
-import java.util.*;
-
 import magick.*;
 import magick.util.*;
 
@@ -13,17 +11,17 @@ public class NyeProfilmetoder {
 
 		DisplayImageMetaData.displayMagickImage(image);
 
-		visProfil(image, "8bim");
-		visProfil(image, "iptc");
-		visProfil(image, "icc");
-		visProfil(image, "exif");
-		visProfil(image, "xmp");
-
-		visProfil(image, "8bim");
-		visProfil(image, "iptc");
-		visProfil(image, "icc");
-		visProfil(image, "exif");
-		visProfil(image, "xmp");
+		visOgSkrivProfil(image, "8bim");
+		visOgSkrivProfil(image, "iptc");
+		visOgSkrivProfil(image, "icc");
+		visOgSkrivProfil(image, "exif");
+		visOgSkrivProfil(image, "xmp");
+		System.out.println("==================");
+		visOgSkrivProfil(image, "8bim");
+		visOgSkrivProfil(image, "iptc");
+		visOgSkrivProfil(image, "icc");
+		visOgSkrivProfil(image, "exif");
+		visOgSkrivProfil(image, "xmp");
 
 	}
 
@@ -33,7 +31,7 @@ public class NyeProfilmetoder {
 	 * @param image MagickImage
 	 * @param string String
 	 */
-	private static void visProfil(MagickImage image, String navn) throws Exception {
+	private static void visOgSkrivProfil(MagickImage image, String navn) throws Exception {
 		byte[] b = image.getImageProfile(navn);
 		if (b==null) {
 			System.out.println(navn+" =null");

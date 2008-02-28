@@ -20,7 +20,7 @@ import magick.*;
  *
  * @author Jacob Nordfalk
  */
-public class Testtools
+public class MagickTesttools
 {
 	public static String path_input = "test"+File.separator+"magicktest"+File.separator+File.separator;
 	public static String path_actual_output = "test"+File.separator+"actual_output"+File.separator;

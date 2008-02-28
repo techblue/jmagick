@@ -7,12 +7,12 @@ import magicktest.*;
 public class ProfileTestCases extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
-		Testtools.allocateAndFreeSomeMem((int)(1000000*Math.random()));
+		MagickTesttools.allocateAndFreeSomeMem((int)(1000000*Math.random()));
 	}
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		Testtools.allocateAndFreeSomeMem((int)(1000000*Math.random()));
+		MagickTesttools.allocateAndFreeSomeMem((int)(1000000*Math.random()));
 	}
 
 
@@ -24,15 +24,15 @@ public class ProfileTestCases extends TestCase {
 	{
 		for (int i=0; i<50; i++)
 		{
-			ImageInfo info = new ImageInfo(Testtools.path_input+ "img_iptc8006_exif2829_icc560.jpg");
+			ImageInfo info = new ImageInfo(MagickTesttools.path_input+ "img_iptc8006_exif2829_icc560.jpg");
 			MagickImage image = new MagickImage(info);
 			ProfileInfo profile = image.getIptcProfile();
 			image.setIptcProfile(profile);
 			System.gc();
-			Testtools.displayProfile(profile);
+			MagickTesttools.displayProfile(profile);
 			// identify -verbose gives: Profile-8bim: 8006 bytes
 			assertEquals(8006, profile.getInfo().length);
-			Testtools.allocateAndFreeSomeMem((int)(1000000*Math.random()));
+			MagickTesttools.allocateAndFreeSomeMem((int)(1000000*Math.random()));
 		}
 	}
 
@@ -43,15 +43,15 @@ public class ProfileTestCases extends TestCase {
 	public void testIccJM626Crash() throws Exception {
 		for (int i=0; i<50; i++)
 		{
-			ImageInfo info = new ImageInfo(Testtools.path_input+ "img_iptc8006_exif2829_icc560.jpg");
+			ImageInfo info = new ImageInfo(MagickTesttools.path_input+ "img_iptc8006_exif2829_icc560.jpg");
 			MagickImage image = new MagickImage(info);
 			ProfileInfo profile = image.getColorProfile();
 			//image.setColorProfile(profile);
 			System.gc();
-			Testtools.displayProfile(profile);
+			MagickTesttools.displayProfile(profile);
 			// identify -verbose gives:   Profile-icc: 560 bytes
 			assertEquals(560, profile.getInfo().length);
-			Testtools.allocateAndFreeSomeMem((int)(1000000*Math.random()));
+			MagickTesttools.allocateAndFreeSomeMem((int)(1000000*Math.random()));
 		}
 	}
 
@@ -61,10 +61,10 @@ public class ProfileTestCases extends TestCase {
 	 *
 	 */
 	public void testReadBigIccJpg() throws Exception {
-		ImageInfo info = new ImageInfo(Testtools.path_input + "big_icc_1827908_bytes.jpg");
+		ImageInfo info = new ImageInfo(MagickTesttools.path_input + "big_icc_1827908_bytes.jpg");
 		MagickImage image = new MagickImage(info);
 		ProfileInfo profile = image.getColorProfile();
-		Testtools.displayProfile(profile);
+		MagickTesttools.displayProfile(profile);
 		// identify -verbose should give:   Profile-icc: 1827908 bytes
 		assertEquals(1827908, profile.getInfo().length);
 	}
@@ -73,10 +73,10 @@ public class ProfileTestCases extends TestCase {
 	/**
 	 */
 	public void testReadBigIptcJpg() throws Exception {
-		ImageInfo info = new ImageInfo(Testtools.path_input + "big_iptc_1477154_bytes_clippath.jpg");
+		ImageInfo info = new ImageInfo(MagickTesttools.path_input + "big_iptc_1477154_bytes_clippath.jpg");
 		MagickImage image = new MagickImage(info);
 		ProfileInfo profile = image.getIptcProfile();
-		Testtools.displayProfile(profile);
+		MagickTesttools.displayProfile(profile);
 		// identify -verbose should give:   Profile-iptc: 1477154 bytes
 		assertEquals(1477154, profile.getInfo().length);
 	}
@@ -87,31 +87,31 @@ public class ProfileTestCases extends TestCase {
 	 *
 	 */
 	public void testReadWriteBigIptcProfilesJpgTif() throws Exception {
-		MagickImage image = new MagickImage(new ImageInfo(Testtools.path_input + "pics.jpg"));
+		MagickImage image = new MagickImage(new ImageInfo(MagickTesttools.path_input + "pics.jpg"));
 
-		MagickImage image_iptc = new MagickImage(new ImageInfo(Testtools.path_input + "big_iptc_1477154_bytes_clippath.jpg"));
+		MagickImage image_iptc = new MagickImage(new ImageInfo(MagickTesttools.path_input + "big_iptc_1477154_bytes_clippath.jpg"));
 		ProfileInfo profile_iptc = image_iptc.getIptcProfile();
-		Testtools.displayProfile(profile_iptc);
+		MagickTesttools.displayProfile(profile_iptc);
 
 		image.setIptcProfile(profile_iptc);
 
 		// Test it has been stored
 		ProfileInfo profile = image.getIptcProfile();
-		Testtools.displayProfile(profile);
+		MagickTesttools.displayProfile(profile);
 		//assertTrue( Arrays.equals(profile_iptc.getInfo(), profile.getInfo()) );
 
 		// Test TIF write
 		// Not working on IM 6.2.6 becaurse of IM bug:
 		// http://www.imagemagick.org/discourse-server/viewtopic.php?f=3&t=9067&hilit=
-		Testtools.writeAndCompare(image, new ImageInfo(), "pics_w_1477154_bytes_clippath.tif");
-		Testtools.writeAndCompare(image, new ImageInfo(), "pics_w_1477154_bytes_clippath.jpg");
+		MagickTesttools.writeAndCompare(image, new ImageInfo(), "pics_w_1477154_bytes_clippath.tif");
+		MagickTesttools.writeAndCompare(image, new ImageInfo(), "pics_w_1477154_bytes_clippath.jpg");
 
 
-		MagickImage writtenimage = new MagickImage(new ImageInfo(Testtools.path_actual_output + "pics_w_1477154_bytes_clippath.tif"));
+		MagickImage writtenimage = new MagickImage(new ImageInfo(MagickTesttools.path_actual_output + "pics_w_1477154_bytes_clippath.tif"));
 		assertEquals(1477154,writtenimage.getIptcProfile().getInfo().length);
 
 
-		assertTrue(Testtools.compareImageProfiles(writtenimage, image));
+		assertTrue(MagickTesttools.compareImageProfiles(writtenimage, image));
 
 		// Test JPG write
 		// Not working on IM 6.2.6 becaurse of IM bug:
@@ -127,32 +127,32 @@ public class ProfileTestCases extends TestCase {
 	 *
 	 */
 	public void testReadWriteBigIccProfilesJpgTif() throws Exception {
-		MagickImage image = new MagickImage(new ImageInfo(Testtools.path_input + "pics.jpg"));
+		MagickImage image = new MagickImage(new ImageInfo(MagickTesttools.path_input + "pics.jpg"));
 
-		MagickImage image_icc = new MagickImage(new ImageInfo(Testtools.path_input + "big_icc_1827908_bytes.jpg"));
+		MagickImage image_icc = new MagickImage(new ImageInfo(MagickTesttools.path_input + "big_icc_1827908_bytes.jpg"));
 		ProfileInfo profile_icc = image_icc.getColorProfile();
-		Testtools.displayProfile(profile_icc);
+		MagickTesttools.displayProfile(profile_icc);
 
 		image.setColorProfile(profile_icc);
 
 		// Test it has been stored
 		ProfileInfo profile = image.getColorProfile();
-		Testtools.displayProfile(profile);
+		MagickTesttools.displayProfile(profile);
 
 		// Test TIF write
 		// Not working on IM 6.2.6 becaurse of IM bug:
 		// http://www.imagemagick.org/discourse-server/viewtopic.php?f=3&t=9067&hilit=
-		Testtools.writeAndCompare(image, new ImageInfo(), "pics_w_icc_1827908_bytes.tif");
+		MagickTesttools.writeAndCompare(image, new ImageInfo(), "pics_w_icc_1827908_bytes.tif");
 
-		MagickImage writtenimage = new MagickImage(new ImageInfo(Testtools.path_actual_output + "pics_w_icc_1827908_bytes.tif"));
+		MagickImage writtenimage = new MagickImage(new ImageInfo(MagickTesttools.path_actual_output + "pics_w_icc_1827908_bytes.tif"));
 
 		assertEquals(1827908,writtenimage.getColorProfile().getInfo().length);
-		assertTrue(Testtools.compareImageProfiles(writtenimage, image));
+		assertTrue(MagickTesttools.compareImageProfiles(writtenimage, image));
 
 		// Test JPG write
 		// Not working on IM 6.2.6 becaurse of IM bug:
 		// http://www.imagemagick.org/discourse-server/viewtopic.php?f=3&t=9067&hilit=
-		Testtools.writeAndCompare(image, new ImageInfo(), "pics_w_icc_1827908_bytes.jpg");
+		MagickTesttools.writeAndCompare(image, new ImageInfo(), "pics_w_icc_1827908_bytes.jpg");
 	}
 
 
@@ -165,7 +165,7 @@ public class ProfileTestCases extends TestCase {
 		{
 			o.testReadBigIptcJpg();
 			o.testReadBigIccJpg();
-			Testtools.allocateAndFreeSomeMem((int)(1000000*Math.random()));
+			MagickTesttools.allocateAndFreeSomeMem((int)(1000000*Math.random()));
 		}
 
 	}

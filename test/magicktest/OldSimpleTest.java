@@ -27,7 +27,7 @@ import java.io.FileOutputStream;
  * @see MainTestCase
  * @author Eric Yeo
  */
-public class SimpleTest {
+public class OldSimpleTest {
 
     /**
      * Display the information about the profile supplied.
@@ -36,7 +36,7 @@ public class SimpleTest {
      *            the profile for which to display
      */
     private static void displayProfile(ProfileInfo profile) {
-			  Testtools.displayProfile(profile);
+			  MagickTesttools.displayProfile(profile);
     }
 
     public static void main(String[] args) {

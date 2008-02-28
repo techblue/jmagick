@@ -28,9 +28,7 @@ public class TestJMagick extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		info = new ImageInfo();
-		image = new MagickImage(new ImageInfo(Testtools.path_input + "pics.jpg"));
-                File f = new File(Testtools.path_input + "pics.jpg");
-                System.err.println(""+f.exists());
+		image = new MagickImage(new ImageInfo(MagickTesttools.path_input + "pics.jpg"));
 	}
 
 	protected void tearDown() throws Exception {
@@ -64,7 +62,7 @@ public class TestJMagick extends TestCase {
 		assertEquals("Scaled to ", 30, rect.height);
 
 		// Copy an image.
-		ImageInfo info = new ImageInfo(Testtools.path_input + "pics.jpg");
+		ImageInfo info = new ImageInfo(MagickTesttools.path_input + "pics.jpg");
 		info.setPage("50x50+0+0");
 		info.setUnits(ResolutionType.PixelsPerInchResolution);
 		info.setColorspace(ColorspaceType.RGBColorspace);
@@ -88,7 +86,7 @@ public class TestJMagick extends TestCase {
 		assertEquals("Total colors ", 0, image.getTotalColors());
 		assertEquals("Depth is ", 8, image.getDepth());
 		image.signatureImage();
-		Testtools.writeAndCompare(image, info, "copy.jpg");
+		MagickTesttools.writeAndCompare(image, info, "copy.jpg");
 
 		// Background Color
 		if (IMver > 557) { // As .equals() is not implementet we compare the strings
@@ -110,7 +108,7 @@ public class TestJMagick extends TestCase {
 		MagickImage borderedImage = image.borderImage(new Rectangle(0, 0, 10, 20));
 		// In IM 557 the profile wont load from file
 		if (IMver > 557) {
-			Testtools.writeAndCompare(borderedImage, info, "border.jpg");
+			MagickTesttools.writeAndCompare(borderedImage, info, "border.jpg");
 		}
 
 	}
@@ -118,7 +116,7 @@ public class TestJMagick extends TestCase {
 	public void testRaise() throws Exception {
 		// Raise image
 		image.raiseImage(new Rectangle(0, 0, 10, 20), true);
-		Testtools.writeAndCompare(image, info, "raised.jpg");
+		MagickTesttools.writeAndCompare(image, info, "raised.jpg");
 	}
 
 
@@ -132,7 +130,7 @@ public class TestJMagick extends TestCase {
 		montageInfo.setFileName("montage.jpg");
 		montageInfo.setBorderWidth(5);
 		MagickImage montage = seqImage.montageImages(montageInfo);
-		Testtools.writeAndCompare(montage, new ImageInfo(), "montage.jpg");
+		MagickTesttools.writeAndCompare(montage, new ImageInfo(), "montage.jpg");
 	}
 
 
@@ -150,7 +148,7 @@ public class TestJMagick extends TestCase {
 		montageInfo.setTitle("Melbourne");
 		montageInfo.setBorderWidth(5);
 		MagickImage montage = seqImage.montageImages(montageInfo);
-		Testtools.writeAndCompare(montage, new ImageInfo(), "montage_w_text.jpg");
+		MagickTesttools.writeAndCompare(montage, new ImageInfo(), "montage_w_text.jpg");
 	}
 
 	/**
@@ -173,7 +171,7 @@ public class TestJMagick extends TestCase {
 
 		// Test average
 		MagickImage average = seqImage.averageImages();
-		Testtools.writeAndCompare(average, new ImageInfo(), "average.jpg");
+		MagickTesttools.writeAndCompare(average, new ImageInfo(), "average.jpg");
 	}
 
 	public void testBlob() throws Exception {
@@ -192,15 +190,15 @@ public class TestJMagick extends TestCase {
 		Dimension imageDim = blobImage.getDimension();
 		assertEquals("Blob width is ", 198, imageDim.width);
 		assertEquals("Blob heght is ", 134, imageDim.height);
-		Testtools.writeAndCompare(blobImage, info, "blob.jpg");
+		MagickTesttools.writeAndCompare(blobImage, info, "blob.jpg");
 
 		// JPEG Image to GIF blob
 		image.setMagick("GIF");
 		blob = image.imageToBlob(info);
-		FileOutputStream out = new FileOutputStream(Testtools.path_actual_output + "blob.gif");
+		FileOutputStream out = new FileOutputStream(MagickTesttools.path_actual_output + "blob.gif");
 		out.write(blob);
 		out.close();
-		Testtools.compareImage(Testtools.path_actual_output + "blob.gif", Testtools.path_correct_output + "blob.gif", 20);
+		MagickTesttools.compareImage(MagickTesttools.path_actual_output + "blob.gif", MagickTesttools.path_correct_output + "blob.gif", 20);
 	}
 
 	/**
@@ -209,11 +207,11 @@ public class TestJMagick extends TestCase {
 	public void testRotShearScale() throws Exception {
 		// Rotation and shear
 		MagickImage rotated = image.rotateImage(45.0);
-		Testtools.writeAndCompare(rotated, info, "rotated.jpg");
+		MagickTesttools.writeAndCompare(rotated, info, "rotated.jpg");
 		MagickImage sheared = image.shearImage(50.0, 10.0);
-		Testtools.writeAndCompare(sheared, info, "sheared.jpg");
+		MagickTesttools.writeAndCompare(sheared, info, "sheared.jpg");
 		MagickImage scaled = image.scaleImage(100, 80);
-		Testtools.writeAndCompare(scaled, info, "scaled.jpg");
+		MagickTesttools.writeAndCompare(scaled, info, "scaled.jpg");
 	}
 
 	public void testCloning() throws Exception {
@@ -225,7 +223,7 @@ public class TestJMagick extends TestCase {
 		assertEquals("Storage class is ", 1, image.getStorageClass());
 		assertEquals("Comment is ", "CREATOR: XV Version 3.10a  Rev: 12/29/94 (PNG patch 1.2)  Quality = 100, Smoothing = 0\n", image.getImageAttribute("Comment"));
 		MagickImage clonedImage = image.cloneImage(0, 0, false);
-		Testtools.writeAndCompare(clonedImage, info, "clone.jpg");
+		MagickTesttools.writeAndCompare(clonedImage, info, "clone.jpg");
 	}
 
 	/**
@@ -243,7 +241,7 @@ public class TestJMagick extends TestCase {
 		assertTrue("QuantizeImage ", quantizedImage.quantizeImage(quantizeInfo));
 		assertEquals("Colors ", 235, quantizedImage.getColors());
 		assertEquals("Total colors ", 0, quantizedImage.getTotalColors());
-		Testtools.writeAndCompare(quantizedImage, info, "quantized.png");
+		MagickTesttools.writeAndCompare(quantizedImage, info, "quantized.png");
 	}
 
 	public void testConstituteDrawTransparent() throws Exception {
@@ -265,14 +263,14 @@ public class TestJMagick extends TestCase {
 		drawInfo.setStroke(PixelPacket.queryColorDatabase("red"));
 		drawInfo.setFill(PixelPacket.queryColorDatabase("white"));
 		blankImage.drawImage(drawInfo);
-		Testtools.writeAndCompare(blankImage, info, "blank.jpg");
+		MagickTesttools.writeAndCompare(blankImage, info, "blank.jpg");
 
 		// Make the white page of the image transparent
 		blankImage.transparentImage(
 				PixelPacket.queryColorDatabase("white"), 65535);
 
 		//info.setMagick("PNG");
-		Testtools.writeAndCompare(blankImage, info, "transparent.jpg");
+		MagickTesttools.writeAndCompare(blankImage, info, "transparent.jpg");
 	}
 
         /**
@@ -302,7 +300,7 @@ public class TestJMagick extends TestCase {
 		annotateInfo.setGeometry("+30+30");
 		blankImage.annotateImage(annotateInfo);
 
-		Testtools.writeAndCompare(blankImage, info, "blank_w_text.jpg");
+		MagickTesttools.writeAndCompare(blankImage, info, "blank_w_text.jpg");
 	}
 
 	public void testCropChop() throws Exception {
@@ -311,24 +309,24 @@ public class TestJMagick extends TestCase {
 		// Crop image
 		rect = new Rectangle(20, 20, 150, 120);
 		MagickImage cropped = image.cropImage(rect);
-		Testtools.writeAndCompare(cropped, info, "cropped.jpg");
+		MagickTesttools.writeAndCompare(cropped, info, "cropped.jpg");
 
 		// Chop image
 		rect = new Rectangle(0, 0, 150, 120);
 		MagickImage chopped = image.chopImage(rect);
-		Testtools.writeAndCompare(chopped, info, "chopped.jpg");
+		MagickTesttools.writeAndCompare(chopped, info, "chopped.jpg");
 	}
 
 	public void testSharpen() throws Exception {
 		// Sharpen image
 		MagickImage sharpened = image.sharpenImage(1.0, 5.0);
-		Testtools.writeAndCompare(sharpened, info, "sharpened.jpg");
+		MagickTesttools.writeAndCompare(sharpened, info, "sharpened.jpg");
 	}
 
 	public void testDespeckle() throws Exception {
 		// Despeckle image
 		MagickImage despeckled = image.despeckleImage();
-		Testtools.writeAndCompare(despeckled, info, "despeckled.jpg");
+		MagickTesttools.writeAndCompare(despeckled, info, "despeckled.jpg");
 	}
 
 	public void testConvolve() throws Exception {
@@ -340,7 +338,7 @@ public class TestJMagick extends TestCase {
 		}
 		kernel[4] = 2.0;
 		MagickImage convolvedImage = image.convolveImage(3, kernel);
-		Testtools.writeAndCompare(convolvedImage, info, "convolved.jpg");
+		MagickTesttools.writeAndCompare(convolvedImage, info, "convolved.jpg");
 
 		// Finally display the image.
 		MagickWindow window = new MagickWindow(image);
