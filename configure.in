@@ -4,6 +4,21 @@ dnl This is the autoconf input file for Java Magick.
 AC_INIT(src/magick/MagickImage.java)
 AC_CANONICAL_SYSTEM
 
+dnl Get the OS name
+
+if test -x "/bin/uname" ; then
+  UNAME=/bin/uname
+elif test -x "/usr/bin/uname" ; then
+  UNAME=/usr/bin/uname
+elif test -x "/usr/local/bin/uname" ; then
+  UNAME=/usr/local/bin/uname
+else
+  echo configure: cannot find uname
+  exit 1
+fi
+
+OS=`$UNAME -s`
+
 dnl The version number must change with every release
 VER_MAJOR=6
 VER_MINOR=3
@@ -310,5 +325,6 @@ AC_SUBST(VER_MINOR)
 AC_SUBST(VER_MICRO)
 AC_SUBST(VER_JMSUB)
 AC_SUBST(SHARED_LIB_EXT)
+AC_SUBST(OS)
 
 AC_OUTPUT([Make.def])

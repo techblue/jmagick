@@ -2,6 +2,8 @@
 # Some macro definitions.
 #
 
+OS    = @OS@
+
 # Versions
 MAJOR = @VER_MAJOR@
 MINOR = @VER_MINOR@

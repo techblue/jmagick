@@ -1,5 +1,9 @@
 # Copyright (C) 1999 Eric Yeo. All rights reserved.
 
+ifeq ($(strip $(OS)),Darwin)
+  DARWIN = true
+endif
+
 
 # This is the main Java sources.
 ifndef JAVA_SRC_DIR
@@ -162,11 +166,22 @@ $(JNI_LIB): $(JNI_OBJ)
                 -rpath $(libdir) $(SHARED_LDFLAGS) $(LDFLAGS)             \
 		-o $(JNI_LIB)                                             \
 		$(JNI_OBJ) $(JNI_LINK_LIBS) $(EXTRA_LIBS)
+
 	# Change install name shown by otool -L if tool available.
-	@-install_name_tool -id $(JNI_LIB) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT)
-	# @-ln -s $(PROJ_BASE_DIR)lib/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)
-	@-ln -s $(PROJ_BASE_DIR)lib/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)
-	@-ln -s $(PROJ_BASE_DIR)lib/jmagick-$(MAJOR).$(MINOR).$(MICRO).jar $(PROJ_BASE_DIR)/lib/jmagick.jar
+	@-ln -s ./lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)
+	@-ln -s ./jmagick-$(MAJOR).$(MINOR).$(MICRO).jar $(PROJ_BASE_DIR)/lib/jmagick.jar
+ifdef DARWIN
+	# Mac OS X
+    @-echo "Using install_name_tool..."
+    @-/usr/bin/install_name_tool -id $(PROJ_BASE_DIR)lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT)
+endif
+
+##	@-install_name_tool -id $(JNI_LIB) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT)
+##	# @-ln -s $(PROJ_BASE_DIR)lib/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)
+##	@-ln -s $(PROJ_BASE_DIR)lib/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)
+##	@-ln -s $(PROJ_BASE_DIR)lib/jmagick-$(MAJOR).$(MINOR).$(MICRO).jar $(PROJ_BASE_DIR)/lib/jmagick.jar
+
+
 
 ifndef CLEANING
 ifeq ($(wildcard $(JNI_DEP_FILE)), $(JNI_DEP_FILE))
@@ -208,7 +223,7 @@ clean:
 ifdef JNI_LIB_NAME
 	@-rm $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT) 
 endif
-	@-rm $(libdir)/lib
+##	@-rm $(libdir)/lib
 ifdef DIRS
 	@for d in $(DIRS); do					\
 		if [ -f $$d/Makefile ]; then	 		\
@@ -232,7 +247,13 @@ ifdef DIRS
 	done
 endif
 ifdef JNI_LIB_NAME
-	@-ln -s $(libdir)/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT) $(libdir)/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)
+##	@-ln -s $(libdir)/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT) $(libdir)/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)
+# Mac OS X
+ifdef DARWIN
+	@-echo "Using install_name_tool..."
+	@-/usr/bin/install_name_tool -id $(libdir)/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT) 		$(libdir)/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT)
 endif
+	@-pwddir=`pwd`;cd $(libdir); ln -fs ./lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT) ./lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT);cd $(pwddir)
+endif #JNI_LIB_NAME
 
 extra-install::
