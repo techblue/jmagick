@@ -1,0 +1,53 @@
+DEVELOPERS AND CONTRIBUTORS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following people have worked on or have contributed code to JMagick.
+They hold the appropriate copyright to their contributions. The list do
+not contain the copyright holders of ImageMagick (see the ImageMagick
+copyright statements).
+
+Eric Yeo <ttey@yeo.nu>
+Development and maintenance of JMagick.
+
+Abdulbaset Gaddah <agaddah@yahoo.com>
+Contributed more functionality to JMagick.
+
+Jin Zhao <jzhao2@Bayou.UH.EDU>
+Constributed to the Mac OS X port.
+
+Ibrahim Tannir <itannir@v-connect.com>
+Contributed the Makefile for Windows.
+
+Susan Dorr <sdorr@contentcube.com>
+Contributed to some methods for MagickImage.
+
+Adam Heath <doogie@brainfood.com>
+Contributed the DESTDIR variable in Makefiles for packaging purposes.
+Conrtibuted the configure directive --with-java-includes
+
+Max Kollegov <virtual_max@geocities.com>
+Contributed code to load JMagick shared library from the system class loader,
+thereby, making JMagick usable in the Resin server.
+
+Tim Griffin <tim@timgriffin.net>
+For pointing out a number of problems when compiling JMagick on Solaris
+using a Sun C compiler and contributions to code.
+
+Elizabeth Barham <soggytrousers@yahoo.com>
+For code contributions.
+
+Susan Dorr <sdorr@contentcube.com>
+For contributing MagickInfo and its associated native C code and pingImage.
+
+Mike Edmonds <misu.edmonds@verizon.net>
+For contributing the MagickImage methods addNoiseImage, blurImage,
+charcoalImage, edgeImage, embossImage, enhanceImage, gaussianBlurImage,
+implodeImage, medianFilterImage, oilPaintImage, reduceNoiseImage,
+segmentImage, solarizeImage, spreadImage, swirlImage, unsharpMaskImage,
+waveImage
+
+
+SPECIAL THANKS
+~~~~~~~~~~~~~~
+Special thanks goes to Alexander Voynow <svoynow@yahoo.com> for his help
+and patience in getting JMagick to work on Solaris.
