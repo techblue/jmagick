@@ -1,7 +1,6 @@
 include ../../Make.def
 
-# JAVA_SRC_FILES	=	MagickWindow.java Test.java Loop.java
-JAVA_SRC_FILES	=	Test.java Loop.java
+JAVA_SRC_FILES	=	MagickTesttools.java OldSimpleTest.java Loop.java TestJMagick.java GenerateCorrectOutput.java
 CLEAN_LIST	=	copy.jpg blank.jpg copy_pics.jpg rotated.jpg \
 			sheared.jpg quantized.png scaled.jpg cropped.jpg \
 			chopped.jpg sharpened.jpg despeckled.jpg \
@@ -14,13 +13,11 @@ include ../../Make.rules
 # For Solaris and Linux, LD_LIBRARY_PATH sets the shared library path
 # For Mac OS X, DYLD_LIBRARY_PATH sets the shared library path
 
-#test: default-target Testtools.class MainTestCase.class
-test:
+test: default-target 
 	cd ../..; LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH):test:lib/junit.jar junit.textui.TestRunner magicktest.TestJMagick
 
-generateCorrect:
+generateCorrect: GenerateCorrectOutput.class
 	cd ../..; LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH):test:lib/junit.jar magicktest.GenerateCorrectOutput
-
 
 simpletest: default-target
 	mkdir ../simpletest_output; cp pics.jpg ../simpletest_output; cd ../simpletest_output; LD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) DYLD_LIBRARY_PATH=$(MAGICK_LIB_PATH):../../lib:$(LD_LIBRARY_PATH) $(JAVA) -classpath $(JAVA_CLASS_PATH) magicktest.OldSimpleTest

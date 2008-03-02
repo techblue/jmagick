@@ -49,7 +49,7 @@ simpletest::
 	cd test/magicktest; make simpletest
 
 test::
-	cd test/magicktest; make test
+	cd test/magicktest; CLASSPATH=../../lib/junit.jar make test
 
 generateCorrect::
-	cd test/magicktest; make generateCorrect
+	cd test/magicktest; CLASSPATH=../../lib/junit.jar make generateCorrect
