@@ -3680,6 +3680,8 @@ JNIEXPORT jbyteArray JNICALL Java_magick_MagickImage_getImageProfile
   Image *image = NULL;
 	const char * cstrProfileName;
 	jbyteArray byteArray;
+  StringInfo* profileInfo;
+  unsigned char* byteElements;
 
 	image = (Image * ) getHandle(env, self, "magickImageHandle", NULL);
 	if (image == NULL) {
@@ -3694,21 +3696,19 @@ JNIEXPORT jbyteArray JNICALL Java_magick_MagickImage_getImageProfile
 		cstrProfileName = (*env)->GetStringUTFChars(env, profileName, 0);
 	}
 
-	StringInfo* profileInfo = GetImageProfile(image, cstrProfileName);
+	profileInfo = GetImageProfile(image, cstrProfileName);
 
-	if (profileInfo != (const StringInfo * ) NULL && profileInfo -> length > 0) {
+	if (profileInfo != (const StringInfo*) NULL && profileInfo->length > 0) {
 
 		/* Construct the byte array */
-		byteArray = ( * env) -> NewByteArray(env, profileInfo -> length);
+		byteArray = (*env)->NewByteArray(env, profileInfo -> length);
 		if (byteArray == NULL) {
 			throwMagickException(env, "Unable to allocate byte array "
 													 "for profile info");
 			return NULL;
 		}
 
-		unsigned char * byteElements;
-		byteElements =
-				( * env) -> GetByteArrayElements(env, byteArray, JNI_FALSE);
+		byteElements = (*env)->GetByteArrayElements(env, byteArray, JNI_FALSE);
 		if (byteElements == NULL) {
 			throwMagickException(env, "Unable to obtain byte array elements "
 													 "for profile info");
