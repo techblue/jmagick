@@ -22,7 +22,7 @@ import magick.*;
  */
 public class MagickTesttools
 {
-	public static String path_input = "test"+File.separator+"magicktest"+File.separator+File.separator;
+	public static String path_input = "test"+File.separator+"magicktest"+File.separator;
 	public static String path_actual_output = "test"+File.separator+"actual_output"+File.separator;
 	public static String path_correct_output = "test"+File.separator+"correct_output"+File.separator;
 
@@ -110,6 +110,9 @@ public class MagickTesttools
 			errsb.append( (char) ch);
 		} while (true);
 
+		compProces.getInputStream().close();
+		std.close();
+		err.close();
 
 		String ret = outsb.toString() + errsb.toString();
 		// parse the first number in output
