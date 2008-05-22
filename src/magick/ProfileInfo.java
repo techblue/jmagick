@@ -5,6 +5,11 @@ package magick;
  * This class corresponds to the ProfileInfo structure in
  * the C API. ProfileInfo is currently used in the Image
  * structure to store the ICC and IPTC profiles.
+ * @deprecated This class is only needed for the old (ImageMagick 5.5.7 ?)
+ * methods get/setColorProfile() and get/setIptcProfile().
+ * Recommended is to use the new generic methods getImageProfile() and
+ * setImageProfile() instead
+ * @see MagickImage#setColorProfile
  * @author Eric Yeo &lt;ttey@yeo.nu&gt;
  */
 public class ProfileInfo {
