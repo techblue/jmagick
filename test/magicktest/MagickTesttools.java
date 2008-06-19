@@ -84,7 +84,10 @@ public class MagickTesttools
 				{ (char *) NULL, (long) UndefinedMetric }
 			}
 	 */
-		String cmd = "compare -metric MSE "+file1+" "+file2+" tempImageDifference.jpg";
+
+		//String cmd = "compare -metric MSE "+file1+" "+file2+" tempImageDifference.jpg";
+		String[] cmd = new String[] {"compare","-metric","MSE",file1,file2,"tempcompareImage.jpg"};
+
 
 		// Some may need an absolute path for IM 'compare' command.
 		// Here are some examples:
@@ -110,7 +113,7 @@ public class MagickTesttools
 			errsb.append( (char) ch);
 		} while (true);
 
-		compProces.getInputStream().close();
+		compProces.getOutputStream().close();
 		std.close();
 		err.close();
 
