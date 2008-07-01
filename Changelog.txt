@@ -1,6 +1,13 @@
-2007-07-01  Jacob Nordfalk - version 6.4.2
+
+The current verison of JMagick should be compatible with any version
+of ImageMagick version 6.3.9 to version 6.4.2 (at least).
+
+---------------
+
+2007-07-01  Jacob Nordfalk - JMagick 6.4.2
 	* look for include files in both ${MPATH}/include/magick/api.h (old IM way) and
 		${MPATH}/include/ImageMagick/magick/api.h  (IM 6.3.8.something and later)
+	* Test run on Q16 (16 bits per pixed)
 
 2007-05-22  Jacob Nordfalk
 	* Small updates of javadoc
@@ -15,6 +22,7 @@
 
 2007-02-25  Andy Lewis
 	* Updated ExceptionType and GeometryFlags to reflect IM changes in 6.3.9
+	* This makes JM INCOMPATIBLE WITH ImageMagick versions before 6.3.9
 
 2007-02-26  Jacob Nordfalk
 	* Renamed test classes and polished the tests
