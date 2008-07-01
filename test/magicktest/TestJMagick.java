@@ -90,11 +90,21 @@ public class TestJMagick extends TestCase {
 
 		// Background Color
 		if (IMver > 557) { // As .equals() is not implementet we compare the strings
+			// This only works if we are running Q8 (8 bits per pixel
+			//assertEquals("Old colour ", image.getBackgroundColor().toString(),
+			//						 new PixelPacket(255, 255, 255, 0).toString());
+			// instead query the color "white"
 			assertEquals("Old colour ", image.getBackgroundColor().toString(),
-									 new PixelPacket(255, 255, 255, 0).toString());
+									 PixelPacket.queryColorDatabase("white").toString());
+
 			image.setBackgroundColor(PixelPacket.queryColorDatabase("red"));
+
+			// This only works if we are running Q8 (8 bits per pixel
+			//assertEquals("New colour ", image.getBackgroundColor().toString(),
+			//						 new PixelPacket(255, 0, 0, 0).toString());
 			assertEquals("New colour ", image.getBackgroundColor().toString(),
-									 new PixelPacket(255, 0, 0, 0).toString());
+									 PixelPacket.queryColorDatabase("red").toString());
+
 		}
 
 		// Profile test
@@ -198,7 +208,8 @@ public class TestJMagick extends TestCase {
 		FileOutputStream out = new FileOutputStream(MagickTesttools.path_actual_output + "blob.gif");
 		out.write(blob);
 		out.close();
-		MagickTesttools.compareImage(MagickTesttools.path_actual_output + "blob.gif", MagickTesttools.path_correct_output + "blob.gif", 20);
+		// going from Q8 to Q16 gives difference 23.5207 here, so set it to 40 to be on the safe side
+		MagickTesttools.compareImage(MagickTesttools.path_actual_output + "blob.gif", MagickTesttools.path_correct_output + "blob.gif", 40);
 	}
 
 	/**
@@ -228,7 +239,7 @@ public class TestJMagick extends TestCase {
 
 	/**
 	 * Test of diverse operations on a small is processed correctly
-         * This test might fail if ImageMagick doesent have PNG support.
+				 * This test might fail if ImageMagick doesent have PNG support.
 	 */
 	public void testQuantizeImage_failMightBeOk() throws Exception {
 
@@ -273,10 +284,10 @@ public class TestJMagick extends TestCase {
 		MagickTesttools.writeAndCompare(blankImage, info, "transparent.jpg");
 	}
 
-        /**
-         * Test annotate with text.
-         * Expect this test to fail when the font set change
-         */
+				/**
+				 * Test annotate with text.
+				 * Expect this test to fail when the font set change
+				 */
 	public void testAnnotate_failMightBeOk() throws Exception {
 
 		// Create an image from scratch
