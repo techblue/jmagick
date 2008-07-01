@@ -1,56 +1,47 @@
 Copyright (C) 1998-2002 Eric Yeo. All rights reserved.
-This software has a LGPL license.
-Please see the file LICENSE for details.
+As of 2008 maintained by Jacob Nordfalk
+This software has a LGPL license. Please see the file LICENSE for details.
+
 
 DEVELOPMENT ENVIRONMENT
 ~~~~~~~~~~~~~~~~~~~~~~~
-JMagick was developed and tested under the following environment:
-
-  1. ImageMagick 5.4.7, RedHat Linux 7.2 and Sun JDK 1.3.1.
-  1. ImageMagick 5.4.7, RedHat Linux 7.2 and Sun JDK 1.4.
-
-Some problems was observed with the IBM JDKs in relation to AWT. It does not
-affect the JMagick interfaces directly.
-
+JMagick is developed and tested under Linux with Sun JDK 1.4.
 It has not been tested on any other operating systems.
 
+Please see top of Changelog.txt to see which which versions of ImageMagick
+is currently supported.
 
-CVS REPOSITORY
+
+SUBVERSION REPOSITORY
 ~~~~~~~~~~~~~~
-The JMagick source can be anonymously accessed with CVS:
+The JMagick source can be anonymously accessed with SVN:
 
-    > cvs -d :pserver:anonymous@jmagick.yeo.nu:/var/cvs/jmagick login
-    > Password: <enter>
-    > cvs -d :pserver:anonymous@jmagick.yeo.nu:/var/cvs/jmagick checkout JMagick
+		> svn co https://jmagick.svn.sourceforge.net/svnroot/jmagick jmagick
+
 
 WEB SITE
 ~~~~~~~~
 
 The JMagick web site is at
 
-    http://www.yeo.nu/jmagick
+		http://www.jmagick.org/
+		http://jmagick.wiki.sourceforge.net/
+		http://sourceforge.net/projects/jmagick/
+
+		(old web site: http://www.yeo.nu/jmagick)
+
+
 
 MAILING LIST
 ~~~~~~~~~~~~
-The JMagick mailing list is jmagick@yeo.nu. However, only list members are
-allowed to post to the mailing. To join the JMagick mailing list, please
-point your web brower at
-
-    http://www.yeo.nu/mailman/listinfo/jmagick
+The JMagick mailing list is jmagick-users@lists.sourceforge.net.
+However, only list members are allowed to post to the mailing.
+To join the JMagick mailing list, please point your web brower at
+		https://lists.sourceforge.net/lists/listinfo/jmagick-users
 
 Please make use of the mailing list for help and bug reports.
 
-MISC
-~~~~
-Things to be done:
 
-1. Implement a more rigerous test with Autoconf.
-2. The full functionality of Image Magick is not supported yet.
-3. Need a web page for JMagick.
-4. Need a maintainer for the Windows build environment.
-5. Need volunteers to verify that JMagick works on other platforms.
 
-ALL contributions and bug reports are welcomed.
-
-Eric Yeo
-9 July 2003
+Jacob Nordfalk
+1 July 2008
