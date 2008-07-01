@@ -1,65 +1,69 @@
+2007-07-01  Jacob Nordfalk
+	* look for include files in both ${MPATH}/include/magick/api.h (old IM way) and
+		${MPATH}/include/ImageMagick/magick/api.h  (IM 6.3.8.something and later)
+
 2007-05-22  Jacob Nordfalk
-  * Small updates of javadoc
+	* Small updates of javadoc
 
 2008-??-??  Jacob Nordfalk
-  * Added a test suite
+	* Added a test suite
 
 2007-02-27  Jacob Nordfalk
-  * Added methods setImageProfile and getImageProfile
+	* Added methods setImageProfile and getImageProfile
 	* Deprecated old and only partly working profile methods
 	* Introduced package magicktest.BETA for test cases not yet finished
 
 2007-02-25  Andy Lewis
-  * Updated ExceptionType and GeometryFlags to reflect IM changes in 6.3.9
+	* Updated ExceptionType and GeometryFlags to reflect IM changes in 6.3.9
 
 2007-02-26  Jacob Nordfalk
-  * Renamed test classes and polished the tests
+	* Renamed test classes and polished the tests
 	* Updated Win32 Makefile.all for Visual Studio 8.
 
 2007-02-25  Andy Lewis
-  * Updated CompositeOperator to reflect IM changes made to composite.h since 6.2.9
+	* Updated CompositeOperator to reflect IM changes made to composite.h since 6.2.9
 	* Added methods blurImageChannel() and trimImage()
 
 2007-02-22  Jacob Nordfalk
-  * First version on SourceForge.net
-  * Renamed package test to magicktest and moved utility class MagickWindow to magick.util
-  * configure.in now claims version is 6.3.8
+	* First version on SourceForge.net
+	* Renamed package test to magicktest and moved utility class MagickWindow to magick.util
+	* configure.in now claims version is 6.3.8
 
 2008-02-19  Eric O'Laughlen
-  * A few tweaks to the output lib names to support version numbers and symlinks.
-  For example, it outputs libJMagick-6.2.6.dylib and a link called libJMagick.dylib (.so's on Linux).
-  An option to the configure.in offers an arg --with-shared-lib-ext=.dylib.
+	* A few tweaks to the output lib names to support version numbers and symlinks.
+	For example, it outputs libJMagick-6.2.6.dylib and a link called libJMagick.dylib (.so's on Linux).
+	An option to the configure.in offers an arg --with-shared-lib-ext=.dylib.
 
 2007-11-26  Jacob Nordfalk
-  * The ImageMagick engine wasnt initialized from JMagick!
-    Fixed. Now setting environment variables also work, like:
+	* The ImageMagick engine wasnt initialized from JMagick!
+		Fixed. Now setting environment variables also work, like:
 		MAGICK_DEBUG=Resource       (IM debugging)
-	  MAGICK_MEMORY_LIMIT=100     (limit mem use to 100MB)
+		MAGICK_MEMORY_LIMIT=100     (limit mem use to 100MB)
 		(see http://www.imagemagick.org/script/resources.php#environment)
 
 
 2007-06-26  Ian Michell
-  * Removed obj/magick from version control. We do not want objects inside.
-  * Changed all RelinquishMemory casts to void* (this needs some testing)
-  * Reverted RelinquishMemory casts back to void** <- should have thought
-  about it haha
-  * Fixed compile error in magick_MagickImage.c at line 3390 onwards: Please
-  compile code before committing.
-  * Renamed RelinquishMemory to RelinquishMagickMemory.... I am so sure it was
-  RelinquishMemory in the docs.... OH WELL!
+	* Removed obj/magick from version control. We do not want objects inside.
+	* Changed all RelinquishMemory casts to void* (this needs some testing)
+	* Reverted RelinquishMemory casts back to void** <- should have thought
+	about it haha
+	* Fixed compile error in magick_MagickImage.c at line 3390 onwards: Please
+	compile code before committing.
+	* Renamed RelinquishMemory to RelinquishMagickMemory.... I am so sure it was
+	RelinquishMemory in the docs.... OH WELL!
 
 
 2007-06-26  Jacob Nordfalk
-  * Update broken setColorProfile() and setIptcProfile() so they dont use
-    deprecated IM557 color_profile and iptc_profile members.
-    (reference http://www.imagemagick.org/discourse-server/viewtopic.php?f=3&t=9063);
+	* Update broken setColorProfile() and setIptcProfile() so they dont use
+		deprecated IM557 color_profile and iptc_profile members.
+		(reference http://www.imagemagick.org/discourse-server/viewtopic.php?f=3&t=9063);
 
 
 2007-06-20 Ian Michell
-  * Replace deprecated LiberateMemory with RelinquishMemory to avoid crash
-    (reference http://www.yeo.id.au/mailman/private/jmagick/2007-June/002591.html);
+	* Replace deprecated LiberateMemory with RelinquishMemory to avoid crash
+		(reference http://www.yeo.id.au/mailman/private/jmagick/2007-June/002591.html);
 
 
 2007-xx-xx Jacob Nordfalk
-  * Updated ColorspaceType to reflect that IM had changed values
+	* Updated ColorspaceType to reflect that IM had changed values
 

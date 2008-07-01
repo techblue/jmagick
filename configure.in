@@ -21,8 +21,8 @@ OS=`$UNAME -s`
 
 dnl The version number must change with every release
 VER_MAJOR=6
-VER_MINOR=3
-VER_MICRO=8
+VER_MINOR=4
+VER_MICRO=2
 VER_JMSUB=0
 
 dnl Need the -G flag on Solaris when creating shared libraries.
@@ -242,19 +242,27 @@ dnl Check if ImageMagick home specified
 AC_ARG_WITH(magick-home, --with-magick-home=path home directory of ImageMagick,
             MAGICK_HOME=${withval})
 for MPATH in /usr /usr/local /usr/local/ImageMagick /usr/local/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO} ${MAGICK_HOME} ; do
+	# Location before IM 6.3.8.something
 	if  test -f ${MPATH}/include/magick/api.h  ; then
 		MAGICK_LIB_PATH=${MPATH}/lib
 		MAGICK_LIBS="-L${MPATH}/lib -lMagick"
 		MAGICK_INCLUDES=-I${MPATH}/include
 		MAGICK_REALHOME=${MPATH}
 	fi
+	# Location after IM 6.3.8.something
+	if  test -f ${MPATH}/include/ImageMagick/magick/api.h  ; then
+		MAGICK_LIB_PATH=${MPATH}/lib
+		MAGICK_LIBS="-L${MPATH}/lib -lMagick"
+		MAGICK_INCLUDES=-I${MPATH}/include/ImageMagick
+		MAGICK_REALHOME=${MPATH}
+	fi
 done
 
-dnl Check if Magick-conf exists
+dnl Check if MagickCore-conf exists
 OLDPATH=${PATH}
 PATH=${MAGICK_REALHOME}/bin:${PATH}
 export PATH
-AC_PATH_PROG(MAGICKCONF, Magick-config, not_found)
+AC_PATH_PROG(MAGICKCONF, MagickCore-config, not_found)
 PATH=${OLDPATH}
 export PATH
 dnl Added $MAGICK_LIB_PATH and $MAGICK_INCLUDES here because of
