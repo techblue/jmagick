@@ -128,10 +128,10 @@ public class MagickTesttools
 																	 " which is bigger than max allowed of " + maxDiff + ":\n  " + file1 + " " + file2);
 			}
 		} catch (NumberFormatException ex) {
-			System.err.println("Output of command 'compare' could not be parsed.");
+			System.err.println("Output of command "+Arrays.asList(cmd)+" could not be parsed.");
 			System.err.println("Perhaps you need to give full path to IMs 'compare' command?");
-			System.err.println(cmd + " gave stdout: '"+outsb+"'");
-			System.err.println(cmd + " gave stderr: '"+errsb+"'");
+			System.err.println(cmd[0] + " gave stdout: '"+outsb.toString().trim()+"'");
+			System.err.println(cmd[0] + " gave stderr: '"+errsb.toString().trim()+"'");
 			throw new RuntimeException(ret);
 		}
 		// delete temporary file if no significan difference was found

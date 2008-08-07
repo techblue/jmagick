@@ -17,7 +17,7 @@ public class GenerateCorrectOutput {
 	public static void main(String[] args) {
 
 		String msg = "GenerateCorrectOutput: After the program have runned you must copy all files in \n"
-				+MagickTesttools.path_actual_output + " to \n"+MagickTesttools.path_actual_output
+				+MagickTesttools.path_actual_output + " to \n"+MagickTesttools.path_correct_output
 				+"\n(it's a bad idea to move the directories if you intend to use Subversion)";
 		System.err.println(msg );
 		JOptionPane.showMessageDialog(null, msg);
