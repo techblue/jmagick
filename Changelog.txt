@@ -1,13 +1,34 @@
 
 The current verison of JMagick should be compatible with any version
-of ImageMagick version 6.3.9 to version 6.4.2 (at least).
+of ImageMagick version 6.3.9 to version 6.4.0 (at least).
+
+----- issues with ImageMagick 6.4.1 and later ---------
+
+In ImageMagick 6.4.1 and after the CompressionType's have been changes
+and therefore the class must be changed to:
+		public final static int UndefinedCompression = 0;
+		public final static int NoCompression = 1;
+		public final static int BZipCompression = 2;
+
+		public final static int DXT1Compression = 3;  // Revision 10867 - 05/10/08 - version 6.4.1-2
+		public final static int DXT3Compression = 4;  // IM Revision 10867
+		public final static int DXT5Compression = 5;  // IM Revision 10867
+
+		public final static int FaxCompression = 6;
+		public final static int Group4Compression = 7;
+		public final static int JPEGCompression = 8;
+		public final static int JPEG2000Compression = 9;
+		public final static int LosslessJPEGCompression = 10;
+		public final static int LZWCompression = 11;
+		public final static int RLECompression = 12;
+		public final static int ZipCompression = 13;  // IM Revision 10867
 
 ---------------
 
 2008-08-05
 	* Added setImageOption()  (contrib from Scott Knight at Specialized Business Software)
 
-2008-07-01  Jacob Nordfalk - JMagick 6.4.2
+2008-07-01  Jacob Nordfalk - JMagick 6.4.0
 	* look for include files in both ${MPATH}/include/magick/api.h (old IM way) and
 		${MPATH}/include/ImageMagick/magick/api.h  (IM 6.3.8.something and later)
 	* Test run on Q16 (16 bits per pixed)
