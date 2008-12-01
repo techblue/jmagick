@@ -1,10 +1,11 @@
+========== Compatibility statement ===========
 
-The current verison of JMagick should be compatible with any version
-of ImageMagick version 6.3.9 to version 6.4.0 (at least).
+The current verison of JMagick is compatible with
+ImageMagick version 6.3.9 to version 6.4.0.
 
 ----- issues with ImageMagick 6.4.1 and later ---------
 
-In ImageMagick 6.4.1 and after the CompressionType's have been changes
+From ImageMagick version 6.4.1-2 and after the CompressionType's have been changes
 and therefore the class must be changed to:
 		public final static int UndefinedCompression = 0;
 		public final static int NoCompression = 1;
@@ -23,7 +24,17 @@ and therefore the class must be changed to:
 		public final static int RLECompression = 12;
 		public final static int ZipCompression = 13;  // IM Revision 10867
 
----------------
+----- issues with ImageMagick before version 6.3.9 ---------
+
+There are only some very minor issues, namely that the classes ExceptionType
+and GeometryFlags have been changed.
+This *could* influence the return value of Magick.parseImageGeometry(),
+but existing values are compatible, so code should not break.
+IM Before version 6.2.9 does not support the DivideCompositeOp CompositeOperator.
+
+
+========== Changelog ===========
+
 
 2008-08-05
 	* Added setImageOption()  (contrib from Scott Knight at Specialized Business Software)
@@ -46,7 +57,7 @@ and therefore the class must be changed to:
 
 2007-02-25  Andy Lewis
 	* Updated ExceptionType and GeometryFlags to reflect IM changes in 6.3.9
-	* This makes JM INCOMPATIBLE WITH ImageMagick versions before 6.3.9
+	* This makes JM incompatible ImageMagick versions before 6.3.9
 
 2007-02-26  Jacob Nordfalk
 	* Renamed test classes and polished the tests
@@ -54,6 +65,7 @@ and therefore the class must be changed to:
 
 2007-02-25  Andy Lewis
 	* Updated CompositeOperator to reflect IM changes made to composite.h since 6.2.9
+    (added public static final int DivideCompositeOp = 55;)
 	* Added methods blurImageChannel() and trimImage()
 
 2007-02-22  Jacob Nordfalk
