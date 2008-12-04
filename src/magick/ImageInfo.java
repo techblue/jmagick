@@ -204,6 +204,14 @@ public class ImageInfo extends Magick {
 		public native int getDither()
 	throws MagickException;
 
+		// Set the antialias attribute.
+		public native void setAntialias(int value)
+	throws MagickException;
+
+		// Get the antialias attribute.
+		public native int getAntialias()
+	throws MagickException;
+
 		// Set the interlace attribute.
 		public native void setInterlace(int value)
 	throws MagickException;

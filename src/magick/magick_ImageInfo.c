@@ -475,6 +475,28 @@ getIntMethod(Java_magick_ImageInfo_getDither,
 	     ImageInfo)
 
 
+/*
+ * Class:     magick_ImageInfo
+ * Method:    setAntialias
+ * Signature: (I)V
+ */
+setIntMethod(Java_magick_ImageInfo_setAntialias,
+	     antialias,
+	     "imageInfoHandle",
+	     ImageInfo)
+
+
+
+/*
+ * Class:     magick_ImageInfo
+ * Method:    getAntialias
+ * Signature: ()I
+ */
+getIntMethod(Java_magick_ImageInfo_getAntialias,
+	     antialias,
+	     "imageInfoHandle",
+	     ImageInfo)
+
 
 /*
  * Class:     magick_ImageInfo
