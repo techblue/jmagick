@@ -1,0 +1,86 @@
+
+#
+# This makefile only compiles the C files and the generated
+# jni stub and headrer files and produces a DLL.
+#
+# The java compilation, generation of the JAR file and the JNI stubs
+# still have to be done on Unix using the regularly supplied make
+# file.
+#
+# Hint: To be placed in .../srm/magick and invoked from there,
+#       nmake -f Makefile.VC++
+#
+# NOTE: If you use a Visual Studio 2003 or later you will propably
+#       prefer the Makefile.all instead
+#
+# TODO: Complete generation of JMagick in the NT Environment.
+#
+# Author: IT
+# Date:   Oct 2000
+# $Id: Makefile.VC++,v 1.2 2002/10/08 20:37:07 ttey Exp $
+#
+
+CPP=cl.exe
+LINK32=link.exe
+
+OUTDIR=..\..\lib
+INTDIR=..\..\obj\magick
+JNIINC=C:\jdk1.3.1_01\include
+GENINC=..\..\generated\magick
+MAGICKINC=c:\image_stuff\ImageMagick-5.4.9-Q16\include
+MAGICKLIB=c:\image_stuff\ImageMagick-5.4.9-Q16\lib\CORE_RL_magick_.lib
+
+ALL : "$(OUTDIR)\jmagick.dll"
+
+# Debugging, no optimizing and stack checks are required. It bangs otherwise!
+CPP_PROJ=/nologo /MTd /W3 /GX /Od /Ge /Fo"$(INTDIR)\\" /c             \
+		 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" \
+		 /D "JMAGICK_EXPORTS"  /D "_VISUALC_"                         \
+		 /I "$(JNIINC)" /I "$(JNIINC)/win32" /I "$(MAGICKINC)" /I "$(GENINC)"
+
+LINK32_FLAGS=$(MAGICKLIB)                                                 \
+			 /nologo /dll /incremental:no /machine:I386                   \
+			 /out:"$(OUTDIR)\jmagick.dll" /implib:"$(OUTDIR)\jmagick.lib"
+
+LINK32_OBJS=                            \
+	"$(INTDIR)\jmagick.obj"             \
+	"$(INTDIR)\magick_DrawInfo.obj"     \
+	"$(INTDIR)\magick_ImageInfo.obj"    \
+	"$(INTDIR)\magick_MagickImage.obj"  \
+	"$(INTDIR)\magick_MagickInfo.obj"  \
+	"$(INTDIR)\magick_MontageInfo.obj"  \
+	"$(INTDIR)\magick_Magick.obj"  \
+	"$(INTDIR)\magick_PixelPacket.obj"  \
+	"$(INTDIR)\magick_QuantizeInfo.obj"
+
+"$(OUTDIR)\jmagick.dll" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+    $(LINK32)   $(LINK32_FLAGS) $(LINK32_OBJS)
+
+.c{$(INTDIR)}.obj::
+	$(CPP) $(CPP_PROJ) $<
+
+"$(INTDIR)\jmagick.obj"             : .\jmagick.c
+"$(INTDIR)\magick_DrawInfo.obj"     : .\magick_DrawInfo.c
+"$(INTDIR)\magick_ImageInfo.obj"    : .\magick_ImageInfo.c
+"$(INTDIR)\magick_Magick.obj"  : .\magick_Magick.c
+"$(INTDIR)\magick_MagickImage.obj"  : .\magick_MagickImage.c
+"$(INTDIR)\magick_MagickInfo.obj"  : .\magick_MagickInfo.c
+"$(INTDIR)\magick_MontageInfo.obj"  : .\magick_MontageInfo.c
+"$(INTDIR)\magick_PixelPacket.obj"  : .\magick_PixelPacket.c
+"$(INTDIR)\magick_QuantizeInfo.obj" : .\magick_QuantizeInfo.c
+
+CLEAN :
+	-@erase "$(INTDIR)\jmagick.obj"
+	-@erase "$(INTDIR)\magick_DrawInfo.obj"
+	-@erase "$(INTDIR)\magick_ImageInfo.obj"
+	-@erase "$(INTDIR)\magick_MagickImage.obj"
+	-@erase "$(INTDIR)\magick_MagickInfo.obj"
+	-@erase "$(INTDIR)\magick_MontageInfo.obj"
+	-@erase "$(INTDIR)\magick_Magick.obj"
+	-@erase "$(INTDIR)\magick_PixelPacket.obj"
+	-@erase "$(INTDIR)\magick_QuantizeInfo.obj"
+	-@erase "$(INTDIR)\vc60.idb"
+	-@erase "$(OUTDIR)\jmagick.dll"
+	-@erase "$(OUTDIR)\jmagick.exp"
+	-@erase "$(OUTDIR)\jmagick.lib"
+

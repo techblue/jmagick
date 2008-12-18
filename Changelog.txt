@@ -1,0 +1,368 @@
+========== Compatibility statement ===========
+
+The current verison of JMagick is compatible with
+ImageMagick version 6.3.9 to version 6.4.0.
+
+----- issues with ImageMagick 6.4.1 and later ---------
+
+From ImageMagick version 6.4.1-2 and after the CompressionType's have been changes
+and therefore the class must be changed to:
+		public final static int UndefinedCompression = 0;
+		public final static int NoCompression = 1;
+		public final static int BZipCompression = 2;
+
+		public final static int DXT1Compression = 3;  // Revision 10867 - 05/10/08 - version 6.4.1-2
+		public final static int DXT3Compression = 4;  // IM Revision 10867
+		public final static int DXT5Compression = 5;  // IM Revision 10867
+
+		public final static int FaxCompression = 6;
+		public final static int Group4Compression = 7;
+		public final static int JPEGCompression = 8;
+		public final static int JPEG2000Compression = 9;
+		public final static int LosslessJPEGCompression = 10;
+		public final static int LZWCompression = 11;
+		public final static int RLECompression = 12;
+		public final static int ZipCompression = 13;  // IM Revision 10867
+
+----- issues with ImageMagick before version 6.3.9 ---------
+
+There are only some very minor issues, namely that the classes ExceptionType
+and GeometryFlags have been changed.
+This *could* influence the return value of Magick.parseImageGeometry(),
+but existing values are compatible, so code should not break.
+IM Before version 6.2.9 does not support the DivideCompositeOp CompositeOperator.
+
+
+========== Changelog ===========
+
+
+2008-08-05
+	* Added setImageOption()  (contrib from Scott Knight at Specialized Business Software)
+
+2008-07-01  Jacob Nordfalk - JMagick 6.4.0
+	* look for include files in both ${MPATH}/include/magick/api.h (old IM way) and
+		${MPATH}/include/ImageMagick/magick/api.h  (IM 6.3.8.something and later)
+	* Test run on Q16 (16 bits per pixed)
+
+2008-05-22  Jacob Nordfalk
+	* Small updates of javadoc
+
+2008-??-??  Jacob Nordfalk
+	* Added a test suite
+
+2007-02-27  Jacob Nordfalk
+	* Added methods setImageProfile and getImageProfile
+	* Deprecated old and only partly working profile methods
+	* Introduced package magicktest.BETA for test cases not yet finished
+
+2007-02-25  Andy Lewis
+	* Updated ExceptionType and GeometryFlags to reflect IM changes in 6.3.9
+	* This makes JM incompatible ImageMagick versions before 6.3.9
+
+2007-02-26  Jacob Nordfalk
+	* Renamed test classes and polished the tests
+	* Updated Win32 Makefile.all for Visual Studio 8.
+
+2007-02-25  Andy Lewis
+	* Updated CompositeOperator to reflect IM changes made to composite.h since 6.2.9
+    (added public static final int DivideCompositeOp = 55;)
+	* Added methods blurImageChannel() and trimImage()
+
+2007-02-22  Jacob Nordfalk
+	* First version on SourceForge.net
+	* Renamed package test to magicktest and moved utility class MagickWindow to magick.util
+	* configure.in now claims version is 6.3.8
+
+2008-02-19  Eric O'Laughlen
+	* A few tweaks to the output lib names to support version numbers and symlinks.
+	For example, it outputs libJMagick-6.2.6.dylib and a link called libJMagick.dylib (.so's on Linux).
+	An option to the configure.in offers an arg --with-shared-lib-ext=.dylib.
+
+2007-11-26  Jacob Nordfalk
+	* The ImageMagick engine wasnt initialized from JMagick!
+		Fixed. Now setting environment variables also work, like:
+		MAGICK_DEBUG=Resource       (IM debugging)
+		MAGICK_MEMORY_LIMIT=100     (limit mem use to 100MB)
+		(see http://www.imagemagick.org/script/resources.php#environment)
+
+
+2007-06-26  Ian Michell
+	* Removed obj/magick from version control. We do not want objects inside.
+	* Changed all RelinquishMemory casts to void* (this needs some testing)
+	* Reverted RelinquishMemory casts back to void** <- should have thought
+	about it haha
+	* Fixed compile error in magick_MagickImage.c at line 3390 onwards: Please
+	compile code before committing.
+	* Renamed RelinquishMemory to RelinquishMagickMemory.... I am so sure it was
+	RelinquishMemory in the docs.... OH WELL!
+
+
+2007-06-26  Jacob Nordfalk
+	* Update broken setColorProfile() and setIptcProfile() so they dont use
+		deprecated IM557 color_profile and iptc_profile members.
+		(reference http://www.imagemagick.org/discourse-server/viewtopic.php?f=3&t=9063);
+
+
+2007-06-20 Ian Michell
+	* Replace deprecated LiberateMemory with RelinquishMemory to avoid crash
+		(reference http://www.yeo.id.au/mailman/private/jmagick/2007-June/002591.html);
+
+
+2007-xx-xx Jacob Nordfalk
+	* Updated ColorspaceType to reflect that IM had changed values
+
+
+---- OLD RELEASE FILE ----
+
+JMagick 6.2.6-0
+~~~~~~~~~~~~~~~
+Update to work with ImageMagick 6.2.6.
+Added MagickImage.setDepth, ImageInfo.getDepth, ImageInfo.setDepth.
+
+Contributed by harikrishna grandhi:
+Added MagickImage.setRenderingIntent and MagickImage.getRenderingIntent.
+
+JMagick 6.2.4-1
+~~~~~~~~~~~~~~~
+Updated libtool.
+Fixed issue associated with autoconf.
+
+JMagick 6.2.4-0
+~~~~~~~~~~~~~~~
+Fixed problems with retrieving Rectanage values.
+Updated to ImageMagick 6.2.4.
+Fixed up problems with overriding LDFLAGS.
+Fixed up build issues with Fedore Core 4.
+Added method MagickImage#getQuality.
+
+JMagick 6.0.4-0
+~~~~~~~~~~~~~~~
+Fixed a number of constants that have gone out of sync with ImageMagick.
+Ensure that the build works with ImageMagick 6.0.4.
+
+JMagick 5.5.7-0
+~~~~~~~~~~~~~~~
+Fixed a problem when the String is based on LATIN-1 rather than Unicode.
+Incorporated patch from Neeme Praks that adds declaration to setIntField
+to jmagick.h, remved an unused variable and correct a type cast.
+Added new parameter --with-javadoc-dir to configure for the Javadoc
+destination directory.
+
+JMagick 5.5.6-0
+~~~~~~~~~~~~~~~
+Configure against ImageMagick 5.5.6.
+Fixed in problem that surfaced in 5.5.6 where by MagickImage.imageToBlob
+did not retrieve the ImageInfo properly.
+
+JMagick 5.5.1-0
+~~~~~~~~~~~~~~~
+MagickImage.pingImage contributed by Susan Dorr.
+Mike Edmonds contributed the methods addNoiseImage, blurImage, charcoalImage,
+edgeImage, embossImage, enhanceImage, gaussianBlurImage, implodeImage,
+medianFilterImage, oilPaintImage, reduceNoiseImage, segmentImage,
+solarizeImage, spreadImage, swirlImage, unsharpMaskImage, waveImage
+
+
+JMagick 5.4.9-0
+~~~~~~~~~~~~~~~
+Removed MagickImage.compressColormap because corresponding function was
+removed from ImageMagick.
+
+JMagick 5.4.8-0
+~~~~~~~~~~~~~~~
+Clean up header. Added new include files as required by magick/api.h.
+Change the ping attribute type to boolean.
+
+JMagick 5.4.7-0
+~~~~~~~~~~~~~~~
+Always set encoding in DrawInfo to "Unicode" since Java only gives us UTF-8.
+Replace all memory management routes with AcquireMemory, LiberateMemory,
+and AcquireString.
+Add contributed code for MagickInfo.
+The class loader is now the default class loader. Set the Java environment
+"jmagick.systemclassloader=yes", to change to the system class loader. This
+affect how the shared library is loaded.
+Implemented MagickIMage.SignatureImage.
+
+JMagick 5.4.6-0
+~~~~~~~~~~~~~~~~~
+Added the method MagickImage.setCompression.
+Added the method MagickImage.signatureImage.
+Changed C comments delimiter from // to /* */.
+Added LosslessJPEGCompression to CompressionType.
+Fixed javadoc rule bug in Makefile.
+Fixed Make.rules. Missing semi-colon in rules for non-gcc compilers.
+Included sys/types.h before magick/api.h. Caused problems with Solaris.
+There appears to be a change in behaviour for Magick-config. It no
+longer provide the include path to the ImageMagick include directory.
+A workaround is provided in configure.
+
+JMagick 5.4.5-0
+~~~~~~~~~~~~~~~~~
+Changes to support ImageMagick 5.4.5.
+JMagick no longer require ImageMagick to be compiled for shared library.
+Added DESTDIR variable to the Makefiles for packaging purposes.
+Added MagickImage.setBorderColor, MagickImage.getBorderColor
+Added ImageInfo.setBorderColor, ImageInfo.getBorderColor
+Added MagickImage.setDelay, MagickImage.getDelay
+Added MagickImage.setDispose, MagickImage.getDispose
+Added MagickImage.setIterations, MagickImage.getIterations
+Added MagickImage.getColors
+Added MagickImage.getTotalColors
+Added MagickImage.getColormap methods
+Added support for the Resin server -
+		get the system class loader to load JMagick shared library.
+Removed DrawInfo.setBox, DrawInfo.getBox
+Added DrawInfo.setUnderColor, DrawInfo.getUnderColor
+Mixed fixes to remove some warnings.
+
+JMagick 5.4.3-1
+~~~~~~~~~~~~~~~
+Fixed a bug in setIntFieldValue so that this function now returns status.
+
+JMagick 5.4.3-0
+~~~~~~~~~~~~~~~
+Change MagickImage.profileImage to support ImageMagick 5.4.3.
+Updated ImageType.java.
+Added MagickImage.getCompression and MagickImage.getImageType.
+Changed configure.in so to include JMagick version numbers.
+Modified various constants in interfaces so that they are final static.
+
+JMagick 5.4.2-1
+~~~~~~~~~~~~~~~
+Fixed bug in MagickImage.transformImage that causes deallocated
+image to be accessed.
+Remove AnnotateInfo.java and magick_AnnoateInfo.c from the distribution.
+
+JMagick 5.4.2-0
+~~~~~~~~~~~~~~~
+Removed set/getCompose method in MontageInfo as it is no longer
+supported by ImageMagick-5.4.2.
+More Mac OS X patches.
+Added Makefile for windows.
+
+JMagick 5.4.1-2
+~~~~~~~~~~~~~~~
+Added method Magick.parseImageGeometry.
+Added method MagickImage.levelImage.
+Added method MagickImage.sizeBlob.
+Rename MagickImage.setImageFormat to MagickImage.setMagick
+and MagickImage.getImageFormat to MagickImage.getMagick.
+Added MagickImage.setImageFormat and MagickImage.getImageFormat
+for compatibility.
+Fixed a bug in MagickImage.profileImage.
+Upgraded to libtool 1.4.2.
+Added patches to support Mac OS X.
+
+JMagick 5.4.1-1
+~~~~~~~~~~~~~~~
+Fixed a bug in MagickImage.matteFloodfillImage.
+Added MagickImage.colorFloodfillImage.
+Added get/set method for the tile member of DrawInfo.
+As for this release, only JDK 1.2 and above are supported.
+Upgraded libtool to 1.4.
+Added patches to support Mac OS X.
+
+JMagick 5.4.1-0
+~~~~~~~~~~~~~~~
+Replace all DestroyImage with DestroyImages so that image sequences
+gets deallocated properly.
+Verified to work with ImageMagick 5.4.1.
+
+JMagick 5.4.0-1
+~~~~~~~~~~~~~~~
+Added methods to manipulate color, IPTC and generic profiles.
+Added new constructor for MagickImage to create image sequence.
+Added MonatageInfo class and support MontageImages method.
+Added AverageImages method.
+
+JMagick 5.4.0
+~~~~~~~~~~~~~
+Adapted to support ImageMagick 5.4.0
+
+JMagick 5.3.3-0
+~~~~~~~~~~~~~~~
+Added a new parameter to MagickImage.transparentImage as per changes
+in ImageMagick 5.3.3.
+Make MagickImage.destroyImage public. This is so that the programmer
+may explicitly remove resources attributed to the image rather than
+waiting for the garbage collector to act.
+
+JMagick 5.2.9-0
+~~~~~~~~~~~~~~~
+The use of libtool was incorrect. It is now generated for each platform.
+Fix in various places so that ImageMagick 5.2.9 gets supported.
+
+JMagick 5.2.7-1
+~~~~~~~~~~~~~~~
+Changes to use libtool for link and compiling.
+Patch to break a list of images into an array. Sent in by
+Ian Burrell <iburrell@digital-integrity.com>.
+Bug fix by Ian Burrell <iburrell@digital-integrity.com> in
+MagickImage.imageToBlob.
+
+JMagick 5.2.7-0
+~~~~~~~~~~~~~~~
+Removed AnnotateInfo from the list of files to make.
+Added more set and get methods in DrawInfo as DrawInfo now takes
+the role of AnnotateInfo in previous releases of ImageMagick.
+
+JMagick 5.2.6-1
+~~~~~~~~~~~~~~~
+Fixed MagickImage.transformImage so that parameters may be NULL.
+Fixed jmagick.c so that the signature for the constructor of
+MagickApiException is correct.
+Fixed magick_MagickImage.c so that exception to ImageToBlob throws
+a MagickApiException.
+Bugs reported and patched by Ian Burrell <iburrell@digital-integrity.com>.
+
+JMagick 5.2.6-0
+~~~~~~~~~~~~~~~
+Removed some method so that it would compile for ImageMagick 5.2.6.
+
+JMagick 5.2.4-1
+~~~~~~~~~~~~~~~
+Added access methods to the units attribute for MagickImage and ImageInfo.
+Added setXResolution, getXResolution, setYResolution and getYResolution
+methods in MagickImage.
+
+JMagick 5.2.4-0
+~~~~~~~~~~~~~~~
+Some changes to support ImageMagick 5.2.4.
+Added methods MagickImage.blobToImage and MagickImage.imageToBlob.
+
+JMagick 5.2.3-0
+~~~~~~~~~~~~~~~
+Added support for ImageMagick 5.2.3.
+Changes in SharpenImage function and AnnotateInfo structure.
+Added Javadoc generation: "make javadoc".
+Added some support for FreeBSD.
+Added MagickImage.scaleImage() to Loop.java.
+
+JMagick 5.2.1-1
+~~~~~~~~~~~~~~~
+Added new functions:
+	MagickImage.despeckleImage,
+	MagickImage.convolveImage,
+	MagickImage.getDepth,
+	MagickImage.getStorageClass,
+	MagickImage.setImageAttribute,
+	MagickImage.getImageAttribute.
+Added new class Magick and make every other class inherit from it.
+This way, Magick can load the shared library on demand.
+
+JMagick 5.2.1-0
+~~~~~~~~~~~~~~~
+Initial release of JMagick for ImageMagick 5.2.1.
+Too many changes to list but suffice to say that the ImageMagick API
+has significantly changed since 5.1.1.
+
+JMagick 5.1.1-6
+~~~~~~~~~~~~~~~
+Added MagickImage.shearImage, MagickImage.rotateImage
+and MagickImage.sharpenImage.
+Added QuantizeInfo class and MagickImage.quantizeImage.
+Deprecated MagickImage.setGrayscale.
+Added lddcheck target in src/test to check library dependencies.
+
+
