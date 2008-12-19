@@ -16,7 +16,7 @@ SUBVERSION REPOSITORY
 ~~~~~~~~~~~~~~
 The JMagick source can be anonymously accessed with SVN:
 
-		> svn co https://jmagick.svn.sourceforge.net/svnroot/jmagick jmagick
+		> svn co https://jmagick.svn.sourceforge.net/svnroot/jmagick/trunk jmagick
 
 
 WEB SITE
