@@ -1,0 +1,98 @@
+INSTALL NOTES
+~~~~~~~~~~~~~
+
+ 0. Prequisite.
+			 - GNU Autoconf (not strictly required)
+			 - The JMagick build scripts makes very extensive use of
+				 GNU Make 3.77.
+			 - A ANSI C compiler. The GNU or EGCS compiler is recommended.
+			 - ImageMagick developers libraries (libmagick-dev)
+				 See in Changelog.txt which version is supported
+			 - A Java2 JDK. However, JMagick was developed with Sun JDK 1.4.1.
+
+ 1. Unpack the JMagick tar file.
+
+				> tar xvfz JMagick-5.5.7-X.tar.gz
+
+ 2. Make the JMagick distribution directory current.
+
+				> cd JMagick-5.5.7-X
+
+ 3. Not strictly required, but you might want to run autoconf:
+
+				> autoconf
+
+ 4. Make sure that java, javac, jar, gcc are in your path.
+		Run the configuration script.
+
+				> ./configure
+
+		The configuration script has the following options:
+
+				--prefix=<path>
+						The root path where the installation goes. For example,
+						 to install the libraries into /usr/local/jmagick/lib,
+						 use --prefix=/usr/local/jmagick
+
+				--with-magick-home=<path>
+						Use this if your have ImageMagick install in non-standard places.
+						E.g. ./configure --with-magick-home=/usr/local/ImageMagick
+
+				--with-java-home=<path>
+						Use this to specify where your JDK is installed. This is NOT
+						necessary if you have the JAVA_HOME environment set.
+						E.g. ./configure --with-java-home=/usr/local/java
+
+				--with-java-includes=<path>
+						Use this to specify a Java include directory.
+
+				--with-jikes
+						If you wish to use the IBM Jikes compiler instead
+
+				--enable-diagnostic
+						If you want verbose messages. Only a few messages are available
+						at the moment.
+
+				--with-javadoc-dir=<path>
+						To specify a directory path for the javadoc.
+
+		 For example:
+				> ./configure --prefix=/usr/local --with-java-home=/usr/local/jdk1.4 --enable-diagnostic
+
+
+ 5. Then make everything.
+
+			 > make all
+
+ 6. To install the binaries run:
+
+			> make install
+
+ 7. To use JMagick, libJMagick.so must be in a directory where the
+		runtime loader can find it or you must set the environment variable
+		LD_LIBRARY_PATH. jmagick.jar must be in your Java class path.
+
+ 8. Examples and some simple tests can be found in test/magicktest. Simply:
+
+			 > make simpletest
+
+		For a more rigorous JUnit test, make sure to copy/link junit.jar to lib/
+		and run:
+
+			 > make test
+
+
+ 9. To generate Javadoc documentation in HTML, run:
+
+			 > make javadoc
+
+10. Enjoy. Subscribe to the mailing list for help and bug reports.
+
+
+NOTES
+~~~~~
+
+ 1. If you pulled the source from the SVN server, the make might failed
+		the first time you run it because GNU Make fails inference rules
+		when directories are not created yet. Try running make after the
+		failure.

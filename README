@@ -1,0 +1,47 @@
+Copyright (C) 1998-2002 Eric Yeo. All rights reserved.
+As of 2008 maintained by Jacob Nordfalk
+This software has a LGPL license. Please see the file LICENSE for details.
+
+
+DEVELOPMENT ENVIRONMENT
+~~~~~~~~~~~~~~~~~~~~~~~
+JMagick is developed and tested under Linux with Sun JDK 1.4.
+It has not been tested on any other operating systems.
+
+Please see top of Changelog.txt to see which which versions of ImageMagick
+is currently supported.
+
+
+SUBVERSION REPOSITORY
+~~~~~~~~~~~~~~
+The JMagick source can be anonymously accessed with SVN:
+
+		> svn co https://jmagick.svn.sourceforge.net/svnroot/jmagick jmagick
+
+
+WEB SITE
+~~~~~~~~
+
+The JMagick web site is at
+
+		http://www.jmagick.org/
+		http://jmagick.wiki.sourceforge.net/
+		http://sourceforge.net/projects/jmagick/
+
+		(old web site: http://www.yeo.nu/jmagick)
+
+
+
+MAILING LIST
+~~~~~~~~~~~~
+The JMagick mailing list is jmagick-users@lists.sourceforge.net.
+However, only list members are allowed to post to the mailing.
+To join the JMagick mailing list, please point your web brower at
+		https://lists.sourceforge.net/lists/listinfo/jmagick-users
+
+Please make use of the mailing list for help and bug reports.
+
+
+
+Jacob Nordfalk
+1 July 2008

@@ -1,0 +1,70 @@
+#
+# Some macro definitions.
+#
+
+OS    = @OS@
+
+# Versions
+MAJOR = @VER_MAJOR@
+MINOR = @VER_MINOR@
+MICRO = @VER_MICRO@
+JMSUB = @VER_JMSUB@
+
+# Where the target installation directory is
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+libdir = @libdir@
+
+# Install program
+INSTALL = @INSTALL@
+
+# libtool link mode flag
+LIBTOOL_LINK_FLAG = @LIBTOOL_LINK_FLAG@
+
+JFLAGS = @JFLAGS@
+CFLAGS = @C_DEBUG@ @CFLAGS@
+LDFLAGS = @LDFLAGS@
+EXTRA_LIBS = @LIBS@
+SHARED_LDFLAGS = @SHARED_LDFLAGS@
+
+# The C compiler to use
+CC = @CC@
+
+# The Java interpreter to use
+JAVA = @JAVA@
+
+# The Java compiler to use.
+JAVAC = @JAVAC@
+
+# The Java header file generator.
+JAVAH = @JAVAH@
+
+# The Java archive maintainer
+JAR = @JAR@
+
+# The Javadoc generator.
+JAVADOC = @JAVADOC@
+
+# Where to generate the javadoc
+JAVADOC_DIR = @JAVADOC_DIR@
+
+# Class path seperator. Platform dependent.
+CLASSSEP = @CLASSSEP@
+
+# This is the base project directory.
+PROJ_BASE_DIR = $(subst //,/,@PROJ_BASE_DIR@/)
+
+# X11 directories
+X11_INCLUDES = @X11_INCLUDES@
+X11_LIBS = @X11_LIBS@
+
+# ImageMagick directories
+MAGICK_INCLUDES = @MAGICK_INCLUDES@
+MAGICK_LIBS = @MAGICK_LIBS@
+MAGICK_LIB_PATH = @MAGICK_LIB_PATH@
+
+# Java include directories
+JAVA_INCLUDES = @JAVA_INCLUDES@
+
+#Shared library extension
+SHARED_LIB_EXT = @SHARED_LIB_EXT@

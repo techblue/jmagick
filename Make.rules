@@ -1,0 +1,259 @@
+# Copyright (C) 1999 Eric Yeo. All rights reserved.
+
+ifeq ($(strip $(OS)),Darwin)
+  DARWIN = true
+endif
+
+
+# This is the main Java sources.
+ifndef JAVA_SRC_DIR
+JAVA_SRC_DIR = $(PROJ_BASE_DIR)src
+endif
+
+# This is where the Java classes are compiled to.
+ifndef JAVA_CLASSES_DIR
+JAVA_CLASSES_DIR = $(PROJ_BASE_DIR)classes
+endif
+
+# This is where generated files should go
+ifndef GENERATED_DIR
+GENERATED_DIR = $(PROJ_BASE_DIR)generated
+endif
+
+# This is where C object files should go
+ifndef OBJ_DIR
+OBJ_DIR = $(PROJ_BASE_DIR)obj
+endif
+
+# This is where the library files should go
+ifndef LIB_DIR
+LIB_DIR = $(PROJ_BASE_DIR)lib
+endif
+
+# This is where we generate javadoc files to
+ifndef JAVADOC_DIR
+JAVADOC_DIR = $(prefix)/doc/javadoc
+endif
+
+# Defines the Java compiler if one is not defined
+ifndef JAVAC
+JAVAC = javac
+endif
+
+# Define the Java header generator
+ifndef JAVAH
+JAVAH = javah
+endif
+
+# Define where libtool is
+ifndef LIBTOOL
+top_builddir = $(PROJ_BASE_DIR)
+LIBTOOL = /bin/sh $(PROJ_BASE_DIR)libtool
+endif
+
+# We have to work out the which package we are in
+CURRENT_DIR = $(shell pwd)
+JAVA_PACKAGE_REL_PATH = $(subst $(JAVA_SRC_DIR)/,,$(CURRENT_DIR))
+JAVA_PACKAGE = $(subst /,.,$(JAVA_PACKAGE_REL_PATH))
+JAVA_PACKAGE_DIR = $(JAVA_CLASSES_DIR)/$(JAVA_PACKAGE_REL_PATH)
+PACKAGE_GENERATED_DIR = $(GENERATED_DIR)/$(JAVA_PACKAGE_REL_PATH)
+PACKAGE_OBJ_DIR = $(OBJ_DIR)/$(JAVA_PACKAGE_REL_PATH)
+
+# Workout if we need the class path from the environment
+ifdef CLASSPATH
+TRAILING_CLASSPATH = $(CLASSSEP)$(CLASSPATH)
+else
+TRAILING_CLASSPATH =
+endif
+JAVA_CLASS_PATH=$(JAVA_CLASSES_DIR)$(TRAILING_CLASSPATH)
+
+# The rule to make class files from java files.
+$(JAVA_PACKAGE_DIR)/%.class: %.java
+	@-mkdir -p $(dir $@)
+	$(JAVAC) $(JFLAGS) -d $(JAVA_CLASSES_DIR) 	\
+		-sourcepath $(JAVA_SRC_DIR)		\
+		-classpath $(JAVA_CLASS_PATH) $<
+
+
+# Default make rule.
+default-target: java_classes_target lib_target dir_target
+
+# If the SRC_FILES are not defined, we use all .java files
+ifndef JAVA_SRC_FILES
+JAVA_SRC_FILES = $(wildcard *.java)
+endif
+
+# Work out the corresponding .class file we need to make
+JAVA_CLASSES := $(foreach i,$(JAVA_SRC_FILES),$(JAVA_PACKAGE_DIR)/$(subst .java,.class,$i))
+
+java_classes_target: $(JAVA_CLASSES)
+
+
+ifdef JNI_LIB_NAME
+
+# If JNI_LIB_NAME is specified, that indicates to the rules that
+# we want a shared library generated.
+JNI_LIB = $(LIB_DIR)/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT)
+
+# The Makefile should specify JNI_SRC_FILES to indicate which
+# Java source files can be used to generate JNI headers.
+JNI_BASE_HEADERS = $(subst .java,.h,$(JNI_SRC_FILES))
+JNI_HEADER_PREFIX = $(subst .,_,$(JAVA_PACKAGE_REL_PATH))
+JNI_HEADERS = $(foreach f,$(JNI_BASE_HEADERS),$(PACKAGE_GENERATED_DIR)/$(JNI_HEADER_PREFIX)_$(f))
+JNI_CLASS_BASE_FILES = $(subst .java,.class,$(JNI_SRC_FILES))
+JNI_CLASS_FILES = $(foreach f,$(JNI_CLASS_BASE_FILES),$(JAVA_PACKAGE_DIR)/$(f))
+
+# Need to force these files to be made
+$(JNI_CLASS_FILES):
+
+# Work out where the object files should go.
+JNI_IMPL = $(foreach f,$(subst .h,.c,$(JNI_BASE_HEADERS)),$(JNI_HEADER_PREFIX)_$(f)) $(JNI_EXTRAS)
+JNI_BASE_OBJ = $(foreach f,$(subst .c,.lo,$(JNI_IMPL)),$(f))
+JNI_OBJ = $(foreach f,$(JNI_BASE_OBJ),$(PACKAGE_OBJ_DIR)/$(f))
+
+# This is used to compile the C sources that defines the native
+# methods. The Makefile must specify INCLUDES for the include file
+# path.
+CFLAGS += $(INCLUDES)
+
+# The rule to make JNI header files from java files.
+# Rule to make header files from java class files.
+# The originating java source must contain native method specifications.
+$(PACKAGE_GENERATED_DIR)/$(JNI_HEADER_PREFIX)_%.h: $(JAVA_PACKAGE_DIR)/%.class
+	@-rm $@ > /dev/null 2>&1
+	@-mkdir -p $(dir $@)
+	"$(JAVAH)" -d $(PACKAGE_GENERATED_DIR) -jni			\
+		-classpath $(JAVA_CLASS_PATH)				\
+		$(JAVA_PACKAGE).$(subst .class,,$(notdir $<))
+
+# Rule to compile JNI C files
+$(PACKAGE_OBJ_DIR)/%.lo: %.c $(PACKAGE_GENERATED_DIR)/%.h
+	@-mkdir -p $(dir $@)
+	$(LIBTOOL) --mode=compile $(CC) -I$(PACKAGE_GENERATED_DIR) $(CFLAGS) -c $< -o $@
+
+$(PACKAGE_OBJ_DIR)/%.lo: %.c
+	@-mkdir -p $(dir $@)
+	$(LIBTOOL) --mode=compile $(CC) $(CFLAGS) -c $< -o $@
+
+# Rule to generate autodependencies in the case where JNI is used.
+JNI_DEP_FILE = .jnidep
+$(JNI_DEP_FILE): $(JNI_HEADERS) $(JNI_IMPL) Makefile
+	@case $(CC) in                                                    \
+	*gcc)                                                             \
+            echo Autogenerating C dependencies.;                          \
+	    $(CC) -M $(CFLAGS) -I$(PACKAGE_GENERATED_DIR)                 \
+			$(JNI_IMPL) > .jnidep.tmp;                        \
+	    sed -e "s;\(.*\)\.o:;$(PACKAGE_OBJ_DIR)/\1.lo:;"              \
+                                                    < .jnidep.tmp > $@;   \
+	    rm .jnidep.tmp > /dev/null 2>&1;                              \
+	    $(MAKE) $(MFLAGS) lib_target;                                 \
+            ;;                                                            \
+        *)                                                                \
+            touch $(JNI_DEP_FILE);                                        \
+            echo Unable to autogenerate C dependencies.;                  \
+            echo Run "make clean" if rebuilding.;                         \
+            ;;                                                            \
+        esac
+
+lib_target: $(JNI_DEP_FILE) $(JNI_LIB)
+
+# Build the JNI shared library
+$(JNI_LIB): $(JNI_OBJ)
+	$(LIBTOOL) --mode=link $(CC)                                      \
+		-dynamiclib                                               \
+                $(LIBTOOL_LINK_FLAG)                                      \
+                -version-info $(MAJOR):$(MINOR):$(MICRO)                  \
+                -rpath $(libdir) $(SHARED_LDFLAGS) $(LDFLAGS)             \
+		-o $(JNI_LIB)                                             \
+		$(JNI_OBJ) $(JNI_LINK_LIBS) $(EXTRA_LIBS)
+
+	# Change install name shown by otool -L if tool available.
+	@-ln -s ./lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)
+	@-ln -s ./jmagick-$(MAJOR).$(MINOR).$(MICRO).jar $(PROJ_BASE_DIR)/lib/jmagick.jar
+ifdef DARWIN
+	# Mac OS X
+    @-echo "Using install_name_tool..."
+    @-/usr/bin/install_name_tool -id $(PROJ_BASE_DIR)lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT)
+endif
+
+##	@-install_name_tool -id $(JNI_LIB) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT)
+##	# @-ln -s $(PROJ_BASE_DIR)lib/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)
+##	@-ln -s $(PROJ_BASE_DIR)lib/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)
+##	@-ln -s $(PROJ_BASE_DIR)lib/jmagick-$(MAJOR).$(MINOR).$(MICRO).jar $(PROJ_BASE_DIR)/lib/jmagick.jar
+
+
+
+ifndef CLEANING
+ifeq ($(wildcard $(JNI_DEP_FILE)), $(JNI_DEP_FILE))
+include $(JNI_DEP_FILE)
+endif
+endif
+
+else
+lib_target:
+endif
+
+
+
+ifdef DIRS
+dir_target:
+	@for d in $(DIRS); do				\
+		if [ -f $$d/Makefile ]; then	 	\
+			$(MAKE) -C $$d -w;		\
+		else					\
+			echo Ignoring $$d. No Makefile.;\
+		fi;					\
+	done
+else
+dir_target:
+endif
+
+# List of files we want to remove
+CLEAN_LIST += $(JAVA_CLASSES) $(JNI_HEADERS) $(JNI_DEP_FILE) $(JNI_OBJ)
+CLEAN_NESTED_CLASSES := $(filter %.class,$(CLEAN_LIST))
+CLEAN_NESTED_CLASSES := $(patsubst %.class,%$$*.class,$(CLEAN_NESTED_CLASSES))
+CLEAN_NESTED_CLASSES := $(foreach i,$(CLEAN_NESTED_CLASSES),$(wildcard $i))
+CLEAN_NESTED_CLASSES := $(subst $$,\$$,$(CLEAN_NESTED_CLASSES))
+CLEAN_LIST += $(CLEAN_NESTED_CLASSES)
+CLEAN_LIST += $(subst .lo,.o,$(JNI_OBJ))
+
+clean:
+	@echo Cleaning `pwd` ...
+	@-rm -rf $(CLEAN_LIST) > /dev/null 2>&1
+ifdef JNI_LIB_NAME
+	@-rm $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT) 
+endif
+##	@-rm $(libdir)/lib
+ifdef DIRS
+	@for d in $(DIRS); do					\
+		if [ -f $$d/Makefile ]; then	 		\
+			$(MAKE) -C $$d -w CLEANING=yes clean;	\
+		else						\
+			echo Ignoring $$d. No Makefile.;	\
+		fi;						\
+	done
+endif
+
+# For each directory install the necessary files
+install: extra-install
+	@echo Installing `pwd` ...
+ifdef DIRS
+	@for d in $(DIRS); do					\
+		if [ -f $$d/Makefile ]; then	 		\
+			$(MAKE) -C $$d -w install;		\
+		else						\
+			echo Ignoring $$d. No Makefile.;	\
+		fi;						\
+	done
+endif
+ifdef JNI_LIB_NAME
+##	@-ln -s $(libdir)/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT) $(libdir)/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)
+# Mac OS X
+ifdef DARWIN
+	@-echo "Using install_name_tool..."
+	@-/usr/bin/install_name_tool -id $(libdir)/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT) 		$(libdir)/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT)
+endif
+	@-pwddir=`pwd`;cd $(libdir); ln -fs ./lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT) ./lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT);cd $(pwddir)
+endif #JNI_LIB_NAME
+
+extra-install::
