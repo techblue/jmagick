@@ -1,6 +1,13 @@
 package magick;
 
+
 public interface CompositeOperator {
+	/*
+		Important! Constant values should correspond to:
+		http://trac.imagemagick.org/browser/ImageMagick/trunk/magick/composite.h?annotate=blame&rev=HEAD
+		see IM which version in http://www.imagemagick.org/script/changelog.php or
+		http://trac.imagemagick.org/browser/ImageMagick/trunk/version.sh?rev=10867
+	*/
 
     public static final int UndefinedCompositeOp = 0;
     public static final int NoCompositeOp = 1;
