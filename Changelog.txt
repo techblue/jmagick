@@ -1,7 +1,7 @@
 ========== Compatibility statement ===========
 
 The current verison of JMagick is compatible with
-ImageMagick version 6.3.9 to version 6.4.0.
+ImageMagick version 6.4.1-2 and later
 
 ----- issues with ImageMagick 6.4.1 and later ---------
 
@@ -35,6 +35,9 @@ IM Before version 6.2.9 does not support the DivideCompositeOp CompositeOperator
 
 ========== Changelog ===========
 
+2008-12-?? 
+	* Added setAntialias() and getAntialias()   (contrib from ???? - check
+	mailing list)
 
 2008-08-05
 	* Added setImageOption()  (contrib from Scott Knight at Specialized Business Software)
