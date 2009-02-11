@@ -2102,7 +2102,7 @@ OS=`$UNAME -s`
 
 VER_MAJOR=6
 VER_MINOR=4
-VER_MICRO=2
+VER_MICRO=0
 VER_JMSUB=0
 
 case "$target" in
