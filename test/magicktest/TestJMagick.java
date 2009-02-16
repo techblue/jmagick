@@ -242,7 +242,7 @@ public class TestJMagick extends TestCase {
 
 	/**
 	 * Test of diverse operations on a small is processed correctly
-				 * This test might fail if ImageMagick doesent have PNG support.
+         * This test might fail if ImageMagick doesent have PNG support.
 	 */
 	public void testQuantizeImage_failMightBeOk() throws Exception {
 
