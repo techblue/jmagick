@@ -1,7 +1,7 @@
 # Copyright (C) 1999 Eric Yeo. All rights reserved.
 
 ifeq ($(strip $(OS)),Darwin)
-  DARWIN = true
+DARWIN = true
 endif
 
 
@@ -172,8 +172,8 @@ $(JNI_LIB): $(JNI_OBJ)
 	@-ln -s ./jmagick-$(MAJOR).$(MINOR).$(MICRO).jar $(PROJ_BASE_DIR)/lib/jmagick.jar
 ifdef DARWIN
 	# Mac OS X
-    @-echo "Using install_name_tool..."
-    @-/usr/bin/install_name_tool -id $(PROJ_BASE_DIR)lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT)
+	@-echo "Using install_name_tool..."
+	@-/usr/bin/install_name_tool -id $(PROJ_BASE_DIR)lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT)
 endif
 
 ##	@-install_name_tool -id $(JNI_LIB) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT)

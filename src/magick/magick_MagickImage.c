@@ -4277,7 +4277,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_trimImage
  * Signature: (DD)Lmagick/MagickImage;
  */
 JNIEXPORT jobject JNICALL Java_magick_MagickImage_blurImageChannel
-  (JNIEnv *env, jobject self, int channelType, jdouble radius, jdouble sigma)
+  (JNIEnv *env, jobject self, jint channelType, jdouble radius, jdouble sigma)
 {
     Image *image = NULL, *blurredImage = NULL;
     jobject newObj;
