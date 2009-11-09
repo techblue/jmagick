@@ -21,8 +21,8 @@ OS=`$UNAME -s`
 
 dnl The version number must change with every release
 VER_MAJOR=6
-VER_MINOR=4
-VER_MICRO=0
+VER_MINOR=5
+VER_MICRO=7
 VER_JMSUB=0
 
 dnl Need the -G flag on Solaris when creating shared libraries.
