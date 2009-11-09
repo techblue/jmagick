@@ -2,6 +2,8 @@ package magick;
 
 /**
  * Corresponds to the ImageMagick enumerated type of the same name.
+ * Important! Constant values should correspond to:
+ * http://trac.imagemagick.org/browser/ImageMagick/trunk/magick/geometry.h
  *
  * @author Eric Yeo
  */
@@ -19,5 +21,4 @@ public interface GravityType {
     public final static int SouthGravity = 8;
     public final static int SouthEastGravity = 9;
     public final static int StaticGravity = 10;
-
 }

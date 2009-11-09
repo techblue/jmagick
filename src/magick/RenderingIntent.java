@@ -3,6 +3,9 @@ package magick;
 /**
  * Corresponds to the ImageMagick enumerated type of the same name.
  *
+ * Important! Constant values should correspond to:
+ * http://trac.imagemagick.org/browser/ImageMagick/trunk/magick/profile.h
+ *
  * @author Eric Yeo
  */
 public interface RenderingIntent {

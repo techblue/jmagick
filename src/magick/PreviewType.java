@@ -3,6 +3,7 @@ package magick;
 
 /**
  * Corresponds to the ImageMagick enumerated type of the same name.
+ * http://trac.imagemagick.org/browser/ImageMagick/trunk/magick/effect.h
  *
  * @author Eric Yeo
  */

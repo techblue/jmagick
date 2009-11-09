@@ -1,5 +1,9 @@
 package magick;
 
+/*
+ * Important! Constant values should correspond to:
+ * http://trac.imagemagick.org/browser/ImageMagick/trunk/magick/image.h
+ */
 public interface NoiseType {
 
     public final static int UndefinedNoise = 0;
@@ -10,4 +14,7 @@ public interface NoiseType {
     public final static int LaplacianNoise = 5;
     public final static int PoissonNoise = 6;
 
+    // The following have been added after ImageMagick-6.4.1-2 and before 6.5.7-6
+    // (exact time not known). Using them is untested.
+    public final static int RandomNoise = 7;
 }

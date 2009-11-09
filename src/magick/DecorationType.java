@@ -2,7 +2,7 @@ package magick;
 
 /**
  * Interface to contain definition for Image Magick's DecorationType.
- *
+ * Must always correspong to http://trac.imagemagick.org/browser/ImageMagick/trunk/magick/draw.h
  * @author Eric Yeo
  */
 public interface DecorationType {

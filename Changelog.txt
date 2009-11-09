@@ -1,7 +1,7 @@
-========== Compatibility statement ===========
+========== Compatibility statement for JMagick 6.5.7 ===========
 
-The current verison of JMagick is compatible with
-ImageMagick version 6.4.1-2 and later
+The current verison of JMagick is compatible with ImageMagick version 6.4.1-2 and later. 
+Some new values have been added to support new functionality in IM 6.5.7-6, but if you don't use the new values then JMagick 6.5.7 should be compatible with any version if ImageMagick from 6.4.1-2 to 6.5.7-6.
 
 ----- issues with ImageMagick 6.4.1 and later ---------
 
@@ -34,6 +34,12 @@ IM Before version 6.2.9 does not support the DivideCompositeOp CompositeOperator
 
 
 ========== Changelog ===========
+
+2009-11-09 Jacob Nordfalk
+	* Added new entries to CompositeOperator CompressionType ExceptionType QuantumTypes InterlaceType NoiseType
+	  which has been added from ImageMagick-6.5.7-6 to 6.4.1-2. 
+	  all entries are backwards compatible, i.e. no old values have changed
+
 
 2008-12-?? 
 	* Added setAntialias() and getAntialias()   (contrib from ???? - check

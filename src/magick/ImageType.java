@@ -2,6 +2,8 @@ package magick;
 
 /**
  * Corresponds to the ImageMagick enumerated type of the same name.
+ * Important! Constant values should correspond to:
+ * http://trac.imagemagick.org/browser/ImageMagick/trunk/magick/image.h
  * TODO: Generate from image.h
  * @author Eric Yeo
  */
@@ -19,5 +21,4 @@ public interface ImageType {
 		public final static int ColorSeparationMatteType = 9;
 		public final static int OptimizeType = 10;
 		public final static int PaletteBilevelMatteType = 11;
-
 }

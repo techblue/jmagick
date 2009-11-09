@@ -1,7 +1,11 @@
 package magick;
 
+/*
+        Important! Constant values should correspond to:
+        http://trac.imagemagick.org/browser/ImageMagick/trunk/magick/resample.h
+*/
+
 public interface FilterType {
-// TODO: Generate from resize.h
 		public final static int UndefinedFilter = 0;
 		public final static int PointFilter = 1;
 		public final static int BoxFilter = 2;

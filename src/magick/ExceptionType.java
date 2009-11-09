@@ -2,6 +2,7 @@ package magick;
 
 /**
  * Corresponds to the ImageMagick ExceptionType enumeration.
+ * Must correspond to http://trac.imagemagick.org/browser/ImageMagick/trunk/magick/exception.h
  *
  * @author Eric Yeo
  */
@@ -71,4 +72,8 @@ public interface ExceptionType {
 	public static final int MonitorFatalError = 785;
 	public static final int RegistryFatalError = 790;
 	public static final int ConfigureFatalError = 795;
+
+  // The following have been added after ImageMagick-6.4.1-2 and before 6.5.7-6
+  // (exact time not known). Using them is untested.
+  public static final int PolicyFatalError = 799;
 }

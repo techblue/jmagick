@@ -1,6 +1,21 @@
 package magick;
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 public interface CompositeOperator {
 	/*
 		Important! Constant values should correspond to:
@@ -65,4 +80,15 @@ public interface CompositeOperator {
     public static final int ThresholdCompositeOp = 53;
     public static final int XorCompositeOp = 54;
     public static final int DivideCompositeOp = 55;
+
+    // The following have been added after ImageMagick-6.4.1-2 and before 6.5.7-6
+    // (exact time not known). Using them is untested.
+    public static final int DistortCompositeOp =  56 ;
+    public static final int BlurCompositeOp =  57 ;
+    public static final int PegtopLightCompositeOp =  58 ;
+    public static final int VividLightCompositeOp =  59 ;
+    public static final int PinLightCompositeOp =  60 ;
+    public static final int LinearDodgeCompositeOp = 61  ;
+    public static final int LinearBurnCompositeOp =  62 ;
+    public static final int MathematicsCompositeOp = 62  ;
 }

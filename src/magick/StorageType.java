@@ -1,8 +1,9 @@
 package magick;
 
 /**
- * Used in MagickImage.createImage to specify the size 
+ * Used in MagickImage.createImage to specify the size
  * of component.
+ * Must correspond to http://trac.imagemagick.org/browser/ImageMagick/trunk/magick/constitute.h
  *
  * @author Eric Yeo
  */
