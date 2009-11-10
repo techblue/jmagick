@@ -3388,7 +3388,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_setColorProfile
 
     Image *image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
     if (image == NULL) {
-       throwMagickException(env, "Cannot obtain image handle");
+       throwMagickException(env, "setColorProfile: Cannot obtain image handle");
        return;
     }
     // setProfileInfo() is broken, dont use
@@ -3396,7 +3396,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_setColorProfile
 
 
     if (profileObj == NULL) {
-        throwMagickException(env, "ProfileInfo cannot be null");
+        throwMagickException(env, "setColorProfile: ProfileInfo cannot be null");
        return;
     }
 

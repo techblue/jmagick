@@ -247,6 +247,7 @@ JNIEXPORT fieldType JNICALL funcName                                          \
     return info->fieldName;                                                   \
 }
 
+//	throwMagickException(env, "Unable to retrieve handle " funcName+fieldName);               \
 
 /*
  * Convenience macro to set an integer attribute in the object handle.
@@ -310,6 +311,8 @@ JNIEXPORT fieldType JNICALL funcName                                          \
 #define setDoubleMethod(funcName, fieldName, handleName, handleType)          \
         setMethod(funcName, fieldName, handleName, handleType, jdouble)
 
+// Fix memory leak bug. Below was:	RelinquishMagickMemory((void**) &info->fieldName);                            \
+//  info->fieldName = NULL;                                               \
 
 /*
  * Convenience macro to set a string attribute in the object handle.
@@ -328,8 +331,7 @@ JNIEXPORT void JNICALL funcName                                               \
     }                                                                         \
                                                                               \
     if (info->fieldName != NULL) {                                            \
-	RelinquishMagickMemory((void**) &info->fieldName);                            \
-	info->fieldName = NULL;                                               \
+	info->fieldName=(char *) RelinquishMagickMemory((void*) info->fieldName); \
     }                                                                         \
                                                                               \
     cstr = (*env)->GetStringUTFChars(env, value, 0);                          \

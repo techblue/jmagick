@@ -43,6 +43,10 @@ void throwMagickApiException(JNIEnv *env,
     jstring jreason, jdescription;
     int result;
 
+#ifdef DIAGNOSTIC
+	fprintf(stderr, "throwMagickApiException reason: %s - desc: %s \n", exception->reason, exception->description);
+#endif
+
     /* Find the class ID */
     magickApiExceptionClass =
 	(*env)->FindClass(env, "magick/MagickApiException");
