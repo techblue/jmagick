@@ -35,6 +35,10 @@ IM Before version 6.2.9 does not support the DivideCompositeOp CompositeOperator
 
 ========== Changelog ===========
 
+2009-11-10 Jacob Nordfalk - JMagick 6.5.7
+	* Memory leak bug fixed. Affected code is Java_magick_DrawInfo_setGeometry, Java_magick_DrawInfo_setFont, Java_magick_ImageInfo_setServerName, Java_magick_ImageInfo_setFont, Java_magick_ImageInfo_setSize, Java_magick_ImageInfo_setTile, Java_magick_ImageInfo_setDensity, Java_magick_ImageInfo_setPage, Java_magick_ImageInfo_setTexture, Java_magick_ImageInfo_setView, Java_magick_MontageInfo_setGeometry, Java_magick_MontageInfo_setTile, Java_magick_MontageInfo_setTitle, Java_magick_MontageInfo_setFrame, Java_magick_MontageInfo_setTexture, Java_magick_MontageInfo_setFont,
+
+
 2009-11-09 Jacob Nordfalk
 	* Added new entries to CompositeOperator CompressionType ExceptionType QuantumTypes InterlaceType NoiseType
 	  which has been added from ImageMagick-6.5.7-6 to 6.4.1-2. 
