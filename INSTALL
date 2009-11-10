@@ -3,12 +3,23 @@ INSTALL NOTES
 
  0. Prequisite.
 			 - GNU Autoconf (not strictly required)
+
 			 - The JMagick build scripts makes very extensive use of
 				 GNU Make 3.77.
+
 			 - A ANSI C compiler. The GNU or EGCS compiler is recommended.
+
 			 - ImageMagick developers libraries (libmagick-dev)
 				 See in Changelog.txt which version is supported
-			 - A Java2 JDK. However, JMagick was developed with Sun JDK 1.4.1.
+
+			 - ImageMagick dependencies
+				NOTE: If you compile IM yourself, remember to f.ex. install libtiff-dev to get TIFF support.
+				On Ubuntu Linux 9.10, this commant would install TIFF and CMS support:
+				> sudo apt-get install liblcms-dev libtiff4-dev libbz2-dev
+				remember to install these _before_ you issue the ./configure command for ImageMagick
+
+
+			 - A Java2 JDK. JMagick was developed with Sun JDK 1.4.1.
 
  1. Unpack the JMagick tar file.
 
