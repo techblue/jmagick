@@ -5,6 +5,7 @@ package magick;
  * Important! Constant values should correspond to:
  * http://trac.imagemagick.org/browser/ImageMagick/trunk/magick/image.h
  * TODO: Generate from image.h
+ * @see MagickImage#getImageType()
  * @author Eric Yeo
  */
 public interface ImageType {

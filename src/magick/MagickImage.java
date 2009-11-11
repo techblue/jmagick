@@ -1516,7 +1516,7 @@ public class MagickImage extends Magick {
 
     /**
      * Get the image type from the MagickImage
-     *
+     * @see ImageType
      * @param Image
      * @author Susan Dorr <sdorr@contentcube.com>
      */
