@@ -5,6 +5,7 @@ import java.io.*;
 import java.awt.*;
 
 import junit.framework.*;
+import junit.extensions.RepeatedTest;
 import magick.*;
 import magick.util.*;
 
@@ -16,13 +17,19 @@ import magick.util.*;
  * @see Test
  */
 public class TestJMagick extends TestCase {
+  public TestJMagick() {
+    super("TestJMagick");
+  }
+
+  /** In case of repitivie test, don't popup any windows */
+  public static boolean popupWindow = true;
 
 	ImageInfo info;
 	MagickImage image;
 
 	/** The version of ImageMagick against which the tests are run.
 	 *  This version number is intended to allow for IM version differences */
-	int IMver = 638;
+	int IMver = 657;
 
 
 	protected void setUp() throws Exception {
@@ -356,7 +363,7 @@ public class TestJMagick extends TestCase {
 
 		// Finally display the image.
 		MagickWindow window = new MagickWindow(image);
-		window.setVisible(true);
+		if (popupWindow) window.setVisible(true);
 
 		// MagickInfo test
 		MagickInfo minfo = new MagickInfo("JPEG");

@@ -224,7 +224,8 @@ public class MagickTesttools
 					return "profile info=null";
 			}
 			else {
-					return "profile info.length=" + profile.getInfo().length+" hash="+Arrays.hashCode(profile.getInfo());
+					//return "profile info.length=" + profile.getInfo().length+" hash="+Arrays.hashCode(profile.getInfo());
+          return "profile info.length=" + profile.getInfo().length;
 			}
 	}
 
