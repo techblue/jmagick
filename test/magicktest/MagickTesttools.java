@@ -37,6 +37,10 @@ public class MagickTesttools
 
 	private static boolean generate_correct_output_warned;
 
+
+  /** Speedup running tests by a factor 5 by by not invoking compare at all. For memory leak testing, not for unit test.*/
+  public static boolean dont_compare_output = false;
+
 	/**
 	 * Compares two image files pixel by pixel (by invoking the IM command 'compare')
 	 * @param file1 First image file name
@@ -153,6 +157,7 @@ public class MagickTesttools
 		image.writeImage(info);
 
 		// compare the pixel data (allowing for a small difference)
+    if (!dont_compare_output)
 		compareImage(path_actual_output+fileName, path_correct_output+fileName, 20);
 
 		if (!generate_correct_output) {

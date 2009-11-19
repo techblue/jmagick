@@ -51,5 +51,8 @@ simpletest::
 test::
 	cd test/magicktest; CLASSPATH=../../lib/junit.jar make test
 
+looptest::
+	cd test/magicktest; CLASSPATH=../../lib/junit.jar make looptest
+
 generateCorrect::
 	cd test/magicktest; CLASSPATH=../../lib/junit.jar make generateCorrect
