@@ -266,6 +266,14 @@ public class MagickImage extends Magick {
     public native MagickImage trimImage()
       throws MagickException;
 
+     /**
+      * resets the image page canvas and position..
+      * @param page String representing the new page geometry
+      * @return Who knows?
+      */
+     public native boolean resetImagePage(String page)
+       throws MagickException;
+
 /**
      * Return the storage class of the image.
      *

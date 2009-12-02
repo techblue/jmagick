@@ -3238,7 +3238,7 @@ JNIEXPORT jbyteArray JNICALL Java_magick_MagickImage_imageToBlob
   }
   (*env)->SetByteArrayRegion(env, blob, 0, blobSiz, blobMem);
 
-  RelinquishMagickMemory(blobMem);
+  //RelinquishMagickMemory(blobMem);
 
   return blob;
 }
@@ -4269,6 +4269,35 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_trimImage
 
     return newObj;
 }
+
+
+
+  /*
+   * Class:     magick_MagickImage
+   * Method:    resetImagePage
+   * Signature: ()I
+   */
+  JNIEXPORT jboolean JNICALL Java_magick_MagickImage_resetImagePage
+   (JNIEnv *env, jobject self, jstring page)
+  {
+     Image               *image = NULL;
+     const               char *cpage;
+         jboolean        retVal;
+
+     image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+     if (image == NULL) {
+                 throwMagickException(env, "No image to set reset page");
+         return;
+     }
+
+     cpage = (*env)->GetStringUTFChars(env, page, 0);
+         retVal = ResetImagePage(image, cpage);
+     (*env)->ReleaseStringUTFChars(env, page, cpage);
+
+     return retVal;
+   }
+
+
 
 
 /*
