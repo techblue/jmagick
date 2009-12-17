@@ -141,7 +141,7 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setPrimitive
             throwMagickException(env, "Unable to allocate memory");
         }
         if (info->encoding != NULL) {
-            RelinquishMagickMemory((void **) &info->encoding);
+            //RelinquishMagickMemory((void **) &info->encoding);
         }
         info->encoding = (char *) AcquireString("UTF-8");
         if (info->encoding == NULL) {

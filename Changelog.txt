@@ -5,8 +5,7 @@ Some new values have been added to support new functionality in IM 6.5.7-6, but 
 
 ----- issues with ImageMagick 6.4.1 and later ---------
 
-From ImageMagick version 6.4.1-2 and after the CompressionType's have been changes
-and therefore the class must be changed to:
+In ImageMagick version 6.4.1-2 CompressionType's have been changed and therefore the class was changed to:
 		public final static int UndefinedCompression = 0;
 		public final static int NoCompression = 1;
 		public final static int BZipCompression = 2;
@@ -24,6 +23,9 @@ and therefore the class must be changed to:
 		public final static int RLECompression = 12;
 		public final static int ZipCompression = 13;  // IM Revision 10867
 
+This makes JMagick incompatible with ImageMagick version 6.4.1 and before, if any of the values greater than 2 is used or stored in your code.
+
+ 
 ----- issues with ImageMagick before version 6.3.9 ---------
 
 There are only some very minor issues, namely that the classes ExceptionType
