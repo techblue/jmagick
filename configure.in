@@ -25,6 +25,8 @@ VER_MINOR=5
 VER_MICRO=7
 VER_JMSUB=0
 
+SHARED_LIB_EXT=.so
+
 dnl Need the -G flag on Solaris when creating shared libraries.
 case "$target" in
 *solaris*)
@@ -34,8 +36,9 @@ case "$target" in
 	SHARED_LDFLAGS="-shared"
 	;;
 dnl Make sure we use -dynamiclib parameter for OS X Leopard
-*darwin9.*)
+*darwin9.*|*darwin10.*)
 	SHARED_LDFLAGS="-dynamiclib"
+	SHARED_LIB_EXT=.jnilib
 	;;
 *darwin1.[0-2])
 	;;
@@ -158,7 +161,7 @@ fi
 
 dnl Determine if there is a shared library extension supplied
 AC_ARG_WITH(shared_lib_ext, --with-shared-lib-ext Shared library file extension,
-            SHARED_LIB_EXT=${withval}, SHARED_LIB_EXT=.so)
+            SHARED_LIB_EXT=${withval}, SHARED_LIB_EXT=${SHARED_LIB_EXT})
 
 dnl Determine if jni.h is available
 OLD_CPPFLAGS=${CPPFLAGS}
