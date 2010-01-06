@@ -153,7 +153,7 @@ public class TestJMagick extends TestCase {
 
 	/**
 	 * Test montage with text.
-	 * Expect this test to fail when the font set change
+	 * Expect this test to fail when the font set change. This is probably always the case on a fresh installation.
 	 */
 	public void testMontageWithText_failMightBeOk() throws Exception {
 		// Montage test
@@ -163,6 +163,7 @@ public class TestJMagick extends TestCase {
 		MagickImage seqImage = new MagickImage(images);
 		MontageInfo montageInfo = new MontageInfo(new ImageInfo());
 		montageInfo.setTitle("Melbourne");
+    montageInfo.setFont("Helvetica"); // added january 2009 to try to fix font a little more
 		montageInfo.setBorderWidth(5);
 		MagickImage montage = seqImage.montageImages(montageInfo);
 		MagickTesttools.writeAndCompare(montage, new ImageInfo(), "montage_w_text.jpg");
