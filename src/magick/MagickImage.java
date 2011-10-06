@@ -1473,6 +1473,16 @@ public class MagickImage extends Magick {
         throws MagickException;
 
     /**
+     * This operator reads and resets the EXIF image profile setting 'Orientation'
+     * and then performs the appropriate 90 degree rotation on the image
+     * to orient the image, for correct viewing.
+     * @return a new image operated
+     * @throws MagickException upon errors
+     */
+    public native MagickImage autoOrientImage()
+        throws MagickException;
+
+    /**
      * The Average() method takes a set of images and
      * averages them together. Each image in the set must
      * have the same width and height.

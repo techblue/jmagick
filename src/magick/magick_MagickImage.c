@@ -3778,6 +3778,89 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_montageImages
 }
 
 
+/*
+ * Class:     magick_MagickImage
+ * Method:    autoOrientImage
+ * Signature: ()Lmagick/MagickImage;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_autoOrientImage
+  (JNIEnv *env, jobject self)
+{
+    Image *image, *orient_image;
+    ExceptionInfo exception;
+    jobject newObj;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+        throwMagickException(env, "Cannot retrieve image handle");
+        return NULL;
+    }
+
+    GetExceptionInfo(&exception);
+    orient_image=NewImageList();
+    switch (image->orientation)
+     {
+       case TopRightOrientation:
+        {
+          orient_image=FlopImage(image,&exception);
+          break;
+        }
+       case BottomRightOrientation:
+        {
+          orient_image=RotateImage(image,180.0,&exception);
+          break;
+        }
+       case BottomLeftOrientation:
+        {
+          orient_image=FlipImage(image,&exception);
+          break;
+        }
+       case LeftTopOrientation:
+        {
+          orient_image=TransposeImage(image,&exception);
+          break;
+        }
+       case RightTopOrientation:
+        {
+          orient_image=RotateImage(image,90.0,&exception);
+          break;
+        }
+       case RightBottomOrientation:
+        {
+          orient_image=TransverseImage(image,&exception);
+          break;
+        }
+       case LeftBottomOrientation:
+        {
+          orient_image=RotateImage(image,270.0,&exception);
+          break;
+        }
+       default:
+          orient_image=CloneImage(image,0,0,MagickTrue,&exception);
+          image=orient_image;
+          break;
+     }
+    if (orient_image == (Image *) NULL) {
+        throwMagickApiException(env, "Failed to auto-orient image",
+                                &exception);
+        DestroyExceptionInfo(&exception);
+        return NULL;
+    }
+    if ( orient_image != image ) {
+        orient_image->orientation=TopLeftOrientation;
+        image=orient_image;
+     }
+    DestroyExceptionInfo(&exception);
+
+    newObj = newImageObject(env, image);
+    if (newObj == NULL) {
+        DestroyImages(image);
+        throwMagickException(env, "Unable to auto-orient image");
+        return NULL;
+    }
+    return newObj;
+}
+
 
 /*
  * Class:     magick_MagickImage

@@ -43,6 +43,120 @@ public class TestJMagick extends TestCase {
 		image.destroyImages();
 	}
 
+
+  private Color judgeColor ( PixelPacket pixel ) {
+     int blue = pixel.getBlue();
+     int red = pixel.getRed();
+     int green = pixel.getGreen();
+
+      int ignoredValue = 1000;
+      int requiredValue = 65000;
+
+     if ( blue >= requiredValue && red >= requiredValue && green >= requiredValue ) {
+         return Color.WHITE;
+     } else if ( blue >= requiredValue && red <= ignoredValue && green <= ignoredValue ) {
+         return Color.BLUE;
+     } else if ( blue <= ignoredValue && red >= requiredValue && green <= ignoredValue ) {
+         return Color.RED;
+     } else if ( blue <= ignoredValue && red <= ignoredValue && green >= requiredValue ) {
+         return Color.GREEN;
+      } else {
+         fail("invalidate color b=[" + blue + "] red= [" + red + "] green=[" + green + "]");
+          return null;
+       }
+  }
+
+  public void testAutoOrientImage() throws Exception {
+      // const value
+     final String exif_orientation_path = "exif_orientation" + File.separator;
+     final int image_size = 50;
+
+     for ( int orientation = 0; orientation <= 8; orientation++ ) {
+        // do AutoOrient from input file
+       MagickImage inputImage = new MagickImage(new ImageInfo(MagickTesttools.path_input + exif_orientation_path + "exif_orientation_" + orientation + ".jpg"));
+       MagickImage outputImage = inputImage.autoOrientImage();
+       assertNotNull(outputImage);
+       outputImage.setFileName(MagickTesttools.path_actual_output + "exif_orientation_" + orientation + ".jpg");
+       outputImage.writeImage(new ImageInfo());
+       inputImage.destroyImages();
+       outputImage.destroyImages();
+
+       // open actual outputfiles and preparing for checking
+       MagickImage actualImage = new MagickImage(new ImageInfo(MagickTesttools.path_actual_output + "exif_orientation_" + orientation + ".jpg"));
+       PixelPacket leftTop = actualImage.getOnePixel(0,0);
+       PixelPacket leftBottom = actualImage.getOnePixel(0,image_size-1);
+       PixelPacket rightTop = actualImage.getOnePixel(image_size-1,0);
+       PixelPacket rightBottom = actualImage.getOnePixel(image_size-1,image_size-1);
+
+       // checking on aspect of image
+       switch( orientation ) {
+         case 0:
+            assertEquals("orientation[" + orientation + "] leftTop"    ,Color.RED  ,this.judgeColor(leftTop));
+            assertEquals("orientation[" + orientation + "] leftBottom" ,Color.GREEN,this.judgeColor(leftBottom));
+            assertEquals("orientation[" + orientation + "] rightTop"   ,Color.BLUE ,this.judgeColor(rightTop));
+            assertEquals("orientation[" + orientation + "] rightBottom",Color.WHITE,this.judgeColor(rightBottom));
+            break;
+         case 1:
+            assertEquals("orientation[" + orientation + "] leftTop"    ,Color.RED  ,this.judgeColor(leftTop));
+            assertEquals("orientation[" + orientation + "] leftBottom" ,Color.GREEN,this.judgeColor(leftBottom));
+            assertEquals("orientation[" + orientation + "] rightTop"   ,Color.BLUE ,this.judgeColor(rightTop));
+            assertEquals("orientation[" + orientation + "] rightBottom",Color.WHITE,this.judgeColor(rightBottom));
+            break;
+         case 2:
+            assertEquals("orientation[" + orientation + "] leftTop"    ,Color.BLUE ,this.judgeColor(leftTop));
+            assertEquals("orientation[" + orientation + "] leftBottom" ,Color.WHITE,this.judgeColor(leftBottom));
+            assertEquals("orientation[" + orientation + "] rightTop"   ,Color.RED  ,this.judgeColor(rightTop));
+            assertEquals("orientation[" + orientation + "] rightBottom",Color.GREEN,this.judgeColor(rightBottom));
+            break;
+         case 3:
+            assertEquals("orientation[" + orientation + "] leftTop"    ,Color.WHITE,this.judgeColor(leftTop));
+            assertEquals("orientation[" + orientation + "] leftBottom" ,Color.BLUE ,this.judgeColor(leftBottom));
+            assertEquals("orientation[" + orientation + "] rightTop"   ,Color.GREEN,this.judgeColor(rightTop));
+            assertEquals("orientation[" + orientation + "] rightBottom",Color.RED  ,this.judgeColor(rightBottom));
+            break;
+         case 4:
+            assertEquals("orientation[" + orientation + "] leftTop"    ,Color.GREEN,this.judgeColor(leftTop));
+            assertEquals("orientation[" + orientation + "] leftBottom" ,Color.RED  ,this.judgeColor(leftBottom));
+            assertEquals("orientation[" + orientation + "] rightTop"   ,Color.WHITE,this.judgeColor(rightTop));
+            assertEquals("orientation[" + orientation + "] rightBottom",Color.BLUE ,this.judgeColor(rightBottom));
+            break;
+         case 5:
+            assertEquals("orientation[" + orientation + "] leftTop"    ,Color.RED  ,this.judgeColor(leftTop));
+            assertEquals("orientation[" + orientation + "] leftBottom" ,Color.BLUE ,this.judgeColor(leftBottom));
+            assertEquals("orientation[" + orientation + "] rightTop"   ,Color.GREEN,this.judgeColor(rightTop));
+            assertEquals("orientation[" + orientation + "] rightBottom",Color.WHITE,this.judgeColor(rightBottom));
+            break;
+         case 6:
+            assertEquals("orientation[" + orientation + "] leftTop"    ,Color.GREEN,this.judgeColor(leftTop));
+            assertEquals("orientation[" + orientation + "] leftBottom" ,Color.WHITE,this.judgeColor(leftBottom));
+            assertEquals("orientation[" + orientation + "] rightTop"   ,Color.RED  ,this.judgeColor(rightTop));
+            assertEquals("orientation[" + orientation + "] rightBottom",Color.BLUE ,this.judgeColor(rightBottom));
+            break;
+         case 7:
+            assertEquals("orientation[" + orientation + "] leftTop"    ,Color.WHITE,this.judgeColor(leftTop));
+            assertEquals("orientation[" + orientation + "] leftBottom" ,Color.GREEN,this.judgeColor(leftBottom));
+            assertEquals("orientation[" + orientation + "] rightTop"   ,Color.BLUE ,this.judgeColor(rightTop));
+            assertEquals("orientation[" + orientation + "] rightBottom",Color.RED  ,this.judgeColor(rightBottom));
+            break;
+         case 8:
+            assertEquals("orientation[" + orientation + "] leftTop"    ,Color.BLUE ,this.judgeColor(leftTop));
+            assertEquals("orientation[" + orientation + "] leftBottom" ,Color.RED  ,this.judgeColor(leftBottom));
+            assertEquals("orientation[" + orientation + "] rightTop"   ,Color.WHITE,this.judgeColor(rightTop));
+            assertEquals("orientation[" + orientation + "] rightBottom",Color.GREEN,this.judgeColor(rightBottom));
+            break;
+         }
+
+         // checking on Orientation tag
+        String exifOrientationTag = actualImage.getImageAttribute("EXIF:Orientation");
+        if ( orientation == 0 ) {
+           assertNull("orientation[" + orientation + "] image should not have orientation tag",exifOrientationTag);
+        } else {
+           assertEquals("orientation[" + orientation + "] image's orientation tag should be 1",1,Integer.parseInt(exifOrientationTag));
+         }
+        actualImage.destroyImages();
+      }
+  }
+
 	/**
 	 * Test if diverse operations on a small image is processed correctly
 	 * Values on Linux with JMagick 6.2.8 and IM 6.2.8:
