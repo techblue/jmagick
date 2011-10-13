@@ -485,4 +485,18 @@ public class TestJMagick extends TestCase {
 		assertEquals("JPG description: ", "Joint Photographic Experts Group JFIF format", minfo.getDescription());
 	}
 
+	public void testException() throws Exception {
+
+                // When we fail to read image
+		try {
+			ImageInfo notFoundInfo = new ImageInfo( "not_exist.png" );
+			MagickImage notFound = new MagickImage();
+			notFound.readImage(notFoundInfo);
+
+			fail("MagickException shold be thrown from readImage due to no image");
+	     	} catch ( MagickException e ) {
+
+     		}
+	}
+
 }

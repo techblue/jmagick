@@ -65,7 +65,7 @@ void throwMagickApiException(JNIEnv *env,
     }
 
     /* Obtain the string objects */
-    jreason = (*env)->NewStringUTF(env, exception->reason);
+    jreason = (*env)->NewStringUTF(env, exception->reason != NULL ? exception->reason : "");
     if (jreason == NULL) {
 #ifdef DIAGNOSTIC
 	fprintf(stderr,
@@ -75,7 +75,7 @@ void throwMagickApiException(JNIEnv *env,
 	return;
     }
 
-    jdescription = (*env)->NewStringUTF(env, exception->description);
+    jdescription = (*env)->NewStringUTF(env,  exception->description != NULL ? exception->description : "");
     if (jdescription == NULL) {
 #ifdef DIAGNOSTIC
 	fprintf(stderr,
