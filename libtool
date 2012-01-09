@@ -44,7 +44,7 @@ available_tags=" CXX"
 
 # ### BEGIN LIBTOOL CONFIG
 
-# Libtool was configured on host j-laptop-nova:
+# Libtool was configured on host jacob-linux-baerbar:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/bash"
@@ -263,10 +263,10 @@ finish_cmds="PATH=\\\"\\\$PATH:/sbin\\\" ldconfig -n \$libdir"
 finish_eval=""
 
 # Take the output of nm and produce a listing of raw symbols and C names.
-global_symbol_pipe="sed -n -e 's/^.*[ 	]\\([ABCDGIRSTW][ABCDGIRSTW]*\\)[ 	][ 	]*\\([_A-Za-z][_A-Za-z0-9]*\\)\$/\\1 \\2 \\2/p'"
+global_symbol_pipe=""
 
 # Transform the output of nm in a proper C declaration
-global_symbol_to_cdecl="sed -n -e 's/^. .* \\(.*\\)\$/extern int \\1;/p'"
+global_symbol_to_cdecl=""
 
 # Transform the output of nm in a C name address pair
 global_symbol_to_c_name_address="sed -n -e 's/^: \\([^ ]*\\) \$/  {\\\"\\1\\\", (lt_ptr) 0},/p' -e 's/^[BCDEGRST] \\([^ ]*\\) \\([^ ]*\\)\$/  {\"\\2\", (lt_ptr) \\&\\2},/p'"
@@ -322,10 +322,10 @@ variables_saved_for_relink="PATH  LD_RUN_PATH GCC_EXEC_PREFIX COMPILER_PATH LIBR
 link_all_deplibs=unknown
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec=" /usr/lib/gcc/i486-linux-gnu/4.4.1/ /usr/lib/gcc/i486-linux-gnu/4.4.1/ /usr/lib/gcc/i486-linux-gnu/4.4.1/../../../../i486-linux-gnu/lib/i486-linux-gnu/4.4.1/ /usr/lib/gcc/i486-linux-gnu/4.4.1/../../../../i486-linux-gnu/lib/../lib/ /usr/lib/gcc/i486-linux-gnu/4.4.1/../../../i486-linux-gnu/4.4.1/ /usr/lib/gcc/i486-linux-gnu/4.4.1/../../../../lib/ /lib/i486-linux-gnu/4.4.1/ /lib/../lib/ /usr/lib/i486-linux-gnu/4.4.1/ /usr/lib/../lib/ /usr/lib/i486-linux-gnu/i486-linux-gnu/4.4.1/ /usr/lib/i486-linux-gnu/../lib/ /usr/lib/gcc/i486-linux-gnu/4.4.1/../../../../i486-linux-gnu/lib/ /usr/lib/gcc/i486-linux-gnu/4.4.1/../../../ /lib/ /usr/lib/ /usr/lib/i486-linux-gnu/"
+sys_lib_search_path_spec=" /usr/lib/gcc/i686-linux-gnu/4.6.1/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../../i686-linux-gnu/lib/i686-linux-gnu/4.6.1/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../../i686-linux-gnu/lib/i386-linux-gnu/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../../i686-linux-gnu/lib/../lib/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../i686-linux-gnu/4.6.1/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../i386-linux-gnu/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../../lib/ /lib/i686-linux-gnu/4.6.1/ /lib/i386-linux-gnu/ /lib/../lib/ /usr/lib/i686-linux-gnu/4.6.1/ /usr/lib/i386-linux-gnu/ /usr/lib/../lib/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../../i686-linux-gnu/lib/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../ /lib/ /usr/lib/"
 
 # Run-time system search path for libraries
-sys_lib_dlsearch_path_spec="/lib /usr/lib /lib/i486-linux-gnu /usr/lib/i486-linux-gnu /usr/lib/alsa-lib /usr/local/lib "
+sys_lib_dlsearch_path_spec="/lib /usr/lib /lib64 /usr/lib64 /usr/lib/i386-linux-gnu/mesa /lib/i386-linux-gnu /usr/lib/i386-linux-gnu /lib/i686-linux-gnu /usr/lib/i686-linux-gnu /usr/local/lib "
 
 # Fix the shell variable $srcfile for the compiler.
 fix_srcfile_path=""
@@ -7212,7 +7212,7 @@ disable_libs=static
 # End:
 # ### BEGIN LIBTOOL TAG CONFIG: CXX
 
-# Libtool was configured on host j-laptop-nova:
+# Libtool was configured on host jacob-linux-baerbar:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/bash"
@@ -7391,11 +7391,11 @@ striplib="strip --strip-unneeded"
 
 # Dependencies to place before the objects being linked to create a
 # shared library.
-predep_objects="/usr/lib/gcc/i486-linux-gnu/4.4.1/../../../../lib/crti.o /usr/lib/gcc/i486-linux-gnu/4.4.1/crtbeginS.o"
+predep_objects="/usr/lib/gcc/i686-linux-gnu/4.6.1/../../../i386-linux-gnu/crti.o /usr/lib/gcc/i686-linux-gnu/4.6.1/crtbeginS.o"
 
 # Dependencies to place after the objects being linked to create a
 # shared library.
-postdep_objects="/usr/lib/gcc/i486-linux-gnu/4.4.1/crtendS.o /usr/lib/gcc/i486-linux-gnu/4.4.1/../../../../lib/crtn.o"
+postdep_objects="/usr/lib/gcc/i686-linux-gnu/4.6.1/crtendS.o /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../i386-linux-gnu/crtn.o"
 
 # Dependencies to place before the objects being linked to create a
 # shared library.
@@ -7407,7 +7407,7 @@ postdeps="-lstdc++ -lm -lgcc_s -lc -lgcc_s"
 
 # The library search path used internally by the compiler when linking
 # a shared library.
-compiler_lib_search_path="-L/usr/lib/gcc/i486-linux-gnu/4.4.1 -L/usr/lib/gcc/i486-linux-gnu/4.4.1 -L/usr/lib/gcc/i486-linux-gnu/4.4.1/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/i486-linux-gnu/4.4.1/../../.. -L/usr/lib/i486-linux-gnu"
+compiler_lib_search_path="-L/usr/lib/gcc/i686-linux-gnu/4.6.1 -L/usr/lib/gcc/i686-linux-gnu/4.6.1/../../../i386-linux-gnu -L/usr/lib/gcc/i686-linux-gnu/4.6.1/../../../../lib -L/lib/i386-linux-gnu -L/lib/../lib -L/usr/lib/i386-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/i686-linux-gnu/4.6.1/../../.."
 
 # Method to check whether dependent libraries are shared objects.
 deplibs_check_method="pass_all"
@@ -7428,10 +7428,10 @@ finish_cmds="PATH=\\\"\\\$PATH:/sbin\\\" ldconfig -n \$libdir"
 finish_eval=""
 
 # Take the output of nm and produce a listing of raw symbols and C names.
-global_symbol_pipe="sed -n -e 's/^.*[ 	]\\([ABCDGIRSTW][ABCDGIRSTW]*\\)[ 	][ 	]*\\([_A-Za-z][_A-Za-z0-9]*\\)\$/\\1 \\2 \\2/p'"
+global_symbol_pipe=""
 
 # Transform the output of nm in a proper C declaration
-global_symbol_to_cdecl="sed -n -e 's/^. .* \\(.*\\)\$/extern int \\1;/p'"
+global_symbol_to_cdecl=""
 
 # Transform the output of nm in a C name address pair
 global_symbol_to_c_name_address="sed -n -e 's/^: \\([^ ]*\\) \$/  {\\\"\\1\\\", (lt_ptr) 0},/p' -e 's/^[BCDEGRST] \\([^ ]*\\) \\([^ ]*\\)\$/  {\"\\2\", (lt_ptr) \\&\\2},/p'"
@@ -7487,10 +7487,10 @@ variables_saved_for_relink="PATH LD_LIBRARY_PATH LD_RUN_PATH GCC_EXEC_PREFIX COM
 link_all_deplibs=unknown
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec=" /usr/lib/gcc/i486-linux-gnu/4.4.1/ /usr/lib/gcc/i486-linux-gnu/4.4.1/ /usr/lib/gcc/i486-linux-gnu/4.4.1/../../../../i486-linux-gnu/lib/i486-linux-gnu/4.4.1/ /usr/lib/gcc/i486-linux-gnu/4.4.1/../../../../i486-linux-gnu/lib/../lib/ /usr/lib/gcc/i486-linux-gnu/4.4.1/../../../i486-linux-gnu/4.4.1/ /usr/lib/gcc/i486-linux-gnu/4.4.1/../../../../lib/ /lib/i486-linux-gnu/4.4.1/ /lib/../lib/ /usr/lib/i486-linux-gnu/4.4.1/ /usr/lib/../lib/ /usr/lib/i486-linux-gnu/i486-linux-gnu/4.4.1/ /usr/lib/i486-linux-gnu/../lib/ /usr/lib/gcc/i486-linux-gnu/4.4.1/../../../../i486-linux-gnu/lib/ /usr/lib/gcc/i486-linux-gnu/4.4.1/../../../ /lib/ /usr/lib/ /usr/lib/i486-linux-gnu/"
+sys_lib_search_path_spec=" /usr/lib/gcc/i686-linux-gnu/4.6.1/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../../i686-linux-gnu/lib/i686-linux-gnu/4.6.1/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../../i686-linux-gnu/lib/i386-linux-gnu/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../../i686-linux-gnu/lib/../lib/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../i686-linux-gnu/4.6.1/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../i386-linux-gnu/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../../lib/ /lib/i686-linux-gnu/4.6.1/ /lib/i386-linux-gnu/ /lib/../lib/ /usr/lib/i686-linux-gnu/4.6.1/ /usr/lib/i386-linux-gnu/ /usr/lib/../lib/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../../i686-linux-gnu/lib/ /usr/lib/gcc/i686-linux-gnu/4.6.1/../../../ /lib/ /usr/lib/"
 
 # Run-time system search path for libraries
-sys_lib_dlsearch_path_spec="/lib /usr/lib /lib/i486-linux-gnu /usr/lib/i486-linux-gnu /usr/lib/alsa-lib /usr/local/lib "
+sys_lib_dlsearch_path_spec="/lib /usr/lib /lib64 /usr/lib64 /usr/lib/i386-linux-gnu/mesa /lib/i386-linux-gnu /usr/lib/i386-linux-gnu /lib/i686-linux-gnu /usr/lib/i686-linux-gnu /usr/local/lib "
 
 # Fix the shell variable $srcfile for the compiler.
 fix_srcfile_path=""
