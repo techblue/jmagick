@@ -4457,6 +4457,16 @@ getIntMethod(Java_magick_MagickImage_getQuality,
 	     "magickImageHandle",
 	     Image)
 
+ /*
+  * Class:     magick_MagickImage
+  * Method:    setQuality
+  * Signature: ()I
+  */
+setIntMethod(Java_magick_MagickImage_setQuality,
+          quality,
+          "magickImageHandle",
+          Image)
+
 /*
  * Class:     magick_MagickImage
  * Method:    setRenderingIntent

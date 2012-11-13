@@ -168,7 +168,7 @@ public class DrawInfo extends Magick {
      *
      * @param opacity the new opacity value
      */
-		public native void setOpacity(int opacity)
+    public native void setOpacity(int gravity)
 	throws MagickException;
 
     /**
@@ -182,7 +182,7 @@ public class DrawInfo extends Magick {
     /**
      * Set the decorate attribute in the DrawInfo handle.
      *
-		 * @param decoration the new DecorationType value
+     * @param decorate the new DecorationType value
      * @see DecorationType
      */
     public native void setDecorate(int decoration)

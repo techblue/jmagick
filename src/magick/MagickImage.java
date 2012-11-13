@@ -1705,6 +1705,10 @@ public class MagickImage extends Magick {
     public native int getQuality()
         throws MagickException;
 
+    // Set the quality attribute.
+    public native void setQuality(int value)
+	throws MagickException;
+
     /**
      * Set the intent attribute of the image.
      * @param intent the rendering Intent type as defined in RenderingIntent
