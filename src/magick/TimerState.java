@@ -4,6 +4,9 @@ package magick;
  * Used in MagickImage.createImage to specify the size 
  * of component.
  *
+ * Important! Constant values should correspond to:
+ * http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.2/magick/timer.h
+ *
  * @author Eric Yeo
  */
 public interface TimerState {

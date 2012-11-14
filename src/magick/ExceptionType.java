@@ -2,7 +2,7 @@ package magick;
 
 /**
  * Corresponds to the ImageMagick ExceptionType enumeration.
- * Must correspond to http://trac.imagemagick.org/browser/ImageMagick/trunk/magick/exception.h
+ * Must correspond to http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.2/magick/exception.h
  *
  * @author Eric Yeo
  */
@@ -21,6 +21,7 @@ public interface ExceptionType {
 	public static final int StreamWarning = 340;
 	public static final int CacheWarning = 345;
 	public static final int CoderWarning = 350;
+	public static final int FilterWarning = 352;  // Added some time between 6.2.6 and 6.6.2
 	public static final int ModuleWarning = 355;
 	public static final int DrawWarning = 360;
 	public static final int ImageWarning = 365;
@@ -30,6 +31,7 @@ public interface ExceptionType {
 	public static final int MonitorWarning = 385;
 	public static final int RegistryWarning = 390;
 	public static final int ConfigureWarning = 395;
+	public static final int PolicyWarning = 399;  // Added some time between 6.2.6 and 6.6.2
 	public static final int ErrorException = 400;
 	public static final int ResourceLimitError = 400;
 	public static final int TypeError = 405;
@@ -42,6 +44,7 @@ public interface ExceptionType {
 	public static final int StreamError = 440;
 	public static final int CacheError = 445;
 	public static final int CoderError = 450;
+	public static final int FilterError = 452;  // Added some time between 6.2.6 and 6.6.2
 	public static final int ModuleError = 455;
 	public static final int DrawError = 460;
 	public static final int ImageError = 465;
@@ -51,6 +54,7 @@ public interface ExceptionType {
 	public static final int MonitorError = 485;
 	public static final int RegistryError = 490;
 	public static final int ConfigureError = 495;
+	public static final int PolicyError = 499;  // Added some time between 6.2.6 and 6.6.2
 	public static final int FatalErrorException = 700;
 	public static final int ResourceLimitFatalError = 700;
 	public static final int TypeFatalError = 705;
@@ -63,6 +67,7 @@ public interface ExceptionType {
 	public static final int StreamFatalError = 740;
 	public static final int CacheFatalError = 745;
 	public static final int CoderFatalError = 750;
+	public static final int FilterFatalError = 752;  // Added some time between 6.2.6 and 6.6.2
 	public static final int ModuleFatalError = 755;
 	public static final int DrawFatalError = 760;
 	public static final int ImageFatalError = 765;
@@ -73,7 +78,7 @@ public interface ExceptionType {
 	public static final int RegistryFatalError = 790;
 	public static final int ConfigureFatalError = 795;
 
-  // The following have been added after ImageMagick-6.4.1-2 and before 6.5.7-6
-  // (exact time not known). Using them is untested.
-  public static final int PolicyFatalError = 799;
+	// The following have been added after ImageMagick-6.4.1-2 and before 6.5.7-6
+	// (exact time not known). Using them is untested.
+	public static final int PolicyFatalError = 799;
 }

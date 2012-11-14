@@ -1,5 +1,10 @@
 package magick;
 
+/**
+ * Corresponds to ImageMagick enumerated type of the same name.
+ * Important! Constant values should correspond to:
+ * http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.2/magick/draw.h
+ */
 public interface PaintMethod {
 
     public final int UndefinedMethod = 0;
