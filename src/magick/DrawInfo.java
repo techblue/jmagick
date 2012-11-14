@@ -168,7 +168,7 @@ public class DrawInfo extends Magick {
      *
      * @param opacity the new opacity value
      */
-    public native void setOpacity(int gravity)
+    public native void setOpacity(int opacity)
 	throws MagickException;
 
     /**
