@@ -37,6 +37,18 @@ IM Before version 6.2.9 does not support the DivideCompositeOp CompositeOperator
 
 ========== Changelog ===========
 
+2012-11-20 Andrew Kerr - JMagick 6.6.9
+	* Enum interfaces changed to reflect ImageMagick 6.6.9 .h files.  The FilterType.java
+	  file is no longer compatibile with older versions, due to changes to the corresponding
+	  ImageMagick enum.  ImageMagick 6.6.9 is the currently shipping version for Ubuntu 12.04.1 LTS.
+
+2012-11-14 Andrew Kerr - JMagick 6.6.2
+	* Enum interfaces changed to reflect ImageMagick 6.6.2 .h files.  The QuantumTypes.java
+	  file is no longer compatibile with older versions.
+	* Added MagickImage.setQuality().  MagickInfo.setQuality() is ignored in newer ImageMagicks.
+	  See http://sourceforge.net/mailarchive/forum.php?thread_name=alpine.GSO.2.01.1201091112090.20764%40freddy.simplesystems.org&forum_name=jmagick-users
+	  for discussion.
+
 2009-11-10 Jacob Nordfalk - JMagick 6.5.7
 	* Memory leak bug fixed. Affected code is Java_magick_DrawInfo_setGeometry, Java_magick_DrawInfo_setFont, Java_magick_ImageInfo_setServerName, Java_magick_ImageInfo_setFont, Java_magick_ImageInfo_setSize, Java_magick_ImageInfo_setTile, Java_magick_ImageInfo_setDensity, Java_magick_ImageInfo_setPage, Java_magick_ImageInfo_setTexture, Java_magick_ImageInfo_setView, Java_magick_MontageInfo_setGeometry, Java_magick_MontageInfo_setTile, Java_magick_MontageInfo_setTitle, Java_magick_MontageInfo_setFrame, Java_magick_MontageInfo_setTexture, Java_magick_MontageInfo_setFont,
 

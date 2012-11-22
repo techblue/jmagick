@@ -3,8 +3,8 @@ package magick;
 
 /**
  * Corresponds to the ImageMagick enumerated type of the same name.
- * http://trac.imagemagick.org/browser/ImageMagick/trunk/magick/effect.h
- *
+ * Important! Constant values should correspond to:
+ * http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/effect.h
  * @author Eric Yeo
  */
 public interface PreviewType {

@@ -1,8 +1,9 @@
 package magick;
 
-/*
+/**
+ * Corresponds to ImageMagick enumerated type of the same name.
  * Important! Constant values should correspond to:
- * http://trac.imagemagick.org/browser/ImageMagick/trunk/magick/image.h
+ * http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/fx.h
  */
 public interface NoiseType {
 
@@ -17,4 +18,5 @@ public interface NoiseType {
     // The following have been added after ImageMagick-6.4.1-2 and before 6.5.7-6
     // (exact time not known). Using them is untested.
     public final static int RandomNoise = 7;
+
 }

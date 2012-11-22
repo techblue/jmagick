@@ -7,53 +7,53 @@ package magick;
  */
 public class ImageInfo extends Magick {
 
-		/**
-		 * Internal ImageMagick ImageInfo handle.
-		 * We use long (64-bits) for portability.
-		 */
-		private long imageInfoHandle = 0;
+    /**
+     * Internal ImageMagick ImageInfo handle.
+     * We use long (64-bits) for portability.
+     */
+    private long imageInfoHandle = 0;
 
-		/**
-		 * Constructor.
-		 */
-		public ImageInfo()
+    /**
+     * Constructor.
+     */
+    public ImageInfo()
 	throws MagickException
-		{
+    {
 	init();
-		}
+    }
 
-		/**
-		 * Constructor.
-		 *
-		 * @param fileName initial value of the file_name attribute
-		 */
-		public ImageInfo(String fileName)
+    /**
+     * Constructor.
+     *
+     * @param fileName initial value of the file_name attribute
+     */
+    public ImageInfo(String fileName)
 	throws MagickException
-		{
+    {
 	init();
 	setFileName(fileName);
-		}
+    }
 
-		/**
-		 * To release memory on cleanup.
-		 */
-		protected void finalize()
-		{
+    /**
+     * To release memory on cleanup.
+     */
+    protected void finalize()
+    {
 	destroyImageInfo();
-		}
+    }
 
-		/**
-		 * Initialises the internal native handle.
-		 */
-		public native void init()
+    /**
+     * Initialises the internal native handle.
+     */
+    public native void init()
 	throws MagickException;
 
-		/**
-		 * Set the file name attribute of the handle.
-		 *
-		 * @param fileName the new file name
-		 */
-		public native void setFileName(String fileName)
+    /**
+     * Set the file name attribute of the handle.
+     *
+     * @param fileName the new file name
+     */
+    public native void setFileName(String fileName)
 	throws MagickException;
 
 		/**
@@ -78,130 +78,130 @@ public class ImageInfo extends Magick {
 		public native String getFileName()
 	throws MagickException;
 
-		/**
-		 * Set the affirm attribute.
-		 *
-		 * @param affirm new value of affirm
-		 */
-		public native void setAffirm(boolean affirm)
+    /**
+     * Set the affirm attribute.
+     *
+     * @param affirm new value of affirm
+     */
+    public native void setAffirm(boolean affirm)
 	throws MagickException;
 
-		/**
-		 * Get the affirm attribute.
-		 */
-		public native boolean getAffirm()
+    /**
+     * Get the affirm attribute.
+     */
+    public native boolean getAffirm()
 	throws MagickException;
 
-		// Set the subimage attribute.
-		public native void setSubimage(int value)
+    // Set the subimage attribute.
+    public native void setSubimage(int value)
 	throws MagickException;
 
-		// Get the subimage attribute.
-		public native int getSubimage()
+    // Get the subimage attribute.
+    public native int getSubimage()
 	throws MagickException;
 
-		// Set the subrange attribute.
-		public native void setSubrange(int value)
+    // Set the subrange attribute.
+    public native void setSubrange(int value)
 	throws MagickException;
 
-		// Get the subrange attribute.
-		public native int getSubrange()
+    // Get the subrange attribute.
+    public native int getSubrange()
 	throws MagickException;
 
-		// Set the server_name attribute.
-		public native void setServerName(String name)
+    // Set the server_name attribute.
+    public native void setServerName(String name)
 	throws MagickException;
 
-		// Get the server_name attribute.
-		public native String getServerName()
+    // Get the server_name attribute.
+    public native String getServerName()
 	throws MagickException;
 
-		// Set the font attribute.
-		public native void setFont(String font)
+    // Set the font attribute.
+    public native void setFont(String font)
 	throws MagickException;
 
-		// Get the font attribute.
-		public native String getFont()
+    // Get the font attribute.
+    public native String getFont()
 	throws MagickException;
 
-		// Set the size attribute.
-		public native void setSize(String size)
+    // Set the size attribute.
+    public native void setSize(String size)
 	throws MagickException;
 
-		// Get the size attribute.
-		public native String getSize()
+    // Get the size attribute.
+    public native String getSize()
 	throws MagickException;
 
-		// Set the tile attribute.
-		public native void setTile(String tile)
+    // Set the tile attribute.
+    public native void setTile(String tile)
 	throws MagickException;
 
-		// Get the tile attribute.
-		public native String getTile()
+    // Get the tile attribute.
+    public native String getTile()
 	throws MagickException;
 
-		// Set the density attribute.
-		public native void setDensity(String density)
+    // Set the density attribute.
+    public native void setDensity(String density)
 	throws MagickException;
 
-		// Get the density attribute.
-		public native String getDensity()
+    // Get the density attribute.
+    public native String getDensity()
 	throws MagickException;
 
-		// Set the page attribute.
-		public native void setPage(String page)
+    // Set the page attribute.
+    public native void setPage(String page)
 	throws MagickException;
 
-		// Get the page attribute.
-		public native String getPage()
+    // Get the page attribute.
+    public native String getPage()
 	throws MagickException;
 
-		// Set the texture attribute.
-		public native void setTexture(String texture)
+    // Set the texture attribute.
+    public native void setTexture(String texture)
 	throws MagickException;
 
-		// Get the texture attribute.
-		public native String getTexture()
+    // Get the texture attribute.
+    public native String getTexture()
 	throws MagickException;
 
-		// Set the view attribute.
-		public native void setView(String view)
+    // Set the view attribute.
+    public native void setView(String view)
 	throws MagickException;
 
-		// Get the view attribute.
-		public native String getView()
+    // Get the view attribute.
+    public native String getView()
 	throws MagickException;
 
-		// Set the adjoin attribute.
-		public native void setAdjoin(int value)
+    // Set the adjoin attribute.
+    public native void setAdjoin(int value)
 	throws MagickException;
 
-		// Get the adjoin attribute.
-		public native int getAdjoin()
+    // Get the adjoin attribute.
+    public native int getAdjoin()
 	throws MagickException;
 
-		// Set the colorspace attribute.
-		public native void setColorspace(int value)
+    // Set the colorspace attribute.
+    public native void setColorspace(int value)
 	throws MagickException;
 
-		// Get the colorspace attribute.
-		public native int getColorspace()
+    // Get the colorspace attribute.
+    public native int getColorspace()
 	throws MagickException;
 
-		// Set the compression attribute.
-		public native void setCompression(int value)
+    // Set the compression attribute.
+    public native void setCompression(int value)
 	throws MagickException;
 
-		// Get the compression attribute.
-		public native int getCompression()
+    // Get the compression attribute.
+    public native int getCompression()
 	throws MagickException;
 
-		// Set the dither attribute.
-		public native void setDither(int value)
+    // Set the dither attribute.
+    public native void setDither(int value)
 	throws MagickException;
 
-		// Get the dither attribute.
-		public native int getDither()
+    // Get the dither attribute.
+    public native int getDither()
 	throws MagickException;
 
 		// Set the antialias attribute.
@@ -216,32 +216,32 @@ public class ImageInfo extends Magick {
 		public native void setInterlace(int value)
 	throws MagickException;
 
-		// Get the interlace attribute.
-		public native int getInterlace()
+    // Get the interlace attribute.
+    public native int getInterlace()
 	throws MagickException;
 
-		// Set the monochrome attribute.
-		public native void setMonochrome(int value)
+    // Set the monochrome attribute.
+    public native void setMonochrome(int value)
 	throws MagickException;
 
-		// Get the monochrone attribute.
-		public native int getMonochrome()
+    // Get the monochrone attribute.
+    public native int getMonochrome()
 	throws MagickException;
 
-		// Set the pointsize attribute.
-		public native void setPointSize(int value)
+    // Set the pointsize attribute.
+    public native void setPointSize(int value)
 	throws MagickException;
 
-		// Get the pointsize attribute.
-		public native int getPointSize()
+    // Get the pointsize attribute.
+    public native int getPointSize()
 	throws MagickException;
 
-		// Set the quality attribute.
-		public native void setQuality(int value)
+    // Set the quality attribute.
+    public native void setQuality(int value)
 	throws MagickException;
 
-		// Get the quality attribute.
-		public native int getQuality()
+    // Get the quality attribute.
+    public native int getQuality()
 	throws MagickException;
 
 	/** Set the verbose attribute.
@@ -276,18 +276,18 @@ public class ImageInfo extends Magick {
 	/** Get the verbose attribute. @see #setVerbose(int) */
 	public native int getVerbose() throws MagickException;
 
-		/**
-		 * Set the preview_type attribute.
-		 *
-		 * @param value new value of the preview_type attribute
-		 */
-		public native void setPreviewType(int value)
+    /**
+     * Set the preview_type attribute.
+     *
+     * @param value new value of the preview_type attribute
+     */
+    public native void setPreviewType(int value)
 	throws MagickException;
 
-		/**
-		 * Get the preview_type attribute.
-		 */
-		public native int getPreviewType()
+    /**
+     * Get the preview_type attribute.
+     */
+    public native int getPreviewType()
 	throws MagickException;
 
 		/**
@@ -305,10 +305,10 @@ public class ImageInfo extends Magick {
 		public native boolean getPing()
 	throws MagickException;
 
-		/**
-		 * Clean up the memory allocated for the handle
-		 */
-		private native void destroyImageInfo();
+    /**
+     * Clean up the memory allocated for the handle
+     */
+    private native void destroyImageInfo();
 
 		/**
 		 * Set the magick attribute of the handle.
@@ -318,12 +318,12 @@ public class ImageInfo extends Magick {
 		public native void setMagick(String magick)
 	throws MagickException;
 
-		/**
-		 * Return the magick attribute of the handle.
-		 *
-		 * author: Abdulbaset Gaddah <agaddah@yahoo.com>
-		 */
-		public native String getMagick()
+    /**
+     * Return the magick attribute of the handle.
+     *
+     * @author Abdulbaset Gaddah <agaddah@yahoo.com>
+     */
+    public native String getMagick()
 	throws MagickException;
 
 		/**
@@ -336,54 +336,54 @@ public class ImageInfo extends Magick {
 		public native void setUnits(int resolutionType)
 				throws MagickException;
 
-		/**
-		 * Get the units attribute of the ImageInfo.
-		 *
-		 * @return A integer representing the resolution type as defined
-		 *         in ResolutionType
-		 * @see ResolutionType
-		 * @exception MagickException on error
-		 */
-		public native int getUnits()
-				throws MagickException;
+    /**
+     * Get the units attribute of the ImageInfo.
+     *
+     * @return A integer representing the resolution type as defined
+     *         in ResolutionType
+     * @see ResolutionType
+     * @exception MagickException on error
+     */
+    public native int getUnits()
+        throws MagickException;
 
 
 
-		/**
-		 * Set the border colour..
-		 * @param color the border colour
-		 * @see magick.MagickImage#borderImage
-		 * @exception MagickException on error
-		 */
-		public native void setBorderColor(PixelPacket color)
-				throws MagickException;
+    /**
+     * Set the border colour..
+     * @param color the border colour
+     * @see magick.MagickImage#borderImage
+     * @exception MagickException on error
+     */
+    public native void setBorderColor(PixelPacket color)
+        throws MagickException;
 
 
-		/**
-		 * Get the current border colour..
-		 * @return the current border colour
-		 * @see magick.MagickImage#borderImage
-		 * @exception MagickException on error
-		 */
-		public native PixelPacket getBorderColor()
-				throws MagickException;
+    /**
+     * Get the current border colour..
+     * @return the current border colour
+     * @see magick.MagickImage#borderImage
+     * @exception MagickException on error
+     */
+    public native PixelPacket getBorderColor()
+        throws MagickException;
 
-		/**
-		 * Return the depth of the image.
-		 *
-		 * @return the depth of the image.
-		 * @exception MagickException on error
-		 */
-		public native int getDepth()
-				throws MagickException;
+    /**
+     * Return the depth of the image.
+     *
+     * @return the depth of the image.
+     * @exception MagickException on error
+     */
+    public native int getDepth()
+        throws MagickException;
 
-		/**
-		 * Set the depth of the image.
-		 *
-		 * @param depth the depth of the image
-		 * @exception MagickException on error
-		 */
-		public native void setDepth(int depth)
-					throws MagickException;
+    /**
+     * Set the depth of the image.
+     * 
+     * @param depth the depth of the image
+     * @exception MagickException on error
+     */
+    public native void setDepth(int depth)
+          throws MagickException;
 
 }
