@@ -3,12 +3,14 @@ package magick;
 public interface CompositeOperator {
 	/*
 		Important! Constant values should correspond to:
-		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.2/magick/composite.h
+		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/composite.h
 	*/
 
 	public static final int UndefinedCompositeOp = 0;
 	public static final int NoCompositeOp = 1;
 	public static final int ModulusAddCompositeOp = 2;
+	@Deprecated
+	public static final int AddCompositeOp = 2;
 	public static final int AtopCompositeOp = 3;
 	public static final int BlendCompositeOp = 4;
 	public static final int BumpmapCompositeOp = 5;
@@ -42,6 +44,8 @@ public interface CompositeOperator {
 	public static final int LightenCompositeOp = 33;
 	public static final int LinearLightCompositeOp = 34;
 	public static final int LuminizeCompositeOp = 35;
+	public static final int MinusDstCompositeOp = 36;
+	@Deprecated
 	public static final int MinusCompositeOp = 36;
 	public static final int ModulateCompositeOp = 37;
 	public static final int MultiplyCompositeOp = 38;
@@ -59,8 +63,12 @@ public interface CompositeOperator {
 	public static final int SrcOutCompositeOp = 50;
 	public static final int SrcOverCompositeOp = 51;
 	public static final int ModulusSubtractCompositeOp = 52;
+	@Deprecated
+	public static final int SubtractCompositeOp = 52;
 	public static final int ThresholdCompositeOp = 53;
 	public static final int XorCompositeOp = 54;
+	public static final int DivideDstCompositeOp = 55;
+	@Deprecated
 	public static final int DivideCompositeOp = 55;
 	
     // The following have been added after ImageMagick-6.4.1-2 and before 6.5.7-6
@@ -74,4 +82,11 @@ public interface CompositeOperator {
 	public static final int LinearBurnCompositeOp = 62;
 	public static final int MathematicsCompositeOp = 63;
 
+	// Added in IM 6.6.8 
+	public static final int DivideSrcCompositeOp = 64;
+	public static final int MinusSrcCompositeOp = 65;
+
+	// Added in IM 6.6.9
+	public static final int DarkenIntensityCompositeOp = 66;
+	public static final int LightenIntensityCompositeOp = 67;
 }

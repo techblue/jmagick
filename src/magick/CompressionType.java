@@ -3,7 +3,7 @@ package magick;
 public interface CompressionType {
 	/*
 		Important! Constant values should correspond to:
-		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.2/magick/compress.h
+		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/compress.h
 	*/
 	public final static int UndefinedCompression = 0;
 	public final static int NoCompression = 1;
@@ -29,5 +29,11 @@ public interface CompressionType {
 	public final static int Pxr24Compression = 16;
 	public final static int B44Compression = 17;
 	public final static int B44ACompression = 18;
-
+	
+	// Added in IM 6.6.6.
+	public final static int LZMACompression = 19;
+	
+	// Added in IM 6.6.8.
+	public final static int JBIG1Compression = 20;
+	public final static int JBIG2Compression = 21;
 }

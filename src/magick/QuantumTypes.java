@@ -3,7 +3,7 @@ package magick;
 /**
  * Corresponds to the ImageMagick enumerated type of the same name.
  * Important! Constant values should correspond to:
- * http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.2/magick/quantum.h
+ * http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/quantum.h
  * @author Eric Yeo
  */
 public interface QuantumTypes {
@@ -28,6 +28,7 @@ public interface QuantumTypes {
     public static final int RGBOQuantum = 17;
     public static final int RGBQuantum = 18;
     public static final int YellowQuantum = 19;
+    @Deprecated
     public static final int GrayPadQuantum = 20;
     public static final int RGBPadQuantum = 21;
 
@@ -39,4 +40,7 @@ public interface QuantumTypes {
     public static final int CbYCrAQuantum = 24;
     public static final int CMYKOQuantum = 25;
 
+	// Added in IM 6.6.3.
+    public static final int BGRQuantum = 26;
+    public static final int BGROQuantum = 27;
 }

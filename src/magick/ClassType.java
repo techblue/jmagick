@@ -3,7 +3,7 @@ package magick;
 public interface ClassType {
 	/*
           Important! Constant values should correspond to:
-          http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.2/magick/magick-type.h
+          http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/magick-type.h
 	*/
 
 	public final static int UndefinedClass = 0;

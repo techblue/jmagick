@@ -22,7 +22,7 @@ OS=`$UNAME -s`
 dnl The version number must change with every release
 VER_MAJOR=6
 VER_MINOR=6
-VER_MICRO=2
+VER_MICRO=9
 VER_JMSUB=0
 
 SHARED_LIB_EXT=.so

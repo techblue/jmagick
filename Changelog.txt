@@ -37,6 +37,11 @@ IM Before version 6.2.9 does not support the DivideCompositeOp CompositeOperator
 
 ========== Changelog ===========
 
+2012-11-20 Andrew Kerr - JMagick 6.6.9
+	* Enum interfaces changed to reflect ImageMagick 6.6.9 .h files.  The FilterType.java
+	  file is no longer compatibile with older versions, due to changes to the corresponding
+	  ImageMagick enum.  ImageMagick 6.6.9 is the currently shipping version for Ubuntu 12.04.1 LTS.
+
 2012-11-14 Andrew Kerr - JMagick 6.6.2
 	* Enum interfaces changed to reflect ImageMagick 6.6.2 .h files.  The QuantumTypes.java
 	  file is no longer compatibile with older versions.

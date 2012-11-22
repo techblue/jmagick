@@ -3,7 +3,7 @@ package magick;
 public interface GeometryFlags {
 	/*
 		Important! Constant values should correspond to:
-		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.2/magick/geometry.h
+		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/geometry.h
 	*/
 
 	public static final int NoValue = 0x0000;

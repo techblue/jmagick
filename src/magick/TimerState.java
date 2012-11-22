@@ -5,7 +5,7 @@ package magick;
  * of component.
  *
  * Important! Constant values should correspond to:
- * http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.2/magick/timer.h
+ * http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/timer.h
  *
  * @author Eric Yeo
  */

@@ -2,7 +2,7 @@ package magick;
 
 /**
  * Corresponds to the ImageMagick ExceptionType enumeration.
- * Must correspond to http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.2/magick/exception.h
+ * Must correspond to http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/exception.h
  *
  * @author Eric Yeo
  */

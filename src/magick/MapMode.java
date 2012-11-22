@@ -3,7 +3,7 @@ package magick;
 /**
  * Corresponds to ImageMagick enumerated type of the same name.
  * Important! Constant values should correspond to:
- * http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.2/magick/blob.h
+ * http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/blob.h
  * @author Eric Yeo
  */
 public interface MapMode {
