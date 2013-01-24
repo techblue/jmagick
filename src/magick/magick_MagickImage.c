@@ -2139,6 +2139,57 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_scaleImage
 
 /*
  * Class:     magick_MagickImage
+ * Method:    resizeImage
+ * Signature: (II)Lmagick/MagickImage;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_resizeImage
+  (JNIEnv *env, jobject self, jint cols, jint rows, jdouble blur)
+{
+    Image *image = NULL;
+    Image *resizedImage = NULL;
+    jobject returnedImage;
+    jfieldID magickImageHandleFid = NULL;
+    ExceptionInfo exception;
+    int i, numImages;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle",
+                   &magickImageHandleFid);
+    if (image == NULL) {
+    throwMagickException(env, "No image to resize");
+    return NULL;
+    }
+
+    GetExceptionInfo(&exception);
+    resizedImage = ResizeImage(image,
+                 (unsigned int) cols,
+                 (unsigned int) rows,
+                             image->filter,
+                             blur,
+                 &exception);
+    if (resizedImage == NULL) {
+    throwMagickApiException(env, "Unable to resize image", &exception);
+    DestroyExceptionInfo(&exception);
+    return NULL;
+    }
+    DestroyExceptionInfo(&exception);
+
+    returnedImage = newImageObject(env, resizedImage);
+    if (returnedImage == NULL) {
+    DestroyImages(resizedImage);
+    throwMagickException(env, "Unable to construct magick.MagickImage");
+    return NULL;
+    }
+    setHandle(env, returnedImage, "magickImageHandle",
+          (void*) resizedImage, &magickImageHandleFid);
+
+    return returnedImage;
+}
+
+
+
+
+/*
+ * Class:     magick_MagickImage
  * Method:    spreadImage
  * Signature: (I)Lmagick/MagickImage;
  */
