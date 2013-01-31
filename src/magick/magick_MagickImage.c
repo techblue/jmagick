@@ -4420,8 +4420,8 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_trimImage
 
      image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
      if (image == NULL) {
-                 throwMagickException(env, "No image to set reset page");
-         return;
+        throwMagickException(env, "No image to set reset page");
+        return JNI_FALSE;
      }
 
      cpage = (*env)->GetStringUTFChars(env, page, 0);
