@@ -771,6 +771,25 @@ public class MagickImage extends Magick {
     public native MagickImage scaleImage(int cols, int rows)
 	throws MagickException;
 
+     /**
+     * Return a new image that is a resized version of the original.
+     * If an undefined filter is given the filter defaults to Mitchell for a
+     * colormapped image, a image with a matte channel, or if the image is
+     * enlarged.  Otherwise the filter defaults to a Lanczos.
+     *
+     * @param cols An integer that specifies the number of columns in
+     *              the resized image
+     * @param rows An integer that specifies the number of rows in the
+     *              resized image
+     * @param blur - The blur factor where > 1 is blurry, < 1 is sharp.
+     *              Typically set this to 1.0.
+     * @return the resized image
+     * @exception MagickException on error
+     * @author Pavel Cibulka
+     */
+    public native MagickImage resizeImage(int cols, int rows, double blur)
+    throws MagickException;
+
     /**
      * Segment an image by analyzing the histograms of the color components
      * and identifying units that are homogeneous using the fuzzy c-means
