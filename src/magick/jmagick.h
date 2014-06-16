@@ -110,6 +110,29 @@ int setIntFieldValue(JNIEnv *env,
                      jint value);
 
 /*
+ * Retrieve the byte array from the specified field.
+ *
+ * Input:
+ *   env        Java VM environment.
+ *   obj        Java object for which the value is to be retrieved.
+ *   fieldName  name of the field to be retrieved.
+ *   fieldID    if non-null, points to field ID. 0 to request retrieval.
+ *
+ * Output:
+ *   fieldID    if non-null, will contain the field ID.
+ *   size       the size of the array is returned here. Must not be NULL.
+ *
+ * Return:
+ *   The byte array requested. The caller is responsible for
+ *   deallocating this byte array.
+ */
+unsigned char* getByteArrayFieldValue(JNIEnv *env,
+                                      jobject obj,
+                                      const char *fieldName,
+                                      jfieldID *fieldID,
+                                      int *size);
+
+/*
  * From a java.awt.Rectangle object, construct a ImageMagick
  * RectangleInfo, as passed in from the parameter.
  *
