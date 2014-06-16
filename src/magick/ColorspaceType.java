@@ -3,7 +3,7 @@ package magick;
 public interface ColorspaceType {
 	/*
 		Important! Constant values should correspond to:
-		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/colorspace.h
+		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.7.7/magick/colorspace.h
 	*/
 	public final static int UndefinedColorspace = 0;
 	public final static int RGBColorspace = 1;

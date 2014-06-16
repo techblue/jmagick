@@ -1,6 +1,6 @@
 ========== Compatibility statement for JMagick 6.5.7 ===========
 
-The current verison of JMagick is compatible with ImageMagick version 6.4.1-2 and later. 
+The current verison of JMagick is compatible with ImageMagick version 6.4.1-2 and later.
 Some new values have been added to support new functionality in IM 6.5.7-6, but if you don't use the new values then JMagick 6.5.7 should be compatible with any version if ImageMagick from 6.4.1-2 to 6.5.7-6.
 
 ----- issues with ImageMagick 6.4.1 and later ---------
@@ -25,7 +25,7 @@ In ImageMagick version 6.4.1-2 CompressionType's have been changed and therefore
 
 This makes JMagick incompatible with ImageMagick version 6.4.1 and before, if any of the values greater than 2 is used or stored in your code.
 
- 
+
 ----- issues with ImageMagick before version 6.3.9 ---------
 
 There are only some very minor issues, namely that the classes ExceptionType
@@ -36,6 +36,10 @@ IM Before version 6.2.9 does not support the DivideCompositeOp CompositeOperator
 
 
 ========== Changelog ===========
+
+2014-06-16 Andrew Kerr - JMagick 6.7.7
+	* Enum interfaces changed to reflect ImageMagick 6.7.7 .h files.
+	  ImageMagick 6.7.7 is the currently shipping version for Ubuntu 14.04 LTS.
 
 2012-11-20 Andrew Kerr - JMagick 6.6.9
 	* Enum interfaces changed to reflect ImageMagick 6.6.9 .h files.  The FilterType.java
@@ -55,11 +59,11 @@ IM Before version 6.2.9 does not support the DivideCompositeOp CompositeOperator
 
 2009-11-09 Jacob Nordfalk
 	* Added new entries to CompositeOperator CompressionType ExceptionType QuantumTypes InterlaceType NoiseType
-	  which has been added from ImageMagick-6.5.7-6 to 6.4.1-2. 
+	  which has been added from ImageMagick-6.5.7-6 to 6.4.1-2.
 	  all entries are backwards compatible, i.e. no old values have changed
 
 
-2008-12-?? 
+2008-12-??
 	* Added setAntialias() and getAntialias()   (contrib from ???? - check
 	mailing list)
 

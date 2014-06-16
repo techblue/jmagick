@@ -3,7 +3,7 @@ package magick;
 /**
  * Corresponds to the ImageMagick enumerated type of the same name.
  * Important! Constant values should correspond to:
- * http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/image.h
+ * http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.7.7/magick/image.h
  *
  * @author Eric Yeo
  */

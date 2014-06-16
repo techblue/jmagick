@@ -3,11 +3,11 @@ package magick;
 public interface GeometryFlags {
 	/*
 		Important! Constant values should correspond to:
-		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/geometry.h
+		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.7.7/magick/geometry.h
 	*/
 
 	public static final int NoValue = 0x0000;
-	public static final int XValue = 0x0001; 
+	public static final int XValue = 0x0001;
 	public static final int XiValue = 0x0001;
 	public static final int YValue = 0x0002;
 	public static final int PsiValue = 0x0002;

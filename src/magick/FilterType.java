@@ -3,7 +3,7 @@ package magick;
 public interface FilterType {
 	/*
 		Important! Constant values should correspond to:
-		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/resample.h
+		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.7.7/magick/resample.h
 	*/
 	public final static int UndefinedFilter = 0;
 	public final static int PointFilter = 1;
@@ -35,7 +35,10 @@ public interface FilterType {
 	public final static int Lanczos2Filter = 24;
 	public final static int Lanczos2SharpFilter = 25;
 	public final static int RobidouxFilter = 26;
-	public final static int SentinelFilter = 27;
+	public final static int RobidouxSharpFilter = 27;  // Added in IM 6.7.7
+	public final static int CosineFilter = 28;  // Added in IM 6.7.7
+	// a count of all the filters, not a real filter
+	public final static int SentinelFilter = 29;
 }
 
 

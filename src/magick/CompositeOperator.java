@@ -3,7 +3,7 @@ package magick;
 public interface CompositeOperator {
 	/*
 		Important! Constant values should correspond to:
-		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.6.9/magick/composite.h
+		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.7.7/magick/composite.h
 	*/
 
 	public static final int UndefinedCompositeOp = 0;
@@ -70,7 +70,7 @@ public interface CompositeOperator {
 	public static final int DivideDstCompositeOp = 55;
 	@Deprecated
 	public static final int DivideCompositeOp = 55;
-	
+
     // The following have been added after ImageMagick-6.4.1-2 and before 6.5.7-6
     // (exact time not known). Using them is untested.
 	public static final int DistortCompositeOp = 56;
@@ -82,7 +82,7 @@ public interface CompositeOperator {
 	public static final int LinearBurnCompositeOp = 62;
 	public static final int MathematicsCompositeOp = 63;
 
-	// Added in IM 6.6.8 
+	// Added in IM 6.6.8
 	public static final int DivideSrcCompositeOp = 64;
 	public static final int MinusSrcCompositeOp = 65;
 
