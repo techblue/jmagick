@@ -20,16 +20,14 @@ Source can be obtained by running
 	> git clone git@github.com:techblue/jmagick.git
 
 
-WEB SITE
-~~~~~~~~
+WEB SITES
+~~~~~~~~~
 
-The JMagick web site is at
+Information on JMagick can be found at:
 
-		http://www.jmagick.org/
-		http://jmagick.wiki.sourceforge.net/
 		https://github.com/techblue/jmagick
-		http://sourceforge.net/projects/jmagick/
-
+		https://sourceforge.net/projects/jmagick/
+		https://sourceforge.net/p/jmagick/wiki/Home/
 
 MAILING LIST
 ~~~~~~~~~~~~
@@ -46,4 +44,4 @@ Jacob Nordfalk
 1 July 2008
 
 Andrew Kerr
-16 June 2014
+20 June 2014
