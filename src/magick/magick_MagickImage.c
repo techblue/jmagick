@@ -3289,7 +3289,7 @@ JNIEXPORT jbyteArray JNICALL Java_magick_MagickImage_imageToBlob
   }
   (*env)->SetByteArrayRegion(env, blob, 0, blobSiz, blobMem);
 
-  //RelinquishMagickMemory(blobMem);
+  RelinquishMagickMemory(blobMem);
 
   return blob;
 }

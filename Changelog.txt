@@ -40,6 +40,7 @@ IM Before version 6.2.9 does not support the DivideCompositeOp CompositeOperator
 2014-06-16 Andrew Kerr - JMagick 6.7.7
 	* Enum interfaces changed to reflect ImageMagick 6.7.7 .h files.
 	  ImageMagick 6.7.7 is the currently shipping version for Ubuntu 14.04 LTS.
+	* Fix memory leak in MagickImage.imageToBlob(). (https://github.com/techblue/jmagick/issues/3)
 
 2012-11-20 Andrew Kerr - JMagick 6.6.9
 	* Enum interfaces changed to reflect ImageMagick 6.6.9 .h files.  The FilterType.java
