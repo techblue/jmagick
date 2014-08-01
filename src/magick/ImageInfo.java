@@ -386,4 +386,14 @@ public class ImageInfo extends Magick {
     public native void setDepth(int depth)
           throws MagickException;
 
+		
+		public String toString() {
+			try {
+				return "Depth:"+this.getDepth()+" view:"+this.getView()+" monochrome:"+this.getMonochrome()+" size:"+this.getSize();
+			} catch (MagickException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return "ImageInfo get error";
+			}
+		}
 }
