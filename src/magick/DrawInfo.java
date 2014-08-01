@@ -1,3 +1,7 @@
+/**
+ * https://www.informatik.uni-hamburg.de/RZ/software/ImageMagick/www/api/types.html#DrawInfo
+ */
+
 package magick;
 
 /**
@@ -195,6 +199,54 @@ public class DrawInfo extends Magick {
      * @see DecorationType
      */
     public native int getDecorate()
+	throws MagickException;
+
+    /**
+     * Set the kerning attribute in the DrawInfo handle.
+     *
+     * @param strokeWidth value of the stroke_width attribute
+     */
+    public native void setKerning(double kerning)
+	throws MagickException;
+
+    /**
+     * Get the kerning attribute in the DrawInfo handle.
+     *
+     * @return the value of the stroke_width attribute in DrawInfo
+     */
+    public native double getKerning()
+	throws MagickException;
+
+    /**
+     * Set the interword_spacing attribute in the DrawInfo handle.
+     *
+     * @param strokeWidth value of the stroke_width attribute
+     */
+    public native void setInterwordSpacing(double interwordSpacing)
+	throws MagickException;
+
+    /**
+     * Get the interword_spacing attribute in the DrawInfo handle.
+     *
+     * @return the value of the stroke_width attribute in DrawInfo
+     */
+    public native double getInterwordSpacing()
+	throws MagickException;
+
+    /**
+     * Set the interline_spacing attribute in the DrawInfo handle.
+     *
+     * @param strokeWidth value of the stroke_width attribute
+     */
+    public native void setInterlineSpacing(double interlineSpacing)
+	throws MagickException;
+
+    /**
+     * Get the interline_spacing attribute in the DrawInfo handle.
+     *
+     * @return the value of the stroke_width attribute in DrawInfo
+     */
+    public native double getInterlineSpacing()
 	throws MagickException;
 
     /**

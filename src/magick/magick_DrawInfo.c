@@ -402,6 +402,70 @@ getIntMethod(Java_magick_DrawInfo_getDecorate,
 
 /*
  * Class:     magick_DrawInfo
+ * Method:    setKerning
+ * Signature: (Ljava/lang/String;)V
+ */
+setDoubleMethod(Java_magick_DrawInfo_setKerning,
+		kerning,
+		"drawInfoHandle",
+		DrawInfo)
+
+
+/*
+ * Class:     magick_DrawInfo
+ * Method:    getKerning
+ * Signature: ()Ljava/lang/String;
+ */
+getDoubleMethod(Java_magick_DrawInfo_getKerning,
+		kerning,
+		"drawInfoHandle",
+		DrawInfo)
+
+/*
+ * Class:     magick_DrawInfo
+ * Method:    setInterwordSpacing
+ * Signature: (Ljava/lang/String;)V
+ */
+setDoubleMethod(Java_magick_DrawInfo_setInterwordSpacing,
+		interword_spacing,
+		"drawInfoHandle",
+		DrawInfo)
+
+
+/*
+ * Class:     magick_DrawInfo
+ * Method:    getInterwordSpacing
+ * Signature: ()Ljava/lang/String;
+ */
+getDoubleMethod(Java_magick_DrawInfo_getInterwordSpacing,
+		interword_spacing,
+		"drawInfoHandle",
+		DrawInfo)
+
+/*
+ * Class:     magick_DrawInfo
+ * Method:    setInterwordSpacing
+ * Signature: (Ljava/lang/String;)V
+ */
+setDoubleMethod(Java_magick_DrawInfo_setInterlineSpacing,
+		interline_spacing,
+		"drawInfoHandle",
+		DrawInfo)
+
+
+/*
+ * Class:     magick_DrawInfo
+ * Method:    getInterwordSpacing
+ * Signature: ()Ljava/lang/String;
+ */
+getDoubleMethod(Java_magick_DrawInfo_getInterlineSpacing,
+		interline_spacing,
+		"drawInfoHandle",
+		DrawInfo)
+
+
+/*
+ * Class:     magick_DrawInfo
  * Method:    setStrokeWidth
  * Signature: (D)V
  */
@@ -599,4 +663,6 @@ JNIEXPORT jobject JNICALL Java_magick_DrawInfo_getTile
     }
     return imgObj;
 }
+
+
 
