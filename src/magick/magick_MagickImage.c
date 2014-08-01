@@ -1303,6 +1303,74 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_drawImage
 
 
 
+/*
+ * Class:     magick_MagickImage
+ * Method:    getTypeMetric
+ * Signature: (Lmagick/DrawInfo;)Lmagick/TypeMetric;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_getTypeMetrics
+    (JNIEnv *env, jobject self, jobject drawInfoObj)
+{
+    TypeMetric typeMetric;
+    jclass typeMetricClass;
+    jmethodID consMethodID;
+    jobject typeMetricObject;
+
+    DrawInfo *drawInfo;
+    Image *image;
+
+    drawInfo = (DrawInfo*) getHandle(env, drawInfoObj,
+				     "drawInfoHandle", NULL);
+    if (drawInfo == NULL) {
+	throwMagickException(env, "Cannot obtain DrawInfo handle");
+	return JNI_FALSE;
+    }
+
+    image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+	throwMagickException(env, "Cannot obtain image handle");
+	return JNI_FALSE;
+    }
+
+    MagickBooleanType ret=GetTypeMetrics(image, drawInfo, &typeMetric);
+
+#ifdef DIAGNOSTIC
+    fprintf(stderr, "Metrics: text: %s; "
+	    "width: %g; height: %g; ascent: %g; descent: %g; max advance: %g; "
+	    "bounds: %g,%g  %g,%g; origin: %g,%g; pixels per em: %g,%g; "
+	    "underline position: %g; underline thickness: %g\n",drawInfo->text,
+	    typeMetric.width,typeMetric.height,typeMetric.ascent,typeMetric.descent,
+	    typeMetric.max_advance,typeMetric.bounds.x1,typeMetric.bounds.y1,
+	    typeMetric.bounds.x2,typeMetric.bounds.y2,typeMetric.origin.x,typeMetric.origin.y,
+	    typeMetric.pixels_per_em.x,typeMetric.pixels_per_em.y,
+	    typeMetric.underline_position,typeMetric.underline_thickness);
+#endif
+
+
+    typeMetricClass = (*env)->FindClass(env, "magick/TypeMetric");
+    if (typeMetricClass == 0) {
+        throwMagickException(env, "Unable to locate class magick/TypeMetric");
+        return NULL;
+    }
+    consMethodID = (*env)->GetMethodID(env, typeMetricClass,
+				       "<init>", "(DD" "DDDDDDD" "DDDD" "DD)V");
+    if (consMethodID == 0) {
+        throwMagickException(env, "Unable to construct magick/TypeMetric");
+        return NULL;
+    }
+    typeMetricObject = (*env)->NewObject(env, typeMetricClass, consMethodID,
+    	typeMetric.pixels_per_em.x, typeMetric.pixels_per_em.y,
+        typeMetric.ascent, typeMetric.descent,
+        typeMetric.width, typeMetric.height, typeMetric.max_advance,
+        typeMetric.underline_position, typeMetric.underline_thickness,
+        typeMetric.bounds.x1, typeMetric.bounds.y1, typeMetric.bounds.x2, typeMetric.bounds.y2,
+        typeMetric.origin.x, typeMetric.origin.y);
+    if (typeMetricObject == NULL) {
+        throwMagickException(env, "Unable to construct magick/TypeMetric");
+        return NULL;
+    }
+    return typeMetricObject;
+}
 
 /*
  * Class:     magick_MagickImage
