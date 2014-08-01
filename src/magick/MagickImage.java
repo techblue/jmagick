@@ -476,6 +476,16 @@ public class MagickImage extends Magick {
 	throws MagickException;
 
     /**
+     * GetTypeMetrics() returns information for the specified font and text
+	 *
+     * @see <a href="http://www.imagemagick.org/api/annotate.php#GetTypeMetrics">ImageMagick API: GetTypeMetrics</a>
+     * @exception MagickException on error
+     */
+    public native TypeMetric getTypeMetrics(DrawInfo info)
+	throws MagickException;
+
+
+    /**
      * Finds edges in an image. Radius defines the radius of the convolution
      * filter. Use a radius of 0 and Edge() selects a suitable radius for you.
      *
@@ -1788,4 +1798,44 @@ public class MagickImage extends Magick {
     public native boolean getMatte()
       throws MagickException;
 
+    
+    /**
+     * FormatMagickCaption in fact does not need an Image Object 
+     * @see: http://www.imagemagick.org/api/annotate.php#FormatMagickCaption
+     * @param draw_info: the draw info. (text field is changed)
+     * --- @param split: when no convenient line breaks-- insert newline. ---
+     * @param metrics: Return the font metrics in this structure.
+     * @param caption: the caption, newlines are inserted
+     * @param split: not implemented, split word if too long, [default] chop word
+     * @return output String
+     * @throws MagickException 
+     */
+    public String FormatMagickCaption(int maxWidth, DrawInfo draw_info, TypeMetric typeMetric, String caption) throws MagickException {
+    	int lastSpacePos=-1;
+    	int lastNewlinePos=0;
+    	StringBuilder ret=new StringBuilder(caption);
+    	caption+=" "; // einfach am ende noch ein space anhängen, damit wird am ende noch einmal gecheckt
+    	for(int i=0, len=caption.length(); i < len; i++) {
+    		if(Character.isWhitespace(caption.charAt(i))) { // wenn zeichen ein whitespace ist oder ich bin am ende vom string:
+    			if(caption.charAt(i) == '\n') {
+    				lastNewlinePos=i+1;
+    				lastSpacePos=-1;
+    				continue;
+    			}
+    			System.out.println("check text: "+caption.substring(lastNewlinePos,i));
+    			draw_info.setText(caption.substring(lastNewlinePos,i));
+    			typeMetric=this.getTypeMetrics(draw_info);
+    			System.out.println("    width:"+typeMetric.width);
+    			if(typeMetric.width > maxWidth) {
+    				if(lastSpacePos >= 0) // nur wenn schon ein space war \n einfügen, wenn ned dann pech
+    					ret.setCharAt(lastSpacePos,'\n');
+    				lastNewlinePos=lastSpacePos+1;
+    				lastSpacePos=-1;
+    			} else {
+    				lastSpacePos=i;
+    			}
+    		}
+    	}
+    	return ret.toString();
+    }
 }
