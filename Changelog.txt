@@ -37,6 +37,9 @@ IM Before version 6.2.9 does not support the DivideCompositeOp CompositeOperator
 
 ========== Changelog ===========
 
+2014-08-02 Christian Ferbar
+	* Add Kerning, InterwordSpacing, InterlineSpacing, getTypeMetrics, FormatMagickCaption
+
 2014-06-16 Andrew Kerr - JMagick 6.7.7
 	* Enum interfaces changed to reflect ImageMagick 6.7.7 .h files.
 	  ImageMagick 6.7.7 is the currently shipping version for Ubuntu 14.04 LTS.
