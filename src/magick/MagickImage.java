@@ -1784,16 +1784,17 @@ public class MagickImage extends Magick {
      * @return output String
      * @throws MagickException 
      */
-    public String formatMagickCaption(int maxWidth, DrawInfo draw_info, TypeMetric typeMetric, String caption) throws MagickException {
-    	return this.formatMagickCaption(maxWidth, 0, draw_info, typeMetric, caption);
+    public TypeMetric formatMagickCaption(int maxWidth, DrawInfo draw_info, StringBuilder caption) throws MagickException {
+    	return this.formatMagickCaption(maxWidth, 0, draw_info, caption);
     }
     
-    public String formatMagickCaption(int maxWidth, int indent2ndLine, DrawInfo draw_info, TypeMetric typeMetric, String caption) throws MagickException {
+    public TypeMetric formatMagickCaption(int maxWidth, int indent2ndLine, DrawInfo draw_info, StringBuilder caption) throws MagickException {
     	int lastSpacePos=-1;
     	int lastNewlinePos=0;
     	StringBuilder ret=new StringBuilder(caption);
-    	caption+=" "; // einfach am ende noch ein space anhängen, damit wird am ende noch einmal gecheckt
+    	caption.append(" "); // einfach am ende noch ein space anhängen, damit wird am ende noch einmal gecheckt
     	int lineNr=0;
+    	TypeMetric typeMetric=null;
     	for(int i=0, len=caption.length(); i < len; i++) {
     		if(Character.isWhitespace(caption.charAt(i))) { // wenn zeichen ein whitespace ist oder ich bin am ende vom string:
     			if(caption.charAt(i) == '\n') {
@@ -1818,6 +1819,12 @@ public class MagickImage extends Magick {
     			}
     		}
     	}
-    	return ret.toString();
+    	caption.setLength(0);
+    	caption.append(ret.toString());
+    	if(typeMetric == null) { // string hat länge 0 oder nur whitespaces
+    		draw_info.setText(caption.toString());
+			typeMetric=this.getTypeMetrics(draw_info);
+    	}
+    	return typeMetric;
     }
 }
