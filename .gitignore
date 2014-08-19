@@ -1,0 +1,9 @@
+libtool
+Make.def
+config.log
+config.status
+classes
+generated
+lib
+obj
+src/magick/.jnidep
