@@ -1800,7 +1800,7 @@ public class MagickImage extends Magick {
 
     
     /**
-     * FormatMagickCaption in fact does not need an Image Object 
+     * formatMagickCaption in fact does not need an Image Object 
      * @see: http://www.imagemagick.org/api/annotate.php#FormatMagickCaption
      * @param draw_info: the draw info. (text field is changed)
      * --- @param split: when no convenient line breaks-- insert newline. ---
@@ -1810,27 +1810,35 @@ public class MagickImage extends Magick {
      * @return output String
      * @throws MagickException 
      */
-    public String FormatMagickCaption(int maxWidth, DrawInfo draw_info, TypeMetric typeMetric, String caption) throws MagickException {
+    public String formatMagickCaption(int maxWidth, DrawInfo draw_info, TypeMetric typeMetric, String caption) throws MagickException {
+    	return this.formatMagickCaption(maxWidth, 0, draw_info, typeMetric, caption);
+    }
+    
+    public String formatMagickCaption(int maxWidth, int indent2ndLine, DrawInfo draw_info, TypeMetric typeMetric, String caption) throws MagickException {
     	int lastSpacePos=-1;
     	int lastNewlinePos=0;
     	StringBuilder ret=new StringBuilder(caption);
     	caption+=" "; // einfach am ende noch ein space anhängen, damit wird am ende noch einmal gecheckt
+    	int lineNr=0;
     	for(int i=0, len=caption.length(); i < len; i++) {
     		if(Character.isWhitespace(caption.charAt(i))) { // wenn zeichen ein whitespace ist oder ich bin am ende vom string:
     			if(caption.charAt(i) == '\n') {
     				lastNewlinePos=i+1;
     				lastSpacePos=-1;
+    				lineNr++;
     				continue;
     			}
-    			System.out.println("check text: "+caption.substring(lastNewlinePos,i));
+    			// System.out.println("check text: "+caption.substring(lastNewlinePos,i));
     			draw_info.setText(caption.substring(lastNewlinePos,i));
     			typeMetric=this.getTypeMetrics(draw_info);
-    			System.out.println("    width:"+typeMetric.width);
-    			if(typeMetric.width > maxWidth) {
+    			// acSystem.out.println("    width:"+typeMetric.width);
+    			
+    			if(typeMetric.width > (maxWidth - (lineNr >= 1 ? indent2ndLine : 0))) {
     				if(lastSpacePos >= 0) // nur wenn schon ein space war \n einfügen, wenn ned dann pech
     					ret.setCharAt(lastSpacePos,'\n');
     				lastNewlinePos=lastSpacePos+1;
     				lastSpacePos=-1;
+    				lineNr++;
     			} else {
     				lastSpacePos=i;
     			}
