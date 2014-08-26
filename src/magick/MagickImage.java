@@ -1812,7 +1812,7 @@ public class MagickImage extends Magick {
     				if(lastSpacePos >= 0) // nur wenn schon ein space war \n einfügen, wenn ned dann pech
     					ret.setCharAt(lastSpacePos,'\n');
     				lastNewlinePos=lastSpacePos+1;
-    				lastSpacePos=-1;
+    				lastSpacePos=i;
     				lineNr++;
     			} else {
     				lastSpacePos=i;
