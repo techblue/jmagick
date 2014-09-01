@@ -1792,36 +1792,36 @@ public class MagickImage extends Magick {
     	int lastSpacePos=-1;
     	int lastNewlinePos=0;
     	StringBuilder ret=new StringBuilder(caption);
-    	caption.append(" "); // einfach am ende noch ein space anhängen, damit wird am ende noch einmal gecheckt
+    	caption.append(" "); // append space at end of string to check for linebreak at end of string
     	int lineNr=0;
     	TypeMetric typeMetric=null;
     	for(int i=0, len=caption.length(); i < len; i++) {
-    		if(Character.isWhitespace(caption.charAt(i))) { // wenn zeichen ein whitespace ist oder ich bin am ende vom string:
-    			if(caption.charAt(i) == '\n') {
-    				lastNewlinePos=i+1;
-    				lastSpacePos=-1;
-    				lineNr++;
-    				continue;
-    			}
+    		if(Character.isWhitespace(caption.charAt(i))) { // check if char == whitespace or end of string
     			// System.out.println("check text: "+caption.substring(lastNewlinePos,i));
     			draw_info.setText(caption.substring(lastNewlinePos,i));
     			typeMetric=this.getTypeMetrics(draw_info);
-    			// acSystem.out.println("    width:"+typeMetric.width);
+    			// System.out.println("    width:"+typeMetric.width);
     			
     			if(typeMetric.width > (maxWidth - (lineNr >= 1 ? indent2ndLine : 0))) {
-    				if(lastSpacePos >= 0) // nur wenn schon ein space war \n einfügen, wenn ned dann pech
+    				if(lastSpacePos >= 0) { // only place newline at last saved position if we already had a whitespace
     					ret.setCharAt(lastSpacePos,'\n');
-    				lastNewlinePos=lastSpacePos+1;
-    				lastSpacePos=i;
+    					lastNewlinePos=lastSpacePos+1;
+    					lastSpacePos=i;
+    				}
     				lineNr++;
     			} else {
     				lastSpacePos=i;
+    			}
+    			if(caption.charAt(i) == '\n') { // current char is a newline, place newline:
+    				lastNewlinePos=i+1;
+    				lastSpacePos=-1;
+    				lineNr++;
     			}
     		}
     	}
     	caption.setLength(0);
     	caption.append(ret.toString());
-    	if(typeMetric == null) { // string hat länge 0 oder nur whitespaces
+    	if(typeMetric == null) { // empty string
     		draw_info.setText(caption.toString());
 			typeMetric=this.getTypeMetrics(draw_info);
     	}
