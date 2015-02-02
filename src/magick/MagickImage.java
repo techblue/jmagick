@@ -1778,7 +1778,7 @@ public class MagickImage extends Magick {
      * @see: http://www.imagemagick.org/api/annotate.php#FormatMagickCaption
      * @param draw_info: the draw info. (text field is changed)
      * --- @param split: when no convenient line breaks-- insert newline. ---
-     * @param metrics: Return the font metrics in this structure.
+     * @param metrics: Return the font metrics in this structure. (from the line with the max length - to detect if a line couln't be wrapped)
      * @param caption: the caption, newlines are inserted
      * @param split: not implemented, split word if too long, [default] chop word
      * @return output String
@@ -1794,37 +1794,48 @@ public class MagickImage extends Magick {
     	StringBuilder ret=new StringBuilder(caption);
     	caption.append(" "); // append space at end of string to check for linebreak at end of string
     	int lineNr=0;
-    	TypeMetric typeMetric=null;
+    	TypeMetric retTypeMetric=null;
+    	TypeMetric lastTypeMetric=null;
     	for(int i=0, len=caption.length(); i < len; i++) {
     		if(Character.isWhitespace(caption.charAt(i))) { // check if char == whitespace or end of string
     			// System.out.println("check text: "+caption.substring(lastNewlinePos,i));
     			draw_info.setText(caption.substring(lastNewlinePos,i));
-    			typeMetric=this.getTypeMetrics(draw_info);
+    			TypeMetric typeMetric=this.getTypeMetrics(draw_info);
     			// System.out.println("    width:"+typeMetric.width);
+    			if(retTypeMetric == null) retTypeMetric = typeMetric;
+    			if(lastTypeMetric == null) lastTypeMetric = typeMetric;
     			
-    			if(typeMetric.width > (maxWidth - (lineNr >= 1 ? indent2ndLine : 0))) {
-    				if(lastSpacePos >= 0) { // only place newline at last saved position if we already had a whitespace
-    					ret.setCharAt(lastSpacePos,'\n');
-    					lastNewlinePos=lastSpacePos+1;
-    					lastSpacePos=i;
-    				}
-    				lineNr++;
-    			} else {
-    				lastSpacePos=i;
-    			}
     			if(caption.charAt(i) == '\n') { // current char is a newline, place newline:
     				lastNewlinePos=i+1;
     				lastSpacePos=-1;
     				lineNr++;
+					if(retTypeMetric.width < lastTypeMetric.width)
+						retTypeMetric = lastTypeMetric;
+    			} else if(typeMetric.width > (maxWidth - (lineNr >= 1 ? indent2ndLine : 0))) {
+    				if(lastSpacePos >= 0) { // only place newline at last saved position if we already had a whitespace
+    					ret.setCharAt(lastSpacePos,'\n');
+    					lastNewlinePos=lastSpacePos+1;
+    					lastSpacePos=i;
+    					if(retTypeMetric.width < lastTypeMetric.width)
+    						retTypeMetric = lastTypeMetric;
+    				}
+    				lineNr++;
+    			} else {
+    				if(i > 0 && Character.isWhitespace(caption.charAt(i-1))) {
+    					// last character already was a whitespace 
+    				} else {
+    					lastSpacePos=i;
+    				}
     			}
+				lastTypeMetric=typeMetric;
     		}
     	}
     	caption.setLength(0);
     	caption.append(ret.toString());
-    	if(typeMetric == null) { // empty string
+    	if(retTypeMetric == null) { // empty string
     		draw_info.setText(caption.toString());
-			typeMetric=this.getTypeMetrics(draw_info);
+			retTypeMetric=this.getTypeMetrics(draw_info);
     	}
-    	return typeMetric;
+    	return retTypeMetric;
     }
 }
