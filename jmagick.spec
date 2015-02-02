@@ -13,15 +13,16 @@
 
 Summary: open source Java interface of ImageMagick
 Name: jmagick
-Version: 6.4.0
+# check configure.in, too !
+Version: 6.8.6
 Release: 6
 License: GPL 
 Group: Application/Java
 URL: www.ablesky.com
 Source0: jmagick-%{version}-src.tar.gz
-Patch0: magickcoregenesis-error.patch
-Patch1: jmagick-getTypeMetric-kerning-spacing.patch
-Patch2: jmagick-setStringMethod-segv.patch
+#Patch0: magickcoregenesis-error.patch
+#Patch1: jmagick-getTypeMetric-kerning-spacing.patch
+#Patch2: jmagick-setStringMethod-segv.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 %if %{oldIM}
 BuildRequires: ImageMagick-devel
@@ -49,14 +50,14 @@ into the ImageMagick API.
 %prep
 %setup -q -n %{version}
 %if %{oldIM}
-%patch -p1 -b .mcgenesis
+#%patch -p1 -b .mcgenesis
 %endif
-%patch1 -p1
-%patch2 -p1
+#%patch1 -p1
+#%patch2 -p1
 
 %build
 autoconf
-%{configure} --with-magick-home=%{magick_home}
+%{configure} --with-magick-home=%{magick_home} --version=%{version}
 %{__make}
 
 %install
