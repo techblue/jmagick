@@ -1785,12 +1785,27 @@ public class MagickImage extends Magick {
      * @throws MagickException 
      */
     public TypeMetric formatMagickCaption(int maxWidth, DrawInfo draw_info, StringBuilder caption) throws MagickException {
-    	return this.formatMagickCaption(maxWidth, 0, draw_info, caption);
+    	return this.formatMagickCaption(maxWidth, 0, false, draw_info, caption);
     }
     
-    public TypeMetric formatMagickCaption(int maxWidth, int indent2ndLine, DrawInfo draw_info, StringBuilder caption) throws MagickException {
+    /**
+     * 
+     * @param maxWidth
+     * @param indent2ndLine
+     * @param trimLineEnds  -> if line ends with "xyz    \n" line might be wrapped at the first space,  "  \n" will produce an empty line - that option delets whitespaces before \n
+     * @param draw_info
+     * @param caption
+     * @return
+     * @throws MagickException
+     */
+    public TypeMetric formatMagickCaption(int maxWidth, int indent2ndLine, boolean trimLineEnds, DrawInfo draw_info, StringBuilder caption) throws MagickException {
     	int lastSpacePos=-1;
     	int lastNewlinePos=0;
+    	if(trimLineEnds) {
+    		String tmp=caption.toString().replaceAll("[\t ]+\n", "\n"); // "   \n" => "\n"
+    		caption.setLength(0);
+    		caption.append(tmp);
+    	}
     	StringBuilder ret=new StringBuilder(caption);
     	caption.append(" "); // append space at end of string to check for linebreak at end of string
     	int lineNr=0;
@@ -1805,13 +1820,7 @@ public class MagickImage extends Magick {
     			if(retTypeMetric == null) retTypeMetric = typeMetric;
     			if(lastTypeMetric == null) lastTypeMetric = typeMetric;
     			
-    			if(caption.charAt(i) == '\n') { // current char is a newline, place newline:
-    				lastNewlinePos=i+1;
-    				lastSpacePos=-1;
-    				lineNr++;
-					if(retTypeMetric.width < lastTypeMetric.width)
-						retTypeMetric = lastTypeMetric;
-    			} else if(typeMetric.width > (maxWidth - (lineNr >= 1 ? indent2ndLine : 0))) {
+    			if(typeMetric.width > (maxWidth - (lineNr >= 1 ? indent2ndLine : 0))) {
     				if(lastSpacePos >= 0) { // only place newline at last saved position if we already had a whitespace
     					ret.setCharAt(lastSpacePos,'\n');
     					lastNewlinePos=lastSpacePos+1;
@@ -1827,7 +1836,14 @@ public class MagickImage extends Magick {
     					lastSpacePos=i;
     				}
     			}
-				lastTypeMetric=typeMetric;
+    			if(caption.charAt(i) == '\n') { // current char is a newline, place newline:
+    				lastNewlinePos=i+1;
+    				lastSpacePos=-1;
+    				lineNr++;
+    				if(retTypeMetric.width < lastTypeMetric.width)
+    					retTypeMetric = lastTypeMetric;
+    			}
+    			lastTypeMetric=typeMetric;
     		}
     	}
     	caption.setLength(0);
