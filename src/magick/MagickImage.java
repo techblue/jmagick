@@ -368,6 +368,22 @@ public class MagickImage extends Magick {
 	throws MagickException;
 
     /**
+     * Composites a set of images while respecting any page offsets and disposal methods.
+     * @see <a href="http://www.imagemagick.org/api/layer.php#CoalesceImages">The underlying ImageMagick call</a>
+     * @exception MagickException on error
+     */
+    public native MagickImage coalesceImages()
+    throws MagickException;
+
+    /**
+     * Returns the coalesced frames of a GIF animation as it would appear after the GIF dispose method of that frame has been applied..
+     * @see <a href="http://www.imagemagick.org/api/layer.php#DisposeImages">The underlying ImageMagick call</a>
+     * @exception MagickException on error
+     */
+    public native MagickImage disposeImages()
+    throws MagickException;
+
+    /**
      * Enhances the intensity differences between the lighter and
      * darker elements of the image.
      * @return a boolean value to indicate success
@@ -940,6 +956,14 @@ public class MagickImage extends Magick {
       throws MagickException;
 
     /**
+     * Create a Nx1 pixel image where N is the number of unique colors in
+     * the image. Each pixel in the output image is the color of one of
+     * the unique colors of the original image.
+     **/
+    public native MagickImage uniqueImageColors()
+      throws MagickException;
+
+    /**
      * Creates a new image that is a copy of an existing one with
      * the pixels sharpened using an "unsharp" masking technique.
      *<p>
@@ -1273,6 +1297,16 @@ public class MagickImage extends Magick {
      * @exception MagickException on error
      */
     public native byte[] imageToBlob(ImageInfo imageInfo);
+
+    /**
+     * Returns the image sequence as a blob and its length.
+     *
+     * @param imageInfo the magick member of this object determines
+     *                  output format
+     * @return a byte array containing the image in the specified format
+     * @exception MagickException on error
+     */
+    public native byte[] imagesToBlob(ImageInfo imageInfo);
 
     /**
      * Set the units attribute of the image.
