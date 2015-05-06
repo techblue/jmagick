@@ -10,7 +10,16 @@ package magick;
 public class MagickLoader {
     
     static {      
-        System.loadLibrary("JMagick");    
+		String jniFile = System.getProperty("jmagick.lib");
+		// defaults:
+		if (jniFile == null) {
+			jniFile="JMagick";
+		}
+		if (jniFile.contains("/") || jniFile.contains("\\")) { // if a path is specified expect something like "/tmp/libJMagick-6.5.5.so
+			System.load(jniFile);
+		} else {
+			System.loadLibrary(jniFile);
+		}
     }
     
 }

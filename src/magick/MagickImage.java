@@ -476,6 +476,16 @@ public class MagickImage extends Magick {
 	throws MagickException;
 
     /**
+     * GetTypeMetrics() returns information for the specified font and text
+	 *
+     * @see <a href="http://www.imagemagick.org/api/annotate.php#GetTypeMetrics">ImageMagick API: GetTypeMetrics</a>
+     * @exception MagickException on error
+     */
+    public native TypeMetric getTypeMetrics(DrawInfo info)
+	throws MagickException;
+
+
+    /**
      * Finds edges in an image. Radius defines the radius of the convolution
      * filter. Use a radius of 0 and Edge() selects a suitable radius for you.
      *
@@ -1788,4 +1798,86 @@ public class MagickImage extends Magick {
     public native boolean getMatte()
       throws MagickException;
 
+    
+    /**
+     * formatMagickCaption in fact does not need an Image Object 
+     * @see: http://www.imagemagick.org/api/annotate.php#FormatMagickCaption
+     * @param draw_info: the draw info. (text field is changed)
+     * --- @param split: when no convenient line breaks-- insert newline. ---
+     * @param metrics: Return the font metrics in this structure. (from the line with the max length - to detect if a line couln't be wrapped)
+     * @param caption: the caption, newlines are inserted
+     * @param split: not implemented, split word if too long, [default] chop word
+     * @return output String
+     * @throws MagickException 
+     */
+    public TypeMetric formatMagickCaption(int maxWidth, DrawInfo draw_info, StringBuilder caption) throws MagickException {
+    	return this.formatMagickCaption(maxWidth, 0, false, draw_info, caption);
+    }
+    
+    /**
+     * 
+     * @param maxWidth
+     * @param indent2ndLine
+     * @param trimLineEnds  -> if line ends with "xyz    \n" line might be wrapped at the first space,  "  \n" will produce an empty line - that option delets whitespaces before \n
+     * @param draw_info
+     * @param caption
+     * @return
+     * @throws MagickException
+     */
+    public TypeMetric formatMagickCaption(int maxWidth, int indent2ndLine, boolean trimLineEnds, DrawInfo draw_info, StringBuilder caption) throws MagickException {
+    	int lastSpacePos=-1;
+    	int lastNewlinePos=0;
+    	if(trimLineEnds) {
+    		String tmp=caption.toString().replaceAll("[\t ]+\n", "\n"); // "   \n" => "\n"
+    		caption.setLength(0);
+    		caption.append(tmp);
+    	}
+    	StringBuilder ret=new StringBuilder(caption);
+    	caption.append(" "); // append space at end of string to check for linebreak at end of string
+    	int lineNr=0;
+    	TypeMetric retTypeMetric=null;
+    	TypeMetric lastTypeMetric=null;
+    	for(int i=0, len=caption.length(); i < len; i++) {
+    		if(Character.isWhitespace(caption.charAt(i))) { // check if char == whitespace or end of string
+    			// System.out.println("check text: "+caption.substring(lastNewlinePos,i));
+    			draw_info.setText(caption.substring(lastNewlinePos,i));
+    			TypeMetric typeMetric=this.getTypeMetrics(draw_info);
+    			// System.out.println("    width:"+typeMetric.width);
+    			if(retTypeMetric == null) retTypeMetric = typeMetric;
+    			if(lastTypeMetric == null) lastTypeMetric = typeMetric;
+    			
+    			if(typeMetric.width > (maxWidth - (lineNr >= 1 ? indent2ndLine : 0))) {
+    				if(lastSpacePos >= 0) { // only place newline at last saved position if we already had a whitespace
+    					ret.setCharAt(lastSpacePos,'\n');
+    					lastNewlinePos=lastSpacePos+1;
+    					lastSpacePos=i;
+    					if(retTypeMetric.width < lastTypeMetric.width)
+    						retTypeMetric = lastTypeMetric;
+    				}
+    				lineNr++;
+    			} else {
+    				if(i > 0 && Character.isWhitespace(caption.charAt(i-1))) {
+    					// last character already was a whitespace 
+    				} else {
+    					lastSpacePos=i;
+    				}
+    			}
+    			if(caption.charAt(i) == '\n') { // current char is a newline, place newline:
+    				lastNewlinePos=i+1;
+    				lastSpacePos=-1;
+    				lineNr++;
+    				if(retTypeMetric.width < lastTypeMetric.width)
+    					retTypeMetric = lastTypeMetric;
+    			}
+    			lastTypeMetric=typeMetric;
+    		}
+    	}
+    	caption.setLength(0);
+    	caption.append(ret.toString());
+    	if(retTypeMetric == null) { // empty string
+    		draw_info.setText(caption.toString());
+			retTypeMetric=this.getTypeMetrics(draw_info);
+    	}
+    	return retTypeMetric;
+    }
 }

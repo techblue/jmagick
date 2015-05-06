@@ -121,7 +121,9 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setPrimitive
         }
         str[len] = '\0';
         info->primitive = str;
-        printf("String: %s\n", str);
+#ifdef DIAGNOSTIC
+        fprintf(stderr,"String: %s\n", str);
+#endif
         if (info->encoding != NULL) {
            // RelinquishMagickMemory((void **) &info->encoding);
         }
@@ -232,7 +234,9 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setText
         }
         str[len] = '\0';
         info->text = str;
-        printf("String: %s\n", str);
+#ifdef DIAGNOSTIC
+        fprintf(stderr,"String: %s\n", str);
+#endif
         if (info->encoding != NULL) {
           //  RelinquishMagickMemory((void **) &info->encoding);
         }
@@ -398,6 +402,70 @@ getIntMethod(Java_magick_DrawInfo_getDecorate,
 	     decorate,
 	     "drawInfoHandle",
 	     DrawInfo)
+
+
+/*
+ * Class:     magick_DrawInfo
+ * Method:    setKerning
+ * Signature: (Ljava/lang/String;)V
+ */
+setDoubleMethod(Java_magick_DrawInfo_setKerning,
+		kerning,
+		"drawInfoHandle",
+		DrawInfo)
+
+
+/*
+ * Class:     magick_DrawInfo
+ * Method:    getKerning
+ * Signature: ()Ljava/lang/String;
+ */
+getDoubleMethod(Java_magick_DrawInfo_getKerning,
+		kerning,
+		"drawInfoHandle",
+		DrawInfo)
+
+/*
+ * Class:     magick_DrawInfo
+ * Method:    setInterwordSpacing
+ * Signature: (Ljava/lang/String;)V
+ */
+setDoubleMethod(Java_magick_DrawInfo_setInterwordSpacing,
+		interword_spacing,
+		"drawInfoHandle",
+		DrawInfo)
+
+
+/*
+ * Class:     magick_DrawInfo
+ * Method:    getInterwordSpacing
+ * Signature: ()Ljava/lang/String;
+ */
+getDoubleMethod(Java_magick_DrawInfo_getInterwordSpacing,
+		interword_spacing,
+		"drawInfoHandle",
+		DrawInfo)
+
+/*
+ * Class:     magick_DrawInfo
+ * Method:    setInterwordSpacing
+ * Signature: (Ljava/lang/String;)V
+ */
+setDoubleMethod(Java_magick_DrawInfo_setInterlineSpacing,
+		interline_spacing,
+		"drawInfoHandle",
+		DrawInfo)
+
+
+/*
+ * Class:     magick_DrawInfo
+ * Method:    getInterwordSpacing
+ * Signature: ()Ljava/lang/String;
+ */
+getDoubleMethod(Java_magick_DrawInfo_getInterlineSpacing,
+		interline_spacing,
+		"drawInfoHandle",
+		DrawInfo)
 
 
 /*
@@ -599,4 +667,6 @@ JNIEXPORT jobject JNICALL Java_magick_DrawInfo_getTile
     }
     return imgObj;
 }
+
+
 
