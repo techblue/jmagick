@@ -966,6 +966,14 @@ public class MagickImage extends Magick {
       throws MagickException;
 
     /**
+     * Create a Nx1 pixel image where N is the number of unique colors in
+     * the image. Each pixel in the output image is the color of one of
+     * the unique colors of the original image.
+     **/
+    public native MagickImage uniqueImageColors()
+      throws MagickException;
+
+    /**
      * Creates a new image that is a copy of an existing one with
      * the pixels sharpened using an "unsharp" masking technique.
      *<p>

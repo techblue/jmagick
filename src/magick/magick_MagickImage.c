@@ -2600,6 +2600,46 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_transparentImage
 
 
 
+/*
+ * Class:     magick_MagickImage
+ * Method:    uniqueImageColors
+ * Signature: ()Lmagick/MagickImage;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_uniqueImageColors
+    (JNIEnv *env, jobject self)
+{
+    jobject newObj;
+    Image *newImage;
+    ExceptionInfo exception;
+    Image *image =
+    (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if(image == NULL) {
+    throwMagickException(env, "Cannot obtain image handle");
+    return NULL;
+    }
+
+    GetExceptionInfo(&exception);
+    newImage = UniqueImageColors(image, &exception);
+
+    if (newImage == NULL) {
+    throwMagickApiException(env, "Unable to generate unique image colors image", &exception);
+    DestroyExceptionInfo(&exception);
+    return NULL;
+    }
+    DestroyExceptionInfo(&exception);
+
+    newObj = newImageObject(env, newImage);
+    if (newObj == NULL) {
+    DestroyImages(newImage);
+    throwMagickException(env, "Unable to create a new MagickImage object");
+    return NULL;
+    }
+
+    return newObj;
+}
+
+
+
 
 /*
  * Class:     magick_MagickImage
