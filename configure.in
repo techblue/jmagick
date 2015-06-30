@@ -149,10 +149,14 @@ elif test -d ${JAVA_HOME}/include ; then
 	if test -d ${JAVA_HOME}/include/win32 ; then
 		JAVA_INCLUDES="$JAVA_INCLUDES -I${JAVA_HOME}/include/win32"
 	fi
-        if test -d ${JAVA_HOME}/include/bsd ; then
-                JAVA_INCLUDES="$JAVA_INCLUDES -I${JAVA_HOME}/include/bsd"
-        fi
-dnl check for Mac OS X series of systems
+	if test -d ${JAVA_HOME}/include/bsd ; then
+		JAVA_INCLUDES="$JAVA_INCLUDES -I${JAVA_HOME}/include/bsd"
+	fi
+	dnl Modern Oracle JDK on OS X
+	if test -d ${JAVA_HOME}/include/darwin ; then
+		JAVA_INCLUDES="$JAVA_INCLUDES -I${JAVA_HOME}/include/darwin"
+	fi
+dnl check for Mac OS X series of systems with old Apple JDKs
 elif test -d ${JAVA_HOME}/Headers; then
 	JAVA_INCLUDES=-I${JAVA_HOME}/Headers
 else

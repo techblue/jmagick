@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 
 
 /**
- * The sole purchase of this class is to cause the native
+ * The sole purpose of this class is to cause the native
  * library to be loaded whenever a concrete class is used
  * and provide utility methods.
  *

@@ -2600,6 +2600,46 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_transparentImage
 
 
 
+/*
+ * Class:     magick_MagickImage
+ * Method:    uniqueImageColors
+ * Signature: ()Lmagick/MagickImage;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_uniqueImageColors
+    (JNIEnv *env, jobject self)
+{
+    jobject newObj;
+    Image *newImage;
+    ExceptionInfo exception;
+    Image *image =
+    (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if(image == NULL) {
+    throwMagickException(env, "Cannot obtain image handle");
+    return NULL;
+    }
+
+    GetExceptionInfo(&exception);
+    newImage = UniqueImageColors(image, &exception);
+
+    if (newImage == NULL) {
+    throwMagickApiException(env, "Unable to generate unique image colors image", &exception);
+    DestroyExceptionInfo(&exception);
+    return NULL;
+    }
+    DestroyExceptionInfo(&exception);
+
+    newObj = newImageObject(env, newImage);
+    if (newObj == NULL) {
+    DestroyImages(newImage);
+    throwMagickException(env, "Unable to create a new MagickImage object");
+    return NULL;
+    }
+
+    return newObj;
+}
+
+
+
 
 /*
  * Class:     magick_MagickImage
@@ -3360,6 +3400,150 @@ JNIEXPORT jbyteArray JNICALL Java_magick_MagickImage_imageToBlob
   RelinquishMagickMemory(blobMem);
 
   return blob;
+}
+
+/*
+ * Class:     magick_MagickImage
+ * Method:    imagesToBlob
+ * Signature: (Lmagick/ImageInfo;)[B
+ */
+JNIEXPORT jbyteArray JNICALL Java_magick_MagickImage_imagesToBlob
+ (JNIEnv *env, jobject self, jobject imageInfoObj)
+{
+  ImageInfo *imageInfo;
+  Image *image;
+  size_t blobSiz = 0;
+  ExceptionInfo exception;
+  void *blobMem = NULL;
+  jbyteArray blob;
+
+  /* Obtain the ImageInfo pointer */
+  if (imageInfoObj != NULL) {
+    imageInfo = (ImageInfo*) getHandle(env, imageInfoObj,
+                                       "imageInfoHandle", NULL);
+    if (imageInfo == NULL) {
+      throwMagickException(env, "Cannot obtain ImageInfo object");
+      return NULL;
+    }
+  }
+  else {
+    imageInfo = NULL;
+  }
+
+  /* Get the Image pointer */
+  image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+  if (image == NULL) {
+    throwMagickException(env, "No image to get file name");
+    return NULL;
+  }
+
+
+  /* Do the conversion */
+  GetExceptionInfo(&exception);
+  blobMem = ImagesToBlob(imageInfo, image, &blobSiz, &exception);
+  if (blobMem == NULL) {
+    throwMagickApiException(env, "Unable to convert image to blob", &exception);
+    DestroyExceptionInfo(&exception);
+    return NULL;
+  }
+  DestroyExceptionInfo(&exception);
+
+
+  /* Create a new Java array. */
+  blob = (*env)->NewByteArray(env, blobSiz);
+  if (blob == NULL) {
+    throwMagickException(env, "Unable to allocate array");
+    return NULL;
+  }
+  (*env)->SetByteArrayRegion(env, blob, 0, blobSiz, blobMem);
+
+  RelinquishMagickMemory(blobMem);
+
+  return blob;
+}
+
+/*
+ * Class:     magick_MagickImage
+ * Method:    coalesceImages
+ * Signature: (II)Lmagick/MagickImage;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_coalesceImages
+  (JNIEnv *env, jobject self)
+{
+    Image *image = NULL;
+    Image *coalescedImage = NULL;
+    jobject returnedImage;
+    jfieldID magickImageHandleFid = NULL;
+    ExceptionInfo exception;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle",
+                   &magickImageHandleFid);
+    if (image == NULL) {
+    throwMagickException(env, "No image to coalesce");
+    return NULL;
+    }
+
+    GetExceptionInfo(&exception);
+    coalescedImage = CoalesceImages(image, &exception);
+    if (coalescedImage == NULL) {
+        throwMagickApiException(env, "Unable to coalesce image", &exception);
+        DestroyExceptionInfo(&exception);
+        return NULL;
+    }
+    DestroyExceptionInfo(&exception);
+
+    returnedImage = newImageObject(env, coalescedImage);
+    if (returnedImage == NULL) {
+        DestroyImages(coalescedImage);
+        throwMagickException(env, "Unable to construct magick.MagickImage");
+        return NULL;
+    }
+    setHandle(env, returnedImage, "magickImageHandle",
+          (void*) coalescedImage, &magickImageHandleFid);
+
+    return returnedImage;
+}
+
+/*
+ * Class:     magick_MagickImage
+ * Method:    disposeImages
+ * Signature: (II)Lmagick/MagickImage;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_disposeImages
+  (JNIEnv *env, jobject self)
+{
+    Image *image = NULL;
+    Image *disposedImage = NULL;
+    jobject returnedImage;
+    jfieldID magickImageHandleFid = NULL;
+    ExceptionInfo exception;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle",
+                   &magickImageHandleFid);
+    if (image == NULL) {
+        throwMagickException(env, "No image to dispose");
+        return NULL;
+    }
+
+    GetExceptionInfo(&exception);
+    disposedImage = DisposeImages(image, &exception);
+    if (disposedImage == NULL) {
+        throwMagickApiException(env, "Unable to dispose image", &exception);
+        DestroyExceptionInfo(&exception);
+        return NULL;
+    }
+    DestroyExceptionInfo(&exception);
+
+    returnedImage = newImageObject(env, disposedImage);
+    if (returnedImage == NULL) {
+        DestroyImages(disposedImage);
+        throwMagickException(env, "Unable to construct magick.MagickImage");
+        return NULL;
+    }
+    setHandle(env, returnedImage, "magickImageHandle",
+          (void*) disposedImage, &magickImageHandleFid);
+
+    return returnedImage;
 }
 
 
