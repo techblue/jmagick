@@ -2153,6 +2153,25 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_solarizeImage
 }
 
 
+/*
+ * Class:     magick_MagickImage
+ * Method:    setColorFuzz
+ * Signature: (D)V
+ */
+JNIEXPORT void JNICALL Java_magick_MagickImage_setColorFuzz
+    (JNIEnv *env, jobject self, jdouble fuzz)
+{
+    Image *image =
+	(Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+	throwMagickException(env, "Cannot obtain image handle");
+	return;
+    }
+
+    image->fuzz= QuantumRange * fuzz;
+}
+
+
 
 
 

@@ -871,6 +871,16 @@ public class MagickImage extends Magick {
 	throws MagickException;
 
     /**
+     * Set color fuzz
+     *
+     * @param fuzz fuzz value.
+     *
+     * @exception MagickException on error
+     */
+    public native void setColorFuzz(double fuzz)
+	throws MagickException;
+
+    /**
      * Sorts the colormap of a PseudoClass image by decreasing
      * color intensity.
      * @return a boolean value indicating success
