@@ -2258,6 +2258,58 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_resizeImage
 
 /*
  * Class:     magick_MagickImage
+ * Method:    extentImage
+ * Signature: (III)Lmagick/MagickImage;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_extentImage
+  (JNIEnv *env, jobject self, jint cols, jint rows, jint gravity)
+{
+    Image *image = NULL;
+    Image *extendedImage = NULL;
+    jobject returnedImage;
+    jfieldID magickImageHandleFid = NULL;
+    ExceptionInfo exception;
+    int i, numImages;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle",
+                   &magickImageHandleFid);
+    if (image == NULL) {
+    throwMagickException(env, "No image to extent");
+    return NULL;
+    }
+
+    RectangleInfo geometry;
+    SetGeometry(image,&geometry);
+    geometry.width=cols;
+    geometry.height=rows;
+    GravityAdjustGeometry(image->columns,image->rows,gravity,&geometry);
+
+    GetExceptionInfo(&exception);
+    extendedImage = ExtentImage(image, &geometry, &exception);
+    if (extendedImage == NULL) {
+    throwMagickApiException(env, "Unable to extent image", &exception);
+    DestroyExceptionInfo(&exception);
+    return NULL;
+    }
+    DestroyExceptionInfo(&exception);
+
+    returnedImage = newImageObject(env, extendedImage);
+    if (returnedImage == NULL) {
+    DestroyImages(extendedImage);
+    throwMagickException(env, "Unable to construct magick.MagickImage");
+    return NULL;
+    }
+    setHandle(env, returnedImage, "magickImageHandle",
+          (void*) extendedImage, &magickImageHandleFid);
+
+    return returnedImage;
+}
+
+
+
+
+/*
+ * Class:     magick_MagickImage
  * Method:    spreadImage
  * Signature: (I)Lmagick/MagickImage;
  */

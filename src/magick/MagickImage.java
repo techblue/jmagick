@@ -817,6 +817,20 @@ public class MagickImage extends Magick {
     throws MagickException;
 
     /**
+     * Return a new image that is a extended version of the original.
+     *
+     * @param cols An integer that specifies the number of columns in
+     *              the extended image
+     * @param rows An integer that specifies the number of rows in the
+     *              extended image
+     * @param gravity extent direction @see GravityType
+     * @return the extended image
+     * @exception MagickException on error
+     */
+    public native MagickImage extentImage(int cols, int rows, int gravity)
+    throws MagickException;
+
+    /**
      * Segment an image by analyzing the histograms of the color components
      * and identifying units that are homogeneous using the fuzzy c-means
      * technique.
