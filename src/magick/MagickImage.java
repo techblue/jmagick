@@ -881,6 +881,14 @@ public class MagickImage extends Magick {
 	throws MagickException;
 
     /**
+     * Get bounding box
+     *
+     * @exception MagickException on error
+     */
+    public native Rectangle getBoundingBox()
+	throws MagickException;
+
+    /**
      * Sorts the colormap of a PseudoClass image by decreasing
      * color intensity.
      * @return a boolean value indicating success
@@ -1830,7 +1838,6 @@ public class MagickImage extends Magick {
     public native boolean getMatte()
       throws MagickException;
 
-    
     /**
      * formatMagickCaption in fact does not need an Image Object 
      * @see: http://www.imagemagick.org/api/annotate.php#FormatMagickCaption

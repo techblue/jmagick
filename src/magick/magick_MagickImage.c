@@ -2172,8 +2172,51 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_setColorFuzz
 }
 
 
+/*
+ * Class:     magick_MagickImage
+ * Method:    getBoundingBox
+ * Signature: ()Ljava/awt/Rectangle;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_getBoundingBox
+  (JNIEnv *env, jobject self)
+{
+    ExceptionInfo exception;
+    Image *image = NULL;
+    jclass rectangleClass;
+    jmethodID consMethodID;
+    jobject rectangle;
 
+    image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+    throwMagickException(env, "Unable to retrieve handle");
+    return NULL;
+    }
 
+    rectangleClass = (*env)->FindClass(env, "java/awt/Rectangle");
+    if (rectangleClass == 0) {
+    throwMagickException(env, "Unable to locate class java.awt.Rectangle");
+    return NULL;
+    }
+    consMethodID = (*env)->GetMethodID(env, rectangleClass,
+                       "<init>", "(IIII)V");
+    if (consMethodID == 0) {
+    throwMagickException(env, "Unable to construct java.awt.Rectangle");
+    return NULL;
+    }
+
+    GetExceptionInfo(&exception);
+    RectangleInfo info = GetImageBoundingBox(image, &exception);
+    rectangle = (*env)->NewObject(env, rectangleClass, consMethodID,
+                  info.x, info.y, info.width, info.height);
+    if (rectangle == NULL) {
+    throwMagickException(env, "Unable to construct java.awt.Rectangle");
+	DestroyExceptionInfo(&exception);
+    return NULL;
+    }
+	DestroyExceptionInfo(&exception);
+
+    return rectangle;
+}
 
 
 /*
