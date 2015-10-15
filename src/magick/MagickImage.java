@@ -1847,6 +1847,15 @@ public class MagickImage extends Magick {
             throws MagickException;
 
     /**
+     * Strips an image of all profiles and comments..
+     *
+     * @exception MagickException on error
+     */
+    public native boolean strip()
+      throws MagickException;
+
+
+    /**
      * formatMagickCaption in fact does not need an Image Object 
      * @see: http://www.imagemagick.org/api/annotate.php#FormatMagickCaption
      * @param draw_info: the draw info. (text field is changed)

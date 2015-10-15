@@ -4941,3 +4941,23 @@ JNIEXPORT jint JNICALL Java_magick_MagickImage_getNumberImages
 
     return GetImageListLength(image);
 }
+
+/*
+ * Class:     magick_MagickImage
+ * Method:    strip
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_magick_MagickImage_strip
+    (JNIEnv *env, jobject self) {
+    Image *image = NULL;
+    jboolean retVal;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+    throwMagickException(env, "Unable to retrieve image handle");
+    return;
+    }
+
+    retVal = StripImage(image);
+    return(retVal);
+}
