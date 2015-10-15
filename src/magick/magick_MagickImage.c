@@ -4923,3 +4923,21 @@ getBoolMethod(Java_magick_MagickImage_getMatte,
     matte,
     "magickImageHandle",
     Image)
+
+/*
+ * Class:     magick_MagickImage
+ * Method:    getNumberImages
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_magick_MagickImage_getNumberImages
+  (JNIEnv *env, jobject self) {
+    Image *image = NULL;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+    throwMagickException(env, "Unable to retrieve image handle");
+    return -1;
+    }
+
+    return GetImageListLength(image);
+}

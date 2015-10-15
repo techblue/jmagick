@@ -1839,6 +1839,14 @@ public class MagickImage extends Magick {
       throws MagickException;
 
     /**
+     * Get the number of images
+     * @return number of images
+     * @throws MagickException
+     */
+    public native int getNumberImages()
+            throws MagickException;
+
+    /**
      * formatMagickCaption in fact does not need an Image Object 
      * @see: http://www.imagemagick.org/api/annotate.php#FormatMagickCaption
      * @param draw_info: the draw info. (text field is changed)
