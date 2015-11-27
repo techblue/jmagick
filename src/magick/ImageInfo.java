@@ -228,6 +228,14 @@ public class ImageInfo extends Magick {
     public native int getMonochrome()
 	throws MagickException;
 
+    // Set the fuzz attribute.
+    public native void setFuzz(double value)
+            throws MagickException;
+
+    // Get the fuzz attribute.
+    public native double getFuzz()
+            throws MagickException;
+
     // Set the pointsize attribute.
     public native void setPointSize(int value)
 	throws MagickException;

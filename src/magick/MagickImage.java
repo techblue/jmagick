@@ -817,6 +817,20 @@ public class MagickImage extends Magick {
     throws MagickException;
 
     /**
+     * Return a new image that is a extended version of the original.
+     *
+     * @param cols An integer that specifies the number of columns in
+     *              the extended image
+     * @param rows An integer that specifies the number of rows in the
+     *              extended image
+     * @param gravity extent direction @see GravityType
+     * @return the extended image
+     * @exception MagickException on error
+     */
+    public native MagickImage extentImage(int cols, int rows, int gravity)
+    throws MagickException;
+
+    /**
      * Segment an image by analyzing the histograms of the color components
      * and identifying units that are homogeneous using the fuzzy c-means
      * technique.
@@ -854,6 +868,24 @@ public class MagickImage extends Magick {
      * @exception MagickException on error
      */
     public native void solarizeImage(double threshold)
+	throws MagickException;
+
+    /**
+     * Set color fuzz
+     *
+     * @param fuzz fuzz value.
+     *
+     * @exception MagickException on error
+     */
+    public native void setColorFuzz(double fuzz)
+	throws MagickException;
+
+    /**
+     * Get bounding box
+     *
+     * @exception MagickException on error
+     */
+    public native Rectangle getBoundingBox()
 	throws MagickException;
 
     /**
@@ -1806,7 +1838,23 @@ public class MagickImage extends Magick {
     public native boolean getMatte()
       throws MagickException;
 
-    
+    /**
+     * Get the number of images
+     * @return number of images
+     * @throws MagickException
+     */
+    public native int getNumberImages()
+            throws MagickException;
+
+    /**
+     * Strips an image of all profiles and comments..
+     *
+     * @exception MagickException on error
+     */
+    public native boolean strip()
+      throws MagickException;
+
+
     /**
      * formatMagickCaption in fact does not need an Image Object 
      * @see: http://www.imagemagick.org/api/annotate.php#FormatMagickCaption

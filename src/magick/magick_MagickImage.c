@@ -2153,8 +2153,70 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_solarizeImage
 }
 
 
+/*
+ * Class:     magick_MagickImage
+ * Method:    setColorFuzz
+ * Signature: (D)V
+ */
+JNIEXPORT void JNICALL Java_magick_MagickImage_setColorFuzz
+    (JNIEnv *env, jobject self, jdouble fuzz)
+{
+    Image *image =
+	(Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+	throwMagickException(env, "Cannot obtain image handle");
+	return;
+    }
+
+    image->fuzz= QuantumRange * fuzz;
+}
 
 
+/*
+ * Class:     magick_MagickImage
+ * Method:    getBoundingBox
+ * Signature: ()Ljava/awt/Rectangle;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_getBoundingBox
+  (JNIEnv *env, jobject self)
+{
+    ExceptionInfo exception;
+    Image *image = NULL;
+    jclass rectangleClass;
+    jmethodID consMethodID;
+    jobject rectangle;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+    throwMagickException(env, "Unable to retrieve handle");
+    return NULL;
+    }
+
+    rectangleClass = (*env)->FindClass(env, "java/awt/Rectangle");
+    if (rectangleClass == 0) {
+    throwMagickException(env, "Unable to locate class java.awt.Rectangle");
+    return NULL;
+    }
+    consMethodID = (*env)->GetMethodID(env, rectangleClass,
+                       "<init>", "(IIII)V");
+    if (consMethodID == 0) {
+    throwMagickException(env, "Unable to construct java.awt.Rectangle");
+    return NULL;
+    }
+
+    GetExceptionInfo(&exception);
+    RectangleInfo info = GetImageBoundingBox(image, &exception);
+    rectangle = (*env)->NewObject(env, rectangleClass, consMethodID,
+                  info.x, info.y, info.width, info.height);
+    if (rectangle == NULL) {
+    throwMagickException(env, "Unable to construct java.awt.Rectangle");
+	DestroyExceptionInfo(&exception);
+    return NULL;
+    }
+	DestroyExceptionInfo(&exception);
+
+    return rectangle;
+}
 
 
 /*
@@ -2249,6 +2311,58 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_resizeImage
     }
     setHandle(env, returnedImage, "magickImageHandle",
           (void*) resizedImage, &magickImageHandleFid);
+
+    return returnedImage;
+}
+
+
+
+
+/*
+ * Class:     magick_MagickImage
+ * Method:    extentImage
+ * Signature: (III)Lmagick/MagickImage;
+ */
+JNIEXPORT jobject JNICALL Java_magick_MagickImage_extentImage
+  (JNIEnv *env, jobject self, jint cols, jint rows, jint gravity)
+{
+    Image *image = NULL;
+    Image *extendedImage = NULL;
+    jobject returnedImage;
+    jfieldID magickImageHandleFid = NULL;
+    ExceptionInfo exception;
+    int i, numImages;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle",
+                   &magickImageHandleFid);
+    if (image == NULL) {
+    throwMagickException(env, "No image to extent");
+    return NULL;
+    }
+
+    RectangleInfo geometry;
+    SetGeometry(image,&geometry);
+    geometry.width=cols;
+    geometry.height=rows;
+    GravityAdjustGeometry(image->columns,image->rows,gravity,&geometry);
+
+    GetExceptionInfo(&exception);
+    extendedImage = ExtentImage(image, &geometry, &exception);
+    if (extendedImage == NULL) {
+    throwMagickApiException(env, "Unable to extent image", &exception);
+    DestroyExceptionInfo(&exception);
+    return NULL;
+    }
+    DestroyExceptionInfo(&exception);
+
+    returnedImage = newImageObject(env, extendedImage);
+    if (returnedImage == NULL) {
+    DestroyImages(extendedImage);
+    throwMagickException(env, "Unable to construct magick.MagickImage");
+    return NULL;
+    }
+    setHandle(env, returnedImage, "magickImageHandle",
+          (void*) extendedImage, &magickImageHandleFid);
 
     return returnedImage;
 }
@@ -4810,3 +4924,41 @@ getBoolMethod(Java_magick_MagickImage_getMatte,
     matte,
     "magickImageHandle",
     Image)
+
+/*
+ * Class:     magick_MagickImage
+ * Method:    getNumberImages
+ * Signature: ()I
+ */
+JNIEXPORT jint JNICALL Java_magick_MagickImage_getNumberImages
+  (JNIEnv *env, jobject self) {
+    Image *image = NULL;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+    throwMagickException(env, "Unable to retrieve image handle");
+    return -1;
+    }
+
+    return GetImageListLength(image);
+}
+
+/*
+ * Class:     magick_MagickImage
+ * Method:    strip
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_magick_MagickImage_strip
+    (JNIEnv *env, jobject self) {
+    Image *image = NULL;
+    jboolean retVal;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+    throwMagickException(env, "Unable to retrieve image handle");
+    return;
+    }
+
+    retVal = StripImage(image);
+    return(retVal);
+}
