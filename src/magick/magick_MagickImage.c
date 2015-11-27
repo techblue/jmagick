@@ -3329,6 +3329,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_blobToImage
         DestroyExceptionInfo(&exception);
         return;
     }
+    DestroyExceptionInfo(&exception);
 
     /* Get the old image handle and deallocate it (if required). */
     oldImage = (Image*) getHandle(env, self, "magickImageHandle", &fieldID);
