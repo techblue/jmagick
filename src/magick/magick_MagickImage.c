@@ -4956,7 +4956,7 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_strip
     image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
     if (image == NULL) {
     throwMagickException(env, "Unable to retrieve image handle");
-    return;
+    return JNI_FALSE;
     }
 
     retVal = StripImage(image);
