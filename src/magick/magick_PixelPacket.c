@@ -22,18 +22,19 @@ JNIEXPORT jobject JNICALL Java_magick_PixelPacket_queryColorDatabase
     unsigned int result;
     jmethodID consMethodID;
     jobject jPixelPacket;
-    ExceptionInfo exception;
+    ExceptionInfo *exception;
 
     cstr = (*env)->GetStringUTFChars(env, target, 0);
-    GetExceptionInfo(&exception);
-    result = QueryColorDatabase(cstr, &iPixelPacket, &exception);
+    exception=AcquireExceptionInfo();
+    result = QueryColorDatabase(cstr, &iPixelPacket, exception);
     (*env)->ReleaseStringUTFChars(env, target, cstr);
 
     if (!result) {
-	throwMagickApiException(env, "Unable to locate color", &exception);
-        DestroyExceptionInfo(&exception);
+	throwMagickApiException(env, "Unable to locate color", exception);
+        DestroyExceptionInfo(exception);
 	return NULL;
     }
+    DestroyExceptionInfo(exception);
 
     consMethodID = (*env)->GetMethodID(env, class, "<init>", "(IIII)V");
     if (consMethodID == 0) {

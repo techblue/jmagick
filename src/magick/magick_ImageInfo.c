@@ -27,7 +27,7 @@ JNIEXPORT void JNICALL Java_magick_ImageInfo_init
     imageInfo = (ImageInfo*) getHandle(env, obj, "imageInfoHandle", &fid);
 
     if (imageInfo == NULL) {
-	imageInfo = (ImageInfo *) AcquireMemory(sizeof(ImageInfo));
+	imageInfo = AcquireImageInfo();
 	if (imageInfo == NULL) {
 	    throwMagickException(env, "Unable to allocate memory for handle");
 	    return;
@@ -91,7 +91,7 @@ JNIEXPORT void JNICALL Java_magick_ImageInfo_setFileName
 				       "imageInfoHandle", &handleFid);
 
     if (imageInfo == NULL) {
-	imageInfo = (ImageInfo *) AcquireMemory(sizeof(ImageInfo));
+	imageInfo = AcquireImageInfo();
 	if (imageInfo == NULL) {
 	    throwMagickException(env, "Unable to allow memory for handle");
 	    return;
@@ -724,7 +724,7 @@ JNIEXPORT void JNICALL Java_magick_ImageInfo_setMagick
 				       "imageInfoHandle", &handleFid);
 
     if (imageInfo == NULL) {
-	imageInfo = (ImageInfo *) AcquireMemory(sizeof(ImageInfo));
+	imageInfo = AcquireImageInfo();
 	if (imageInfo == NULL) {
 	    throwMagickException(env, "Unable to allocate memory for handle");
 	    return;

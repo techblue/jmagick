@@ -40,7 +40,7 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_init
     }
 
     /* Initialise and set the new DrawInfo handle. */
-    drawInfo = (DrawInfo*) AcquireMemory(sizeof(DrawInfo));
+    drawInfo = AcquireDrawInfo();
     if (drawInfo == NULL) {
 	throwMagickException(env, "Memory allocation failure");
 	return;
@@ -96,7 +96,7 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setPrimitive
     }
 
     if (info->primitive != NULL) {
-//	RelinquishMagickMemory((void**) &info->primitive);
+	RelinquishMagickMemory(info->primitive);
     }
 
     jstr = (*env)->GetStringChars(env, primitive, 0);
@@ -110,7 +110,7 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setPrimitive
     }
 
     if (is8bits) {
-        char *str = (char *) AcquireMemory(len+1);
+        char *str = (char *) AcquireMagickMemory(len+1);
         if (str == NULL) {
             throwMagickException(env, "Unable to allocate memory");
             (*env)->ReleaseStringChars(env, primitive, jstr);
@@ -125,7 +125,7 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setPrimitive
         fprintf(stderr,"String: %s\n", str);
 #endif
         if (info->encoding != NULL) {
-           // RelinquishMagickMemory((void **) &info->encoding);
+            RelinquishMagickMemory(info->encoding);
         }
     }
 
@@ -143,7 +143,7 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setPrimitive
             throwMagickException(env, "Unable to allocate memory");
         }
         if (info->encoding != NULL) {
-            //RelinquishMagickMemory((void **) &info->encoding);
+            RelinquishMagickMemory(info->encoding);
         }
         info->encoding = (char *) AcquireString("UTF-8");
         if (info->encoding == NULL) {
@@ -209,7 +209,7 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setText
     }
 
     if (info->text != NULL) {
-//	RelinquishMagickMemory((void**) &info->text);
+	RelinquishMagickMemory(info->text);
     }
 
     jstr = (*env)->GetStringChars(env, text, 0);
@@ -223,7 +223,7 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setText
     }
 
     if (is8bits) {
-        char *str = (char *) AcquireMemory(len+1);
+        char *str = (char *) AcquireMagickMemory(len+1);
         if (str == NULL) {
             throwMagickException(env, "Unable to allocate memory");
             (*env)->ReleaseStringChars(env, text, jstr);
@@ -238,7 +238,7 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setText
         fprintf(stderr,"String: %s\n", str);
 #endif
         if (info->encoding != NULL) {
-          //  RelinquishMagickMemory((void **) &info->encoding);
+	    RelinquishMagickMemory(info->encoding);
         }
     }
 
@@ -256,9 +256,9 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setText
             throwMagickException(env, "Unable to allocate memory");
         }
         if (info->encoding != NULL) {
-          //  RelinquishMagickMemory((void **) &info->encoding);
+	    RelinquishMagickMemory(info->encoding);
         }
-        info->encoding = (char *) AcquireString("UTF-8");
+        info->encoding = AcquireString("UTF-8");
         if (info->encoding == NULL) {
             throwMagickException(env, "Unable to allocate memory");
         }
