@@ -544,7 +544,25 @@ getIntMethod(Java_magick_ImageInfo_getMonochrome,
 	     "imageInfoHandle",
 	     ImageInfo)
 
+/*
+ * Class:     magick_ImageInfo
+ * Method:    setFuzz
+ * Signature: (D)V
+ */
+setDoubleMethod(Java_magick_ImageInfo_setFuzz,
+	     fuzz,
+	     "imageInfoHandle",
+	     ImageInfo)
 
+/*
+ * Class:     magick_ImageInfo
+ * Method:    getFuzz
+ * Signature: ()D
+ */
+getDoubleMethod(Java_magick_ImageInfo_getFuzz,
+	     fuzz,
+	     "imageInfoHandle",
+	     ImageInfo)
 
 /*
  * Class:     magick_ImageInfo
