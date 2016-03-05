@@ -713,7 +713,7 @@ void setHandleAttribute(JNIEnv *env, char **attribVar, jstring jstr)
 {
     const char *cstr = NULL;
     if (*attribVar != NULL) {
-//	RelinquishMagickMemory((void**)attribVar);
+	RelinquishMagickMemory(*attribVar);
     }
     cstr = (*env)->GetStringUTFChars(env, jstr, 0);
     *attribVar = (char *) AcquireString(cstr);
@@ -748,11 +748,11 @@ void setProfileInfo(JNIEnv *env, ProfileInfo *profileInfo, jobject profileObj)
     name = getStringFieldValue(env, profileObj, "name", NULL);
     info = getByteArrayFieldValue(env, profileObj, "info", NULL, &infoSize);
     if (profileInfo->name != NULL) {
-       // RelinquishMagickMemory((void**) &profileInfo->name);
+        RelinquishMagickMemory(profileInfo->name);
     }
     profileInfo->name = name;
     if (profileInfo->info != NULL) {
-       // RelinquishMagickMemory((void**) &profileInfo->info);
+        RelinquishMagickMemory(profileInfo->info);
     }
     profileInfo->info = info;
     profileInfo->length = infoSize;
