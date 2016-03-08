@@ -11,6 +11,11 @@ It has not been tested on any other operating systems.
 Please see top of Changelog.txt to see which which versions of ImageMagick
 is currently supported.
 
+BUILD WITH DOCKER
+~~~~~~~~~~~~~~~~~~~~~~~
+From source directory run:
+	> docker build -t jmagick-builder .
+	> docker run -v `pwd`:/src -v `pwd`/build-result:/build jmagick-builder
 
 GIT REPOSITORY
 ~~~~~~~~~~~~~~
