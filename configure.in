@@ -245,6 +245,14 @@ AC_ARG_ENABLE(diagnostic,
               C_DEBUG=-DDIAGNOSTIC,C_DEBUG=)
 AC_SUBST(C_DEBUG)
 
+AC_ARG_WITH(magick-version, --with-magick-version=ImageMagick version,
+            MAGICK_VERSION=${withval})
+if "$MAGICK_VERSION" ; then
+  VER_MAJOR=$(echo "$MAGICK_VERSION" | cut --delimiter=. -f 1)
+  VER_MINOR=$(echo "$MAGICK_VERSION" | cut --delimiter=. -f 2)
+  VER_MICRO=$(echo "$MAGICK_VERSION" | cut --delimiter=. -f 3)
+fi
+
 dnl Check if ImageMagick home specified
 AC_ARG_WITH(magick-home, --with-magick-home=path home directory of ImageMagick,
             MAGICK_HOME=${withval})
