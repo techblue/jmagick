@@ -9,17 +9,18 @@
 %{?_with_sunjdk:	%global sunjdk 1}
 
 # %define magick_home %(convert --version | sed -n -e '1s@^.*file:@@' -e 's@/doc/index.html.*$@@' -e 1p)
-%define magick_home "/usr/lib64/ImageMagick-6.8.6/"
+# %define magick_home "/usr/lib64/ImageMagick-6.8.6/"
+%define magick_home %(pkg-config --cflags-only-I ImageMagick | sed 's/^-I//')
 
 Summary: open source Java interface of ImageMagick
 Name: jmagick
 # check configure.in, too !
-Version: 6.8.6
+Version: %(rpm -q --queryformat '%{version}\n' ImageMagick)
 Release: 6
 License: GPL 
 Group: Application/Java
 URL: www.ablesky.com
-Source0: jmagick-%{version}-src.tar.gz
+Source0: jmagick-ferbar-git-src.tar.bz2
 #Patch0: magickcoregenesis-error.patch
 #Patch1: jmagick-getTypeMetric-kerning-spacing.patch
 #Patch2: jmagick-setStringMethod-segv.patch
@@ -27,8 +28,8 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 %if %{oldIM}
 BuildRequires: ImageMagick-devel
 %else
-BuildRequires: ImageMagick-devel >= 6.4.5
-Requires: ImageMagick >= 6.4.5
+BuildRequires: ImageMagick-devel >= %{version}
+Requires: ImageMagick >= %{version}
 %endif
 #
 # logic for java dependencies
@@ -48,7 +49,7 @@ implemented in the form of a thin Java Native Interface (JNI) layer
 into the ImageMagick API.
 
 %prep
-%setup -q -n %{version}
+%setup -q -n jmagick-ferbar-git
 %if %{oldIM}
 #%patch -p1 -b .mcgenesis
 %endif
@@ -57,7 +58,7 @@ into the ImageMagick API.
 
 %build
 autoconf
-%{configure} --with-magick-home=%{magick_home} --version=%{version}
+%{configure} --with-magick-home=%{magick_home} --with-magick-version=%{version}
 %{__make}
 
 %install
