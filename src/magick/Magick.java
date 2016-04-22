@@ -64,4 +64,8 @@ public class Magick {
     public static native int parseImageGeometry(String geometry,
                                                 Rectangle rect);
 
+    /**
+     * Gets an array of the names of the fonts that ImageMagick has that match the pattern
+     */
+    public static native String[] queryFonts(String pattern);
 }
