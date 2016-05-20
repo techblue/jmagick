@@ -247,7 +247,7 @@ AC_SUBST(C_DEBUG)
 
 AC_ARG_WITH(magick-version, --with-magick-version=ImageMagick version,
             MAGICK_VERSION=${withval})
-if "$MAGICK_VERSION" ; then
+if (test -n "$MAGICK_VERSION"); then
   VER_MAJOR=$(echo "$MAGICK_VERSION" | cut --delimiter=. -f 1)
   VER_MINOR=$(echo "$MAGICK_VERSION" | cut --delimiter=. -f 2)
   VER_MICRO=$(echo "$MAGICK_VERSION" | cut --delimiter=. -f 3)
@@ -271,11 +271,20 @@ for MPATH in /usr /usr/local /usr/local/ImageMagick /usr/local/ImageMagick-${VER
 		MAGICK_INCLUDES=-I${MPATH}/include/ImageMagick
 		MAGICK_REALHOME=${MPATH}
 	fi
+  # Location after Ubuntu 16.04
+	if  test -f ${MPATH}/include/ImageMagick-6/magick/api.h  ; then
+		MAGICK_LIB_PATH=${MPATH}/lib
+		MAGICK_LIBS="-L${MPATH}/lib -lMagick"
+		MAGICK_INCLUDES=-I${MPATH}/include/ImageMagick-6
+		MAGICK_REALHOME=${MPATH}
+	fi
 done
 
 dnl Check if MagickCore-conf exists
 OLDPATH=${PATH}
-PATH=${MAGICK_REALHOME}/bin:${PATH}
+# MagickCore-config isn't installed in /usr/bin in Ubuntu 16.04+ due
+# to changes in libmagickcore-dev package.
+PATH=${MAGICK_REALHOME}/bin:/usr/lib/x86_64-linux-gnu/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}/bin-Q16:${PATH}
 export PATH
 AC_PATH_PROG(MAGICKCONF, MagickCore-config, not_found)
 PATH=${OLDPATH}

@@ -209,7 +209,7 @@ dir_target:
 endif
 
 # List of files we want to remove
-CLEAN_LIST += $(JAVA_CLASSES) $(JNI_HEADERS) $(JNI_DEP_FILE) $(JNI_OBJ)
+CLEAN_LIST += $(JAVA_CLASSES) $(JNI_HEADERS) $(JNI_DEP_FILE) $(JNI_OBJ) ./lib/jmagick.jar
 CLEAN_NESTED_CLASSES := $(filter %.class,$(CLEAN_LIST))
 CLEAN_NESTED_CLASSES := $(patsubst %.class,%$$*.class,$(CLEAN_NESTED_CLASSES))
 CLEAN_NESTED_CLASSES := $(foreach i,$(CLEAN_NESTED_CLASSES),$(wildcard $i))
@@ -221,7 +221,7 @@ clean:
 	@echo Cleaning `pwd` ...
 	@-rm -rf $(CLEAN_LIST) > /dev/null 2>&1
 ifdef JNI_LIB_NAME
-	@-rm $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT) 
+	@-rm $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)
 endif
 ##	@-rm $(libdir)/lib
 ifdef DIRS
