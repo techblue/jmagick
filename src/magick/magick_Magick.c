@@ -63,13 +63,14 @@ JNIEXPORT jobjectArray JNICALL Java_magick_Magick_queryFonts
 {
 	char **fonts;
 	size_t number_fonts;
+	int i;
 	ExceptionInfo exception;
 	jobjectArray fontArray;
 	GetExceptionInfo(&exception);
 	fonts = GetTypeList((*env)->GetStringUTFChars(env, pattern, 0), &number_fonts, &exception);
 	DestroyExceptionInfo(&exception);
 	fontArray = (*env)->NewObjectArray(env, number_fonts, (*env)->FindClass(env, "java/lang/String"), (*env)->NewStringUTF(env, ""));
-	for(int i = 0; i < number_fonts; i++) {
+	for(i = 0; i < number_fonts; i++) {
 		(*env)->SetObjectArrayElement(env, fontArray, i, (*env)->NewStringUTF(env, fonts[i]));
 	}
 	return fontArray;
