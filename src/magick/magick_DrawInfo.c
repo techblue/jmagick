@@ -626,7 +626,7 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setTile
     DestroyExceptionInfo(&exception);
 
     if (drawInfo->tile != NULL) {
-        DestroyImages(drawInfo->tile);
+        DestroyImageList(drawInfo->tile);
     }
     drawInfo->tile = imgCopy;
 }
@@ -661,7 +661,7 @@ JNIEXPORT jobject JNICALL Java_magick_DrawInfo_getTile
 
     imgObj = newImageObject(env, image);
     if (imgObj == NULL) {
-        DestroyImages(image);
+        DestroyImageList(image);
         throwMagickException(env, "Unable to create image object from handle");
         return NULL;
     }
