@@ -11,12 +11,23 @@
 MAKE_PATH = .
 include $(MAKE_PATH)/Make.def
 
+CYGPATH := $(shell command -v cygpath 2> /dev/null)
+
 DIRS = src
+ifdef CYGPATH
+JAR_FILE = "$(shell cygpath -C UTF8 -w "$(LIB_DIR)/jmagick-$(MAJOR).$(MINOR).$(MICRO).jar")"
+CLEAN_LIST = $(LIB_DIR)/jmagick-$(MAJOR).$(MINOR).$(MICRO).jar
+JAVADOC_DEST = "$(shell cygpath -C UTF8 -s -w "$(DEST)$(JAVADOC_DIR)")"
+JAVADOC_SRC = "$(shell cygpath -C UTF8 -s -w "$(JAVA_SRC_DIR)")"
+else
 JAR_FILE = $(LIB_DIR)/jmagick-$(MAJOR).$(MINOR).$(MICRO).jar
 CLEAN_LIST = $(JAR_FILE)
+JAVADOC_DEST = $(DEST)$(JAVADOC_DIR)
+JAVADOC_SRC = $(JAVA_SRC_DIR)
+endif
 
 all: dir default-target
-	cd classes; jar cvf $(JAR_FILE) magick
+	cd classes; $(JAR) cvf $(JAR_FILE) magick resources
 
 include $(MAKE_PATH)/Make.rules
 
@@ -36,8 +47,8 @@ javadoc:
 	@-if [ -x "$(JAVADOC)" ]; then					\
 		echo Generating Javadoc files ... ;			\
 		$(INSTALL) -d $(DESTDIR)$(JAVADOC_DIR) ;				\
-		$(JAVADOC) -author -version -d $(DEST)$(JAVADOC_DIR)    \
-                      -sourcepath $(JAVA_SRC_DIR) magick magick.util ;	\
+		"$(JAVADOC)" -author -version -d $(JAVADOC_DEST)    \
+                      -sourcepath $(JAVADOC_SRC) magick magick.util ;	\
 	else								\
 		echo Unable to generate javadoc;			\
 	fi
