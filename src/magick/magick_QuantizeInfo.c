@@ -3,11 +3,13 @@
 #include <stdio.h>
 #include <time.h>
 #include <sys/types.h>
-#include <magick/api.h>
+#if defined (IMAGEMAGICK_HEADER_STYLE_7)
+#    include <MagickCore/MagickCore.h>
+#else
+#    include <magick/api.h>
+#endif
 #include "jmagick.h"
 #include "magick_ImageInfo.h"
-
-
 
 /*
  * Class:     magick_QuantizeInfo
@@ -24,11 +26,19 @@ JNIEXPORT void JNICALL Java_magick_QuantizeInfo_init
 	(QuantizeInfo*) getHandle(env, self, "quantizeInfoHandle", &fid);
 
     if (quantizeInfo == NULL) {
-	quantizeInfo = (QuantizeInfo *) AcquireMemory(sizeof(QuantizeInfo));
-	if (quantizeInfo == NULL) {
-	    throwMagickException(env, "Unable to allow memory for handle");
-	    return;
-	}
+#if MagickLibVersion < 0x700
+		quantizeInfo = (QuantizeInfo *) AcquireMemory(sizeof(QuantizeInfo));
+#else
+        AcquireMemoryHandler acquire_memory_handler;
+        ResizeMemoryHandler resize_memory_handler;
+        DestroyMemoryHandler destroy_memory_handler;
+		GetMagickMemoryMethods(&acquire_memory_handler, &resize_memory_handler, &destroy_memory_handler);
+        quantizeInfo = (QuantizeInfo *) acquire_memory_handler(sizeof(QuantizeInfo));
+#endif
+        if (quantizeInfo == NULL) {
+            throwMagickException(env, "Unable to allow memory for handle");
+            return;
+        }
     }
     GetQuantizeInfo(quantizeInfo);
 
@@ -106,10 +116,18 @@ getIntMethod(Java_magick_QuantizeInfo_getTreeDepth,
  * Method:    setDither
  * Signature: (I)V
  */
+#if MagickLibVersion < 0x700
 setIntMethod(Java_magick_QuantizeInfo_setDither,
 	     dither,
 	     "quantizeInfoHandle",
 	     QuantizeInfo)
+#else
+setDeprecatedMethod(Java_magick_QuantizeInfo_setDither,
+	     dither,
+	     "quantizeInfoHandle",
+	     QuantizeInfo,
+		 jint)
+#endif
 
 
 /*
@@ -117,10 +135,18 @@ setIntMethod(Java_magick_QuantizeInfo_setDither,
  * Method:    getDither
  * Signature: ()I
  */
+#if MagickLibVersion < 0x700
 getIntMethod(Java_magick_QuantizeInfo_getDither,
 	     dither,
 	     "quantizeInfoHandle",
 	     QuantizeInfo)
+#else
+getDeprecatedMethod(Java_magick_QuantizeInfo_getDither,
+	     dither,
+	     "quantizeInfoHandle",
+	     QuantizeInfo,
+		 jint)
+#endif
 
 
 /*

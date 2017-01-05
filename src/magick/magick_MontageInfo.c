@@ -4,10 +4,13 @@
 #include <stdio.h>
 #include <time.h>
 #include <sys/types.h>
-#include <magick/api.h>
+#if defined (IMAGEMAGICK_HEADER_STYLE_7)
+#    include <MagickCore/MagickCore.h>
+#else
+#    include <magick/api.h>
+#endif
 #include "jmagick.h"
 #include "magick_MontageInfo.h"
-
 
 /*
  * Class:     magick_MontageInfo
@@ -31,7 +34,15 @@ JNIEXPORT void JNICALL Java_magick_MontageInfo_init
     montageInfo =
         (MontageInfo*) getHandle(env, self, "montageInfoHandle", NULL);
     if (montageInfo == NULL) {
+#if MagickLibVersion < 0x700
         montageInfo = (MontageInfo*) AcquireMemory(sizeof(MontageInfo));
+#else
+        AcquireMemoryHandler acquire_memory_handler;
+        ResizeMemoryHandler resize_memory_handler;
+        DestroyMemoryHandler destroy_memory_handler;
+		GetMagickMemoryMethods(&acquire_memory_handler, &resize_memory_handler, &destroy_memory_handler);
+        montageInfo = (MontageInfo *) acquire_memory_handler(sizeof(MontageInfo));
+#endif
         if (montageInfo == NULL) {
             throwMagickException(env,
                                  "Unable to allocate "
@@ -383,20 +394,36 @@ getPixelPacketMethod(Java_magick_MontageInfo_getBorderColor,
  * Method:    setMatteColor
  * Signature: (Lmagick/PixelPacket;)V
  */
+#if MagickLibVersion < 0x700
 setPixelPacketMethod(Java_magick_MontageInfo_setMatteColor,
                      matte_color,
                      "montageInfoHandle",
                      MontageInfo)
+#else
+setDeprecatedMethod(Java_magick_MontageInfo_setMatteColor,
+                     matte_color,
+                     "montageInfoHandle",
+                     MontageInfo,
+                     jobject)
+#endif
 
 /*
  * Class:     magick_MontageInfo
  * Method:    getMatteColor
  * Signature: ()Z
  */
+#if MagickLibVersion < 0x700
 getPixelPacketMethod(Java_magick_MontageInfo_getMatteColor,
                      matte_color,
                      "montageInfoHandle",
                      MontageInfo)
+#else
+getDeprecatedMethod(Java_magick_MontageInfo_getMatteColor,
+                     matte_color,
+                     "montageInfoHandle",
+                     MontageInfo,
+                     jobject)
+#endif
 
 
 /*

@@ -4,14 +4,13 @@
 #include <stdio.h>
 #include <time.h>
 #include <sys/types.h>
-#include <magick/api.h>
+#if defined (IMAGEMAGICK_HEADER_STYLE_7)
+#    include <MagickCore/MagickCore.h>
+#else
+#    include <magick/api.h>
+#endif
 #include "magick_ImageInfo.h"
 #include "jmagick.h"
-
-
-
-
-
 
 /*
  * Class:     magick_ImageInfo
@@ -138,10 +137,18 @@ JNIEXPORT jstring JNICALL Java_magick_ImageInfo_getFileName
  * Method:    setSubimage
  * Signature: (I)V
  */
+#if MagickLibVersion < 0x700
 setIntMethod(Java_magick_ImageInfo_setSubimage,
 	     subimage,
 	     "imageInfoHandle",
 	     ImageInfo)
+#else
+setDeprecatedMethod(Java_magick_ImageInfo_setSubimage,
+	     subimage,
+	     "imageInfoHandle",
+	     ImageInfo,
+		 jint)
+#endif
 
 
 
@@ -151,10 +158,18 @@ setIntMethod(Java_magick_ImageInfo_setSubimage,
  * Method:    getSubimage
  * Signature: ()I
  */
+#if MagickLibVersion < 0x700
 getIntMethod(Java_magick_ImageInfo_getSubimage,
 	     subimage,
 	     "imageInfoHandle",
 	     ImageInfo)
+#else
+getDeprecatedMethod(Java_magick_ImageInfo_getSubimage,
+	     subimage,
+	     "imageInfoHandle",
+	     ImageInfo,
+		 jint)
+#endif
 
 
 
@@ -164,10 +179,18 @@ getIntMethod(Java_magick_ImageInfo_getSubimage,
  * Method:    setSubrange
  * Signature: (I)V
  */
+#if MagickLibVersion < 0x700
 setIntMethod(Java_magick_ImageInfo_setSubrange,
 	     subrange,
 	     "imageInfoHandle",
 	     ImageInfo)
+#else
+setDeprecatedMethod(Java_magick_ImageInfo_setSubrange,
+	     subrange,
+	     "imageInfoHandle",
+	     ImageInfo,
+		 jint)
+#endif
 
 
 
@@ -178,10 +201,18 @@ setIntMethod(Java_magick_ImageInfo_setSubrange,
  * Method:    getSubrange
  * Signature: ()I
  */
+#if MagickLibVersion < 0x700
 getIntMethod(Java_magick_ImageInfo_getSubrange,
 	     subrange,
 	     "imageInfoHandle",
 	     ImageInfo)
+#else
+getDeprecatedMethod(Java_magick_ImageInfo_getSubrange,
+	     subrange,
+	     "imageInfoHandle",
+	     ImageInfo,
+		 jint)
+#endif
 
 
 
@@ -263,11 +294,18 @@ getStringMethod(Java_magick_ImageInfo_getSize,
  * Method:    setTile
  * Signature: (Ljava/lang/String;)V
  */
+#if MagickLibVersion < 0x700
 setStringMethod(Java_magick_ImageInfo_setTile,
 		tile,
 		"imageInfoHandle",
 		ImageInfo)
-
+#else
+setDeprecatedMethod(Java_magick_ImageInfo_setTile,
+		tile,
+		"imageInfoHandle",
+		ImageInfo,
+		jstring)
+#endif
 
 
 /*
@@ -275,11 +313,17 @@ setStringMethod(Java_magick_ImageInfo_setTile,
  * Method:    getTile
  * Signature: ()Ljava/lang/String;
  */
+#if MagickLibVersion < 0x700
 getStringMethod(Java_magick_ImageInfo_getTile,
 		tile,
 		"imageInfoHandle",
 		ImageInfo)
-
+#else
+getStringDeprecatedMethod(Java_magick_ImageInfo_getTile,
+		tile,
+		"imageInfoHandle",
+		ImageInfo)
+#endif
 
 
 /*
@@ -360,11 +404,18 @@ getStringMethod(Java_magick_ImageInfo_getTexture,
  * Method:    setView
  * Signature: (Ljava/lang/String;)V
  */
+#if MagickLibVersion < 0x700
 setStringMethod(Java_magick_ImageInfo_setView,
 		view,
 		"imageInfoHandle",
 		ImageInfo)
-
+#else
+setDeprecatedMethod(Java_magick_ImageInfo_setView,
+		view,
+		"imageInfoHandle",
+		ImageInfo,
+		jstring)
+#endif
 
 
 /*
@@ -372,10 +423,17 @@ setStringMethod(Java_magick_ImageInfo_setView,
  * Method:    getView
  * Signature: ()Ljava/lang/String;
  */
+#if MagickLibVersion < 0x700
 getStringMethod(Java_magick_ImageInfo_getView,
 		view,
 		"imageInfoHandle",
 		ImageInfo)
+#else
+getStringDeprecatedMethod(Java_magick_ImageInfo_getView,
+		view,
+		"imageInfoHandle",
+		ImageInfo)
+#endif
 
 
 
@@ -640,10 +698,18 @@ getIntMethod(Java_magick_ImageInfo_getVerbose,
  * Method:    setPreviewType
  * Signature: (I)V
  */
+#if MagickLibVersion < 0x700
 setIntMethod(Java_magick_ImageInfo_setPreviewType,
 	     preview_type,
 	     "imageInfoHandle",
 	     ImageInfo)
+#else
+setDeprecatedMethod(Java_magick_ImageInfo_setPreviewType,
+	     preview_type,
+	     "imageInfoHandle",
+	     ImageInfo,
+		 jint)
+#endif
 
 
 
@@ -652,10 +718,18 @@ setIntMethod(Java_magick_ImageInfo_setPreviewType,
  * Method:    getPreviewType
  * Signature: ()I
  */
+#if MagickLibVersion < 0x700
 getIntMethod(Java_magick_ImageInfo_getPreviewType,
 	     preview_type,
 	     "imageInfoHandle",
 	     ImageInfo)
+#else
+getDeprecatedMethod(Java_magick_ImageInfo_getPreviewType,
+	     preview_type,
+	     "imageInfoHandle",
+	     ImageInfo,
+		 jint)
+#endif
 
 
 

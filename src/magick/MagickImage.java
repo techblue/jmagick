@@ -1,9 +1,7 @@
 package magick;
 
-
 import java.awt.Dimension;
 import java.awt.Rectangle;
-
 
 /**
  * Encapsulation of the ImageMagick Image object.
@@ -33,6 +31,7 @@ public class MagickImage extends Magick {
      * the images contains multiple frames, the frames
      * are also appended to the new image. All the
      * images are cloned.
+     *
      * @param images array of images to linked
      */
     public MagickImage(MagickImage[] images)
@@ -47,6 +46,7 @@ public class MagickImage extends Magick {
      * If any of  the images contains multiple frames, the
      * frames are also appended to the new image. All the
      * images are cloned.
+     *
      * @param images array of images to linked
      * @throws MagickException if the new image cannot be constructed
      * @see MagickImage
@@ -59,9 +59,9 @@ public class MagickImage extends Magick {
      * specified in the parameter.
      *
      * @param imageInfo the ImageInfo for an image file to read
-     * @param boolean true for ping the image only.
+     * @param ping true for ping the image only.
      *
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public MagickImage(ImageInfo imageInfo, boolean ping)
         throws MagickException
@@ -76,8 +76,10 @@ public class MagickImage extends Magick {
 
     /**
      * Pings the image.
+     *
      * @param imageInfo the ImageInfo for an image file to read
      * @see <a href="http://www.imagemagick.org/api/constitute.php#PingImage">The underlying ImageMagick call</a>
+     * @throws MagickException if an error occurs
      */
     public native void pingImage(ImageInfo imageInfo)
         throws MagickException;
@@ -88,12 +90,12 @@ public class MagickImage extends Magick {
      *
      * @param imageInfo the ImageInfo for an image file to read
      *
-     * @exception MagickException on error on error
+     * @throws MagickException if an error occurs
      */
     public MagickImage(ImageInfo imageInfo)
-	throws MagickException
+        throws MagickException
     {
-	readImage(imageInfo);
+        readImage(imageInfo);
     }
 
     /**
@@ -102,12 +104,12 @@ public class MagickImage extends Magick {
      * @param imageInfo the ImageInfo instance for default settings, etc
      * @param blob the image to be read in memory
      *
-     * @exception MagickException on error
+     * @throws MagickException if an error occurs
      */
     public MagickImage(ImageInfo imageInfo, byte[] blob)
-	throws MagickException
+        throws MagickException
     {
-	blobToImage(imageInfo, blob);
+        blobToImage(imageInfo, blob);
     }
 
     /**
@@ -115,7 +117,7 @@ public class MagickImage extends Magick {
      */
     protected void finalize()
     {
-	destroyImages();
+        destroyImages();
     }
 
     /**
@@ -130,36 +132,37 @@ public class MagickImage extends Magick {
      *
      * @param imageInfo specifies the file to read from
      * @see <a href="http://www.imagemagick.org/api/constitute.php#ReadImage">The underlying ImageMagick call</a>
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void readImage(ImageInfo imageInfo)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Write the image specified in the ImageInfo object.
      *
      * @param imageInfo specifies the writing parameters
+     * @return true for success, false for failure
      *
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean writeImage(ImageInfo imageInfo)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Return the image file name of the image.
      *
      * @return the file name of the image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native String getFileName()
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Set the image file name.
      *
      * @param fileName new file name
      *
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void setFileName(String fileName)
 	    throws MagickException;
@@ -169,17 +172,17 @@ public class MagickImage extends Magick {
      *
      * @param filter the filter type from constants defined in the class FilterType
      * @see FilterType
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void setFilter(int filter)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Get the filter type.
      *
      * @return the filter type as defined in the class FilterType
      * @see FilterType
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native int getFilter()
         throws MagickException;
@@ -192,15 +195,29 @@ public class MagickImage extends Magick {
      * @see NoiseType
      * @return An image with additional noise.
      * @see <a href="http://www.imagemagick.org/api/effect.php#AddNoiseImage">The underlying ImageMagick call</a>
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage addNoiseImage(int noiseType)
-	    throws MagickException;
+        throws MagickException;
+
+    /**
+     * Adds random noise to the image.
+     *
+     * @param noiseType The type of noise: Uniform, Gaussian, Multiplicative,
+     *                  Impulse, Laplacian, or Poisson.
+     * @param attenuate The random distribution.
+     * @see NoiseType
+     * @return An image with additional noise.
+     * @see <a href="http://www.imagemagick.org/api/effect.php#AddNoiseImage">The underlying ImageMagick call</a>
+     * @throws MagickException on error
+     */
+    public native MagickImage addNoiseImage(int noiseType, double attenuate)
+        throws MagickException;
 
     /**
      * Return the number of columns and rows of the image.
      * @return the dimension of the image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native Dimension getDimension()
 	    throws MagickException;
@@ -209,7 +226,7 @@ public class MagickImage extends Magick {
      * Return the depth of the image.
      *
      * @return the depth of the image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native int getDepth()
 	    throws MagickException;
@@ -218,7 +235,7 @@ public class MagickImage extends Magick {
      * Set the depth of the image.
      *
      * @param depth the depth of the image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void setDepth(int depth)
       throws MagickException;
@@ -235,10 +252,10 @@ public class MagickImage extends Magick {
      * @param sigma The standard deviation of the gaussian, in pixels
      *
      * @return A blurred image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage blurImage(double raduis, double sigma)
-	throws MagickException;
+        throws MagickException;
 
 
     /**
@@ -254,22 +271,26 @@ public class MagickImage extends Magick {
      * @param sigma The standard deviation of the gaussian, in pixels
      *
      * @return A blurred image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage blurImageChannel(int channel, double raduis, double sigma)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Trim edges that are the background color from the image.
-     * @exception MagickException on error
+     *
+     * @return the trimmed image
+     * @throws MagickException on error
      */
     public native MagickImage trimImage()
       throws MagickException;
 
      /**
-      * resets the image page canvas and position..
+      * Resets the image page canvas and position.
+      *
       * @param page String representing the new page geometry
-      * @return Who knows?
+      * @return true for success, false for failure
+      * @throws MagickException on error
       */
      public native boolean resetImagePage(String page)
        throws MagickException;
@@ -279,12 +300,12 @@ public class MagickImage extends Magick {
      *
      * @return the store class as defined in ClassType
      * @see ClassType
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native int getStorageClass()
-	throws MagickException;
+        throws MagickException;
 
-    /*
+    /**
      * Annotates an image with test. Optionally the annotation can
      * include the image filename, type, width, height, or scene
      * number by embedding special format characters.
@@ -301,12 +322,28 @@ public class MagickImage extends Magick {
      *
      * @param borderInfo the rectangle for which border is drawn
      * @return an Image with a border around it
-     * @exception MagickException on error
+     * @throws MagickException on error
      * @see #setBorderColor
      * @see #getBorderColor
      */
     public native MagickImage borderImage(Rectangle borderInfo)
-	throws MagickException;
+        throws MagickException;
+
+    /**
+     * Surrounds the image with a border of the color defined by
+     * the border color member of the image structure. The width
+     * and height of the border are defined by the corresponding
+     * members of the Rectangle.
+     *
+     * @param borderInfo the rectangle for which border is drawn
+     * @param compositeOperator the composite operator
+     * @return an Image with a border around it
+     * @throws MagickException on error
+     * @see #setBorderColor
+     * @see #getBorderColor
+     */
+    public native MagickImage borderImage(Rectangle borderInfo, int compositeOperator)
+        throws MagickException;
 
     /**
      * Creates a new image that is a copy of an existing one with the
@@ -316,10 +353,10 @@ public class MagickImage extends Magick {
      * @param sigma The standard deviation of the gaussian, in pixels
      *
      * @return A charcoal-like image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage charcoalImage(double raduis, double sigma)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Creates a simulated three-dimensional button-like effect by
@@ -329,79 +366,113 @@ public class MagickImage extends Magick {
      *
      * @param raiseInfo the rectangle for which border is drawn
      * @param raise true to create raise effect, false to lower
+     *
      * @return true if successful, false otherwise
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean raiseImage(Rectangle raiseInfo, boolean raise)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Creates a new image that is a subregion of the original.
      *
      * @param chopInfo the rectange to chop the image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage chopImage(Rectangle chopInfo)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Colourises the image with a pen colour.
      *
      * @param opacity string percentage value for opacity
      * @param target a colour value
-     * @exception MagickException on error
+     *
+     * @return the colourised image
+     * @throws MagickException on error
      */
-    public native MagickImage
-	colorizeImage(String opacity, PixelPacket target)
-	throws MagickException;
+    public native MagickImage colorizeImage(String opacity, PixelPacket target)
+        throws MagickException;
 
     /**
      * Composite the image supplied onto itself at the specified offsets.
+     *
+     * @param compOp This operator affects how the composite is applied to the image.  The operators and how they are utilized are listed <a href="http://www.w3.org/TR/SVG12/#compositing">here</a>.
+     * @param compImage the source image
+     * @param clipToSelf Whether or not to limit composition to area composed
+     * @param xOff The column offset of the composited image.
+     * @param yOff The row offset of the composited image.
+     *
+     * @see CompositeOperator
      * @see <a href="http://www.imagemagick.org/script/command-line-options.php#compose">Command line explanation</a>
      * @see <a href="http://www.imagemagick.org/api/composite.php">The underlying ImageMagick call</a>
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
-    public native boolean compositeImage(int compOp,
-					 MagickImage compImage,
-					 int xOff,
-					 int yOff)
-	throws MagickException;
+    public native boolean compositeImage(int compOp, MagickImage compImage, boolean clipToSelf, int xOff, int yOff)
+        throws MagickException;
+
+    /**
+     * Composite the image supplied onto itself at the specified offsets.
+     *
+     * @param compOp This operator affects how the composite is applied to the image.  The operators and how they are utilized are listed <a href="http://www.w3.org/TR/SVG12/#compositing">here</a>.
+     * @param compImage the source image
+     * @param xOff The column offset of the composited image.
+     * @param yOff The row offset of the composited image.
+     *
+     * @see CompositeOperator
+     * @see <a href="http://www.imagemagick.org/script/command-line-options.php#compose">Command line explanation</a>
+     * @see <a href="http://www.imagemagick.org/api/composite.php">The underlying ImageMagick call</a>
+     * @throws MagickException on error
+     */
+    public native boolean compositeImage(int compOp, MagickImage compImage, int xOff, int yOff)
+        throws MagickException;
 
     /**
      * Composites a set of images while respecting any page offsets and disposal methods.
+     *
+     * @return the coalesced image
      * @see <a href="http://www.imagemagick.org/api/layer.php#CoalesceImages">The underlying ImageMagick call</a>
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage coalesceImages()
-    throws MagickException;
+        throws MagickException;
 
     /**
      * Returns the coalesced frames of a GIF animation as it would appear after the GIF dispose method of that frame has been applied..
+     *
+     * @return the disposed image
      * @see <a href="http://www.imagemagick.org/api/layer.php#DisposeImages">The underlying ImageMagick call</a>
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage disposeImages()
-    throws MagickException;
+        throws MagickException;
 
     /**
      * Enhances the intensity differences between the lighter and
      * darker elements of the image.
+     *
+     * @param sharpen
+     *
      * @return a boolean value to indicate success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean contrastImage(boolean sharpen)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Returns a copy of all fields of the input image.
-     * The the pixel memory is allocated but the pixel data is copy
-     * is optional.
+     * The the pixel memory is allocated but the pixel data copy is optional.
+     *
+     * @param columns
+     * @param rows
+     * @param clonePixels
+     *
      * @return a cloned image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage cloneImage(int columns, int rows,
 					 boolean clonePixels)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Create a new image of 8-bit component of the specified dimensions.
@@ -411,11 +482,11 @@ public class MagickImage extends Magick {
      * @param map the components of a pixel
      * @param pixels the raw image in an array of pixels
      * @see <a href="http://www.imagemagick.org/api/constitute.php#ConstituteImage">The underlying ImageMagick call</a>
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void constituteImage(int width, int height,
 				       String map, byte[] pixels)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Create a new image of 32-bit component of the specified dimensions.
@@ -425,11 +496,11 @@ public class MagickImage extends Magick {
      * @param map the components of a pixel
      * @param pixels the raw image in an array of pixels
      * @see <a href="http://www.imagemagick.org/api/constitute.php#ConstituteImage">The underlying ImageMagick call</a>
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void constituteImage(int width, int height,
 				       String map, int[] pixels)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Create a new image of float component of the specified dimensions.
@@ -439,28 +510,28 @@ public class MagickImage extends Magick {
      * @param map the components of a pixel
      * @param pixels the raw image in an array of pixels
      * @see <a href="http://www.imagemagick.org/api/constitute.php#ConstituteImage">The underlying ImageMagick call</a>
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void constituteImage(int width, int height,
 				       String map, float[] pixels)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Creates a new image that is a subregion of the original.
      *
      * @param chopInfo the subimage
      * @return a subimage of the original
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage cropImage(Rectangle chopInfo)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Cycles the image colormap by a specified amount.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void cycleColormapImage(int amount)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Called by finalize to deallocate the image handle.
@@ -470,19 +541,19 @@ public class MagickImage extends Magick {
     /**
      * Draws a primitive (line, rectangle, ellipse) on the image.
      * @return a boolean value to indicate success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean drawImage(DrawInfo aInfo)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * GetTypeMetrics() returns information for the specified font and text
 	 *
      * @see <a href="http://www.imagemagick.org/api/annotate.php#GetTypeMetrics">ImageMagick API: GetTypeMetrics</a>
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native TypeMetric getTypeMetrics(DrawInfo info)
-	throws MagickException;
+        throws MagickException;
 
 
     /**
@@ -492,10 +563,10 @@ public class MagickImage extends Magick {
      * @param raduis The radius of the pixel neighborhood.
      *
      * @return A new image with the edges hilighted.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage edgeImage(double raduis)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Returns a grayscale image with a three-dimensional effect.
@@ -508,53 +579,53 @@ public class MagickImage extends Magick {
      * @param sigma The standard deviation of the Gaussian, in pixels
      *
      * @return A new, embossed, image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage embossImage(double raduis, double sigma)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Applies a digital filter that improves the quality of a noisy image.
      *
      * @return A new, enhanced, image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage enhanceImage()
-	throws MagickException;
+        throws MagickException;
 
     /**
      *  Performs histogram equalization.
      * @return a boolean value to indicate success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean equalizeImage()
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Creates a new image that reflects each scanline
      * in the vertical direction.
      * @return a new image that has been flipped
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage flipImage()
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Creates a new image that reflects each scanline in the
      * horizontal direction
      * @return a new image that has been flopped
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage flopImage()
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Converts the reference image to gamma corrected colors.
      * @return a boolean value to indicate success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean gammaImage(String gamma)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Blurs the image using a gaussian operator. The effectiveness of the
@@ -569,10 +640,10 @@ public class MagickImage extends Magick {
      * @param sigma The standard deviation of the Gaussian, in pixels.
      *
      * @return A new, blurred, image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage gaussianBlurImage(double raduis, double sigma)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Implodes the image's pixels about the center.
@@ -580,48 +651,60 @@ public class MagickImage extends Magick {
      * @param amount Amount of implosion if positive, explosion if negative.
      *
      * @return A new, imploded, image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage implodeImage(double amount)
-	throws MagickException;
+        throws MagickException;
+
+    /**
+     * Implodes the image's pixels about the center.
+     *
+     * @param amount Amount of implosion if positive, explosion if negative.
+     * @param pixelInterpolateMethod The pixel interpolation method.
+     *
+     * @return A new, imploded, image.
+     * @throws MagickException on error
+     */
+    public native MagickImage implodeImage(double amount, int pixelInterpolateMethod)
+        throws MagickException;
 
     /**
      * Returns True if the image is grayscale otherwise False is returned.
      * @return a boolean value to indicate success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean isGrayImage()
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Returns True if the image is monochrome otherwise False is returned.
      * @return a boolean value to indicate success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean isMonochromeImage()
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Creates a new image that is a integral size greater
      * than an existing one.
      *
      * @return a magnified image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage magnifyImage()
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Floodfills the designated area with a matte value.
      * @return a boolean value to indicate success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean matteFloodfillImage(PixelPacket target,
 					      int matte,
 					      int x,
 					      int y,
 					      int method)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Changes the color value of any pixel that matches target
@@ -660,44 +743,44 @@ public class MagickImage extends Magick {
      * @param radius The radius of the pixel neighborhood.
      *
      * @return A new, filtered, image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage medianFilterImage(double radius)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Creates a new image that is a integral size less than an existing one.
      * @return a minified image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage minifyImage()
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Modulates the hue, saturation, and brightness of an image.
      * @return a boolean value to indicate success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean modulateImage(String modulate)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Negates the colors in the reference image. The Grayscale
      * option means that only grayscale values within the image are negated.
      * @return a boolean value to indicate success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean negateImage(int grayscale)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Normalizes the pixel values to span the full range of color values.
      * This is a contrast enhancement technique.
      * @return a boolean value to indicate success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean normalizeImage()
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Applies a special effect filter that simulates an oil painting.
@@ -707,20 +790,34 @@ public class MagickImage extends Magick {
      * @param radius The radius of the pixel neighborhood.
      *
      * @return A new, simulated oil-painting, image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage oilPaintImage(double radius)
-	throws MagickException;
+        throws MagickException;
+
+    /**
+     * Applies a special effect filter that simulates an oil painting.
+     * Each pixel is replaced by the most frequent color occurring in a
+     * circular region defined by radius.
+     *
+     * @param radius The radius of the pixel neighborhood.
+     * @param sigma The standard deviation of the Gaussian, in pixels.
+     *
+     * @return A new, simulated oil-painting, image.
+     * @throws MagickException on error
+     */
+    public native MagickImage oilPaintImage(double radius, double sigma)
+        throws MagickException;
 
     /**
      * Changes the color of an opaque pixel to the pen color.
      * @param target the color to search for in the image
      * @param penColor the color to replace it with
      * @return a boolean value to indicate success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean opaqueImage(PixelPacket target, PixelPacket penColor)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * This operation attempts to reduce the 'noise' in the image. This
@@ -738,10 +835,10 @@ public class MagickImage extends Magick {
      * @param radius The radius of the pixel neighborhood.
      *
      * @return A new, filtered, image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage reduceNoiseImage(double radius)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Converts the reference image from RGB to an alternate colorspace.
@@ -750,10 +847,10 @@ public class MagickImage extends Magick {
      * be [0..MaxRGB].
      * @param colorspace the target colorspace to transform to
      * @return a boolean value to indicate success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean rgbTransformImage(int colorspace)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Rolls an image vertically and horizontally.
@@ -762,10 +859,10 @@ public class MagickImage extends Magick {
      * @param yOffset An integer that specifies the number of rows to \
                       roll in the vertical direction
      * @return the rolled image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage rollImage(int xOffset, int yOffset)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Creates a new image that is a scaled size of an existing one
@@ -775,10 +872,10 @@ public class MagickImage extends Magick {
      * @param rows An integer that specifies the number of rows in the \
                    sampled image
      * @return the sampled image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage sampleImage(int cols, int rows)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Return a new image that is a scaled version of the
@@ -792,10 +889,10 @@ public class MagickImage extends Magick {
      * @param rows An integer that specifies the number of rows in the \
                    scaled image
      * @return the scaled image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage scaleImage(int cols, int rows)
-	throws MagickException;
+        throws MagickException;
 
      /**
      * Return a new image that is a resized version of the original.
@@ -807,14 +904,14 @@ public class MagickImage extends Magick {
      *              the resized image
      * @param rows An integer that specifies the number of rows in the
      *              resized image
-     * @param blur - The blur factor where > 1 is blurry, < 1 is sharp.
+     * @param blur - The blur factor where &gt; 1 is blurry, &lt; 1 is sharp.
      *              Typically set this to 1.0.
      * @return the resized image
-     * @exception MagickException on error
+     * @throws MagickException on error
      * @author Pavel Cibulka
      */
     public native MagickImage resizeImage(int cols, int rows, double blur)
-    throws MagickException;
+        throws MagickException;
 
     /**
      * Return a new image that is a extended version of the original.
@@ -825,10 +922,10 @@ public class MagickImage extends Magick {
      *              extended image
      * @param gravity extent direction @see GravityType
      * @return the extended image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage extentImage(int cols, int rows, int gravity)
-    throws MagickException;
+        throws MagickException;
 
     /**
      * Segment an image by analyzing the histograms of the color components
@@ -850,12 +947,12 @@ public class MagickImage extends Magick {
      *                   second derivative. The default is 1.5.
      *
      * @return The actual number of colors allocated in the colormap.
-     * @exception MagickException on error
+     * @throws MagickException on error
      * @see ColorspaceType
      */
     public native int segmentImage(int colorspace, double cluster_threshold,
                                                    double smoothing_threshold)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Applies a special effect to the image, similar to the effect achieved
@@ -865,37 +962,37 @@ public class MagickImage extends Magick {
      * @param threshold Ranges from 0 to MaxRGB and is a measure of the
      *                  extent of the solarization.
      *
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void solarizeImage(double threshold)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Set color fuzz
      *
      * @param fuzz fuzz value.
      *
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void setColorFuzz(double fuzz)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Get bounding box
      *
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native Rectangle getBoundingBox()
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Sorts the colormap of a PseudoClass image by decreasing
      * color intensity.
      * @return a boolean value indicating success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean sortColormapByIntensity()
-	throws MagickException;
+        throws MagickException;
 
     /**
      * A special effects method that randomly displaces each pixel in a
@@ -904,10 +1001,23 @@ public class MagickImage extends Magick {
      * @param radius Choose a random pixel in a neighborhood of this extent.
      *
      * @return A new, spread, image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage spreadImage(int radius)
-	throws MagickException;
+        throws MagickException;
+    
+        /**
+     * A special effects method that randomly displaces each pixel in a
+     * block defined by the radius parameter.
+     *
+     * @param radius Choose a random pixel in a neighborhood of this extent.
+     * @param pixelInterpolateMethod The pixel interpolation method.
+     *
+     * @return A new, spread, image.
+     * @throws MagickException on error
+     */
+    public native MagickImage spreadImage(int radius, int pixelInterpolateMethod)
+        throws MagickException;
 
     /**
      * Swirls the pixels about the center of the image, where degrees
@@ -917,15 +1027,29 @@ public class MagickImage extends Magick {
      * @param degrees Defines the tightness of the swirling effect.
      *
      * @return A new, swirled, image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
-    public native MagickImage swirlImage(double degress)
-	throws MagickException;
+    public native MagickImage swirlImage(double degrees)
+        throws MagickException;
+    
+    /**
+     * Swirls the pixels about the center of the image, where degrees
+     * indicates the sweep of the arc through which each pixel is moved.
+     * You get a more dramatic effect as the degrees move from 1 to 360.
+     *
+     * @param degrees Defines the tightness of the swirling effect.
+     * @param pixelInterpolateMethod The pixel interpolation method.
+     *
+     * @return A new, swirled, image.
+     * @throws MagickException on error
+     */
+    public native MagickImage swirlImage(double degrees, int pixelInterpolateMethod)
+        throws MagickException;
 
     /**
      * Initializes the red, green, and blue intensities of each
      * pixel as defined by the colormap index.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void syncImage()
       throws MagickException;
@@ -933,7 +1057,7 @@ public class MagickImage extends Magick {
     /**
      * Layers a texture onto the background of an image.
      * @param image the image to use for texture
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void textureImage(MagickImage image)
       throws MagickException;
@@ -942,7 +1066,7 @@ public class MagickImage extends Magick {
      * Thresholds the reference image.
      * @param threshold the threshold value
      * @return a boolean value indicating success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean thresholdImage(double threshold)
       throws MagickException;
@@ -967,7 +1091,7 @@ public class MagickImage extends Magick {
      * @param imageGeometry a image geometry string. The specified \
                             width and height of this geometry string
                             are absolute.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void transformImage(String cropGeometry,
 				      String imageGeometry)
@@ -980,9 +1104,9 @@ public class MagickImage extends Magick {
      * transformed values to be [0..MaxRGB].
      *
      * @param colorspace An unsigned integer value defines which \
-                         colorspace to transform the image to
+                         colorspace to transform the image from
      * @return a boolean value indicating success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean transformRgbImage(int colorspace)
       throws MagickException;
@@ -992,7 +1116,7 @@ public class MagickImage extends Magick {
      * @param color The color to search for in the image
      * @param opacity The opacity of the transparent image
      * @return a boolean value indicating success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean transparentImage(PixelPacket color, int opacity)
       throws MagickException;
@@ -1039,30 +1163,45 @@ public class MagickImage extends Magick {
      *
      * @return A sharpened image.
      *
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage unsharpMaskImage(double raduis, double sigma,
                                                double amount, double threshold)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Creates a "ripple" effect in the image by shifting the pixels
      * vertically along a sine wave whose amplitude and wavelength is
      * specified by the given parameters.
      *
-     * @param amplitude  Define the amplitude   of the sine wave.
+     * @param amplitude  Define the amplitude of the sine wave.
      * @param wavelength Define the wave-length of the sine wave.
      *
      * @return A new, "waved", image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage waveImage(double amplitude, double wavelength)
-	throws MagickException;
+        throws MagickException;
+
+    /**
+     * Creates a "ripple" effect in the image by shifting the pixels
+     * vertically along a sine wave whose amplitude and wavelength is
+     * specified by the given parameters.
+     *
+     * @param amplitude  Define the amplitude of the sine wave.
+     * @param wavelength Define the wave-length of the sine wave.
+     * @param pixelInterpolateMethod The pixel interpolation method.
+     *
+     * @return A new, "waved", image.
+     * @throws MagickException on error
+     */
+    public native MagickImage waveImage(double amplitude, double wavelength, int pixelInterpolateMethod)
+        throws MagickException;
 
     /**
      * Creates a new image that is a scaled size of an existing one.
      * @return the zoomed image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage zoomImage(int cols, int rows)
       throws MagickException;
@@ -1077,11 +1216,11 @@ public class MagickImage extends Magick {
      * @param map component order of the pixels
      * @param pixels pixels of the subimage
      * @return a boolean value indicating success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean dispatchImage(int x, int y, int width, int height,
 				    String map, byte[] pixels)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Get the pixels as 32-bit components from the image.
@@ -1093,11 +1232,11 @@ public class MagickImage extends Magick {
      * @param map component order of the pixels
      * @param pixels pixels of the subimage
      * @return a boolean value indicating success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean dispatchImage(int x, int y, int width, int height,
 				    String map, int[] pixels)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Get the pixels as float components from the image.
@@ -1109,22 +1248,22 @@ public class MagickImage extends Magick {
      * @param map component order of the pixels
      * @param pixels pixels of the subimage
      * @return a boolean value indicating success
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean dispatchImage(int x, int y, int width, int height,
 					String map, float[] pixels)
-	throws MagickException;
+        throws MagickException;
 
 
     /**
      * Return the image format (i.e., Gif, Jpeg,...)
      *
      * @return the string representing the image format
-     * @exception MagickException on error
-     * @author Abdulbaset Gaddah <agaddah@yahoo.com>
+     * @throws MagickException on error
+     * @author Abdulbaset Gaddah &lt;agaddah@yahoo.com&gt;
      */
     public native String getMagick()
-	throws MagickException;
+        throws MagickException;
     public String getImageFormat()
         throws MagickException
     {
@@ -1135,11 +1274,11 @@ public class MagickImage extends Magick {
      * Set the image format (i.e., Gif, Jpeg,...).
      *
      * @param imageFormat new image format
-     * @exception MagickException on error
-     * @author Abdulbaset Gaddah <agaddah@yahoo.com>
+     * @throws MagickException on error
+     * @author Abdulbaset Gaddah &lt;agaddah@yahoo.com&gt;
      */
     public native void setMagick(String imageFormat)
-	throws MagickException;
+        throws MagickException;
     public void setImageFormat(String imageFormat)
         throws MagickException
     {
@@ -1149,31 +1288,31 @@ public class MagickImage extends Magick {
     /**
      * Return the number of unique colors in an image.
      * @return the number of unique colors
-     * @exception MagickException on error
-     * @author Abdulbaset Gaddah <agaddah@yahoo.com>
+     * @throws MagickException on error
+     * @author Abdulbaset Gaddah &lt;agaddah@yahoo.com&gt;
      */
     public native int getNumberColors()
-	throws MagickException;
+        throws MagickException;
 
     /*
      * Set the number of unigue colors in an image.
      *
      * @param numberColors new number of unigue colors in an image
-     * @exception MagickException on error
-     * @author Abdulbaset Gaddah <agaddah@yahoo.com>
+     * @throws MagickException on error
+     * @author Abdulbaset Gaddah &lt;agaddah@yahoo.com&gt;
      */
     public native void setNumberColors(int numberColors)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Returns True if the Gif image is Animated otherwise False is returned.
      *
      * @return a boolean value representing the animated status of the image
-     * @exception MagickException on error
-     * @author Abdulbaset Gaddah <agaddah@yahoo.com>
+     * @throws MagickException on error
+     * @author Abdulbaset Gaddah &lt;agaddah@yahoo.com&gt;
      */
     public native boolean isAnimatedImage()
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Creates a new image that is a rotated copy of an existing one.
@@ -1185,10 +1324,10 @@ public class MagickImage extends Magick {
      *
      * @param degrees angle of rotation.
      * @return A image that is a rotation of self
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage rotateImage(double degrees)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Creates a new image that is a shear_image copy of an existing one.
@@ -1204,10 +1343,10 @@ public class MagickImage extends Magick {
      * @param x_shear x direction shear amount
      * @param y_shear y direction shear amount
      * @return a sheared image constructor from self.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage shearImage(double x_shear, double y_shear)
-	throws MagickException;
+        throws MagickException;
 
 
     /**
@@ -1218,10 +1357,10 @@ public class MagickImage extends Magick {
      *
      * @param quantizeInfo contains parameters for quantization
      * @return a boolean value indicating success of the process
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean quantizeImage(QuantizeInfo quantizeInfo)
-	throws MagickException;
+        throws MagickException;
 
 
     /**
@@ -1229,10 +1368,10 @@ public class MagickImage extends Magick {
      *
      * @deprecated Use QuantizeInfo with MagickImage.quantizeImage
      *             to acheive the same effect.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public void setGrayscale()
-	throws MagickException
+        throws MagickException
     {
 	QuantizeInfo quantizeInfo = new QuantizeInfo();
 	quantizeInfo.setColorspace(ColorspaceType.GRAYColorspace);
@@ -1246,7 +1385,7 @@ public class MagickImage extends Magick {
      *
      * @return the colorspace as defined in ColorspaceType
      * @see ColorspaceType
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native int getColorspace()
         throws MagickException;
@@ -1260,10 +1399,10 @@ public class MagickImage extends Magick {
      * @param sigma The standard deviation of the gaussian, in pixels
      *
      * @return a sharpened image.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage sharpenImage(double raduis, double sigma)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Creates a new image that is a copy of an existing one with the
@@ -1274,10 +1413,10 @@ public class MagickImage extends Magick {
      * using a polarity and negative hull function.
      *
      * @return a despeckled image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage despeckleImage()
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Applies a general image convolution kernel to an image returns
@@ -1288,10 +1427,10 @@ public class MagickImage extends Magick {
      * @param kernel An array of double representing the convolution kernel
      *
      * @return a convoled image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native MagickImage convolveImage(int order, double[] kernel)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Searches the list of image attributes and returns
@@ -1299,10 +1438,10 @@ public class MagickImage extends Magick {
      *
      * @param key the key of the attribute
      * @return the value of the attribute if exists, otherwise, null.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native String getImageAttribute(String key)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Searches the list of image attributes and replaces the
@@ -1314,10 +1453,10 @@ public class MagickImage extends Magick {
      * @param key the key of the attribute
      * @param value the value of the attribute
      * @return true if the attribute is replace or false if added
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean setImageAttribute(String key, String value)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Takes from memory an image in a known format and read it into
@@ -1325,10 +1464,10 @@ public class MagickImage extends Magick {
      *
      * @param imageInfo a ImageInfo instance
      * @param blob memory containing an image in a known format
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void blobToImage(ImageInfo imageInfo, byte[] blob)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Returns an array that contents the image format.
@@ -1336,7 +1475,6 @@ public class MagickImage extends Magick {
      * @param imageInfo the magick member of this object determines
      *                  output format
      * @return a byte array containing the image in the specified format
-     * @exception MagickException on error
      */
     public native byte[] imageToBlob(ImageInfo imageInfo);
 
@@ -1346,7 +1484,6 @@ public class MagickImage extends Magick {
      * @param imageInfo the magick member of this object determines
      *                  output format
      * @return a byte array containing the image in the specified format
-     * @exception MagickException on error
      */
     public native byte[] imagesToBlob(ImageInfo imageInfo);
 
@@ -1355,7 +1492,7 @@ public class MagickImage extends Magick {
      *
      * @param resolutionType the resolution type as defined in ResolutionType
      * @see ResolutionType
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void setUnits(int resolutionType)
       throws MagickException;
@@ -1366,7 +1503,7 @@ public class MagickImage extends Magick {
      * @return A integer representing the resolution type as defined
      *         in ResolutionType
      * @see ResolutionType
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native int getUnits()
       throws MagickException;
@@ -1375,7 +1512,7 @@ public class MagickImage extends Magick {
      * Set the x_resolution attribute in the image.
      *
      * @param xRes x_resolution value
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void setXResolution(double xRes)
         throws MagickException;
@@ -1384,7 +1521,7 @@ public class MagickImage extends Magick {
      * Get the x_resolution attribute in the image.
      *
      * @return x_resolution value
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native double getXResolution()
         throws MagickException;
@@ -1393,7 +1530,7 @@ public class MagickImage extends Magick {
      * Get the y_resolution attribute in the image.
      *
      * @param yRes y_resolution value
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void setYResolution(double yRes)
         throws MagickException;
@@ -1402,7 +1539,7 @@ public class MagickImage extends Magick {
      * Get the y_resolution attribute in the image.
      *
      * @return y_resolution value
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native double getYResolution()
       throws MagickException;
@@ -1412,7 +1549,7 @@ public class MagickImage extends Magick {
      * Also sets the next image pointer to NULL.
      *
      * @return next image or null if end of list.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     protected native MagickImage nextImage()
         throws MagickException;
@@ -1421,7 +1558,7 @@ public class MagickImage extends Magick {
      * Check if the image has multiple frames.
      *
      * @return true if the image has multiple frames, false, otherwise.
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean hasFrames()
         throws MagickException;
@@ -1430,7 +1567,7 @@ public class MagickImage extends Magick {
      * Count the number of frames in image.
      *
      * @return number of frame in image
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native int getNumFrames()
         throws MagickException;
@@ -1440,7 +1577,7 @@ public class MagickImage extends Magick {
      * as the first object and frames in sequence.
      *
      * @return an array of image frame
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public MagickImage[] breakFrames()
         throws MagickException
@@ -1497,7 +1634,7 @@ public class MagickImage extends Magick {
     /**
      * Return the number of generic profiles.
      * @return number of generic profiles
-		 * @Deprecated No longer works (after ImageMagick 5.5.7 ?)
+		 * @deprecated No longer works (after ImageMagick 5.5.7 ?)
      * @throws MagickException if the profile count cannot be retrieved
      */
     public native int getGenericProfileCount()
@@ -1507,7 +1644,7 @@ public class MagickImage extends Magick {
      * Return the generic profile specified by the index.
      * @param i the index of the generic profile to retrieve
      * @return a generic ProfileInfo if found, null otheriwse.
-		 * @Deprecated No longer works (after ImageMagick 5.5.7 ?)
+		 * @deprecated No longer works (after ImageMagick 5.5.7 ?)
      * @throws MagickException if an error occurs
      */
     public native ProfileInfo getGenericProfile(int i)
@@ -1538,10 +1675,10 @@ public class MagickImage extends Magick {
 		 * @author Jacob Nordfalk
 		 * @since JMagick 6.3.9
 		 * @throws MagickException if an error occurs
-		 * @see http://www.imagemagick.org/api/profile.php#SetImageProfile
+		 * @see <a href="http://www.imagemagick.org/api/profile.php#SetImageProfile">The ImageMagick SetImageProfile documentation</a>
 		 */
 		public native boolean setImageProfile(String profileName, byte[] profileData)
-				throws MagickException;
+			        throws MagickException;
 
 
 		/**
@@ -1551,10 +1688,10 @@ public class MagickImage extends Magick {
 		 * @author Jacob Nordfalk
 		 * @since JMagick 6.3.9
 		 * @throws MagickException if an error occurs
-		 * @see http://www.imagemagick.org/api/profile.php#GetImageProfile
+		 * @see <a href="http://www.imagemagick.org/api/profile.php#GetImageProfile">The ImageMagick GetImageProfile documentation</a>
 		 */
 		public native byte[] getImageProfile(String profileName)
-				throws MagickException;
+			        throws MagickException;
 
 
 
@@ -1610,7 +1747,7 @@ public class MagickImage extends Magick {
      * @param value a value from CompressionType
      * @see CompressionType
      * @see <a href="http://www.imagemagick.org/script/command-line-options.php#compress">Command line explanation</a>
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void setCompression(int value)
         throws MagickException;
@@ -1619,9 +1756,9 @@ public class MagickImage extends Magick {
    /**
      * Get the CompressionType of the image.
      * @return the compression as defined in CompressionType
-     * @exception MagickException on error
+     * @throws MagickException on error
      * @see CompressionType
-     * @author Susan Dorr <sdorr@contentcube.com>
+     * @author Susan Dorr &lt;sdorr@contentcube.com&gt;
      */
     public native int getCompression()
         throws MagickException;
@@ -1630,8 +1767,7 @@ public class MagickImage extends Magick {
     /**
      * Get the image type from the MagickImage
      * @see ImageType
-     * @param Image
-     * @author Susan Dorr <sdorr@contentcube.com>
+     * @author Susan Dorr &lt;sdorr@contentcube.com&gt;
      */
     public native int getImageType()
         throws MagickException;
@@ -1641,7 +1777,7 @@ public class MagickImage extends Magick {
      * Set the border colour for the method borderImage.
      * @param color the border colour
      * @see #borderImage
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void setBorderColor(PixelPacket color)
         throws MagickException;
@@ -1651,7 +1787,7 @@ public class MagickImage extends Magick {
      * Get the current border colour used by method borderImage.
      * @return the current border colour
      * @see #borderImage
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native PixelPacket getBorderColor()
         throws MagickException;
@@ -1659,7 +1795,7 @@ public class MagickImage extends Magick {
     /**
      * Set the background colour.
      * @param color the background colour
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void setBackgroundColor(PixelPacket color)
         throws MagickException;
@@ -1667,7 +1803,7 @@ public class MagickImage extends Magick {
     /**
      * Get the current background colour.
      * @return the current background colour
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native PixelPacket getBackgroundColor()
         throws MagickException;
@@ -1787,7 +1923,7 @@ public class MagickImage extends Magick {
      * Determine signature of image and place signature
      * in the image's attributes.
      * @return true if successful, false, otherwise
-     * @exception MagickException on error
+     * @throws MagickException on error
      * @author Elizabeth Barham &lt;soggytrousers@yahoo.com&gt;
      */
     public native boolean signatureImage()
@@ -1802,13 +1938,13 @@ public class MagickImage extends Magick {
 
     // Set the quality attribute.
     public native void setQuality(int value)
-	throws MagickException;
+        throws MagickException;
 
     /**
      * Set the intent attribute of the image.
-     * @param intent the rendering Intent type as defined in RenderingIntent
+     * @param renderingIntent the rendering Intent type as defined in RenderingIntent
      * @see RenderingIntent
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void setRenderingIntent(int renderingIntent)
       throws MagickException;
@@ -1817,7 +1953,7 @@ public class MagickImage extends Magick {
      * Get the intent attribute of the image.
      * @return A integer representing the rendering Intent type as defined
      *         in RenderingIntent
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native int getRenderingIntent()
       throws MagickException;
@@ -1825,7 +1961,7 @@ public class MagickImage extends Magick {
     /**
      * Set the matte attribute of the image.
      * @param matte the matte value
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native void setMatte(boolean matte)
       throws MagickException;
@@ -1833,7 +1969,7 @@ public class MagickImage extends Magick {
     /**
      * Get the matte attribute of the image.
      * @return A boolean representing the value of the matte attribute
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean getMatte()
       throws MagickException;
@@ -1849,7 +1985,7 @@ public class MagickImage extends Magick {
     /**
      * Strips an image of all profiles and comments..
      *
-     * @exception MagickException on error
+     * @throws MagickException on error
      */
     public native boolean strip()
       throws MagickException;
@@ -1857,12 +1993,10 @@ public class MagickImage extends Magick {
 
     /**
      * formatMagickCaption in fact does not need an Image Object 
-     * @see: http://www.imagemagick.org/api/annotate.php#FormatMagickCaption
-     * @param draw_info: the draw info. (text field is changed)
-     * --- @param split: when no convenient line breaks-- insert newline. ---
-     * @param metrics: Return the font metrics in this structure. (from the line with the max length - to detect if a line couln't be wrapped)
-     * @param caption: the caption, newlines are inserted
-     * @param split: not implemented, split word if too long, [default] chop word
+     * @see <a href="http://www.imagemagick.org/api/annotate.php#FormatMagickCaption">The ImageMagick FormatMagickCaption documentation</a>
+     * @param maxWidth
+     * @param draw_info the draw info. (text field is changed)
+     * @param caption the caption, newlines are inserted
      * @return output String
      * @throws MagickException 
      */
@@ -1874,9 +2008,9 @@ public class MagickImage extends Magick {
      * 
      * @param maxWidth
      * @param indent2ndLine
-     * @param trimLineEnds  -> if line ends with "xyz    \n" line might be wrapped at the first space,  "  \n" will produce an empty line - that option delets whitespaces before \n
-     * @param draw_info
-     * @param caption
+     * @param trimLineEnds if line ends with "xyz    \n" line might be wrapped at the first space,  "  \n" will produce an empty line - that option deletes whitespaces before \n
+     * @param draw_info the draw info. (text field is changed)
+     * @param caption the caption, newlines are inserted
      * @return
      * @throws MagickException
      */
@@ -1936,4 +2070,38 @@ public class MagickImage extends Magick {
     	}
     	return retTypeMetric;
     }
+
+    /**
+     * Return a new image that is a resized version of the
+     * original, with the specified filter applied. To scale a scanline from x pixels to y pixels, each new
+     * pixel represents x/y old pixels. To read x/y pixels, read
+     * (x/y rounded up) pixels but only count the required fraction of
+     * the last old pixel read in your new pixel. The remainder of the
+     * old pixel will be counted in the next new pixel.
+     * @param cols An integer that specifies the number of columns in \
+                   the scaled image
+     * @param rows An integer that specifies the number of rows in the \
+                   scaled image
+     * @return the scaled image
+     * @throws MagickException on error
+     */
+    public native MagickImage resizeImage(int cols, int rows, int filter, double blur)
+      throws MagickException;
+
+    /**
+     * Transforms an image colorspace.
+     *
+     * @param colorspace An unsigned integer value defines which \
+                         colorspace to transform the image to
+     * @return a boolean value indicating success
+     * @throws MagickException on error
+     */
+    public native boolean transformImageColorspace(int colorspace)
+      throws MagickException;
+
+    public native MagickImage deconstructImages()
+      throws MagickException;
+
+    public native MagickImage optimizeLayer(ImageInfo imageInfo)
+      throws MagickException;
 }
