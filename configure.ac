@@ -17,12 +17,17 @@ else
   exit 1
 fi
 
+LIB=lib
+if test -x "/usr/lib64" ; then
+  LIB=lib64
+fi
+
 OS=`$UNAME -s`
 
 dnl The version number must change with every release
-VER_MAJOR=6
-VER_MINOR=8
-VER_MICRO=6
+VER_MAJOR=7
+VER_MINOR=0
+VER_MICRO=4
 VER_JMSUB=0
 
 SHARED_LIB_EXT=.so
@@ -45,11 +50,17 @@ dnl Make sure we use -dynamiclib parameter for OS X Leopard
 *darwin*)
 	LIBTOOL_LINK_FLAG='-module'
 	;;
+*-*-cygwin|*-*-mingw32)
+	SHARED_LDFLAGS="-shared"
+	SHARED_LIB_EXT=.dll
+	JAVA_HOME=$(cygpath -C UTF8 "$(cygpath -C UTF8 -d "${JAVA_HOME}")")
+	MAGICK_HOME=$(cygpath -C UTF-8 "$(cygpath -C UTF-8 -d "$(dirname "$(which convert)")")")
+	;;
 esac
 
 dnl By default, we look at /usr/local. Need to explicitly do this because
 dnl some compilers don't.
-LDFLAGS="${LDFLAGS} -L/usr/local/lib"
+LDFLAGS="${LDFLAGS} -L/usr/local/${LIB}"
 CFLAGS="${CFLAGS} -I/usr/local/include"
 
 dnl Get the full path of the source directory.
@@ -111,7 +122,7 @@ fi
 dnl Determine the OS we are running on and set the class path
 dnl separator accordingly.
 case ${build_os} in
-*cygwin*)
+*-*-cygwin|*-*-mingw32)
 	CLASSSEP=;
 	;;
 *)
@@ -125,39 +136,39 @@ AC_ARG_WITH(java-home, --with-java-home Java installation path,
 AC_ARG_WITH(java-includes, --with-java-includes Java includes path,
             JAVA_INCLUDE_PATH="${withval}")
 if test -n "${JAVA_INCLUDE_PATH}" -a -d "${JAVA_INCLUDE_PATH}" ; then
-	dnl Java include path supplied
+dnl Java include path supplied
 	JAVA_INCLUDES=-I${JAVA_INCLUDE_PATH}
-elif test -d ${JAVA_HOME}/include ; then
+elif test -d "${JAVA_HOME}/include" ; then
 	JAVA_INCLUDES=-I${JAVA_HOME}/include
-	dnl The Blackdown JDK seems to have genunix.
-	if test -d ${JAVA_HOME}/include/genunix ; then
+dnl The Blackdown JDK seems to have genunix.
+	if test -d "${JAVA_HOME}/include/genunix" ; then
 		JAVA_INCLUDES="$JAVA_INCLUDES -I${JAVA_HOME}/include/genunix"
 	fi
-	dnl The Sun Linux JDK seems to use linux
-	if test -d ${JAVA_HOME}/include/linux ; then
+dnl The Sun Linux JDK seems to use linux
+	if test -d "${JAVA_HOME}/include/linux" ; then
 		JAVA_INCLUDES="$JAVA_INCLUDES -I${JAVA_HOME}/include/linux"
 	fi
-	dnl The Sun Solaris JDK seems to use solaris
-	if test -d ${JAVA_HOME}/include/solaris ; then
+dnl The Sun Solaris JDK seems to use solaris
+	if test -d "${JAVA_HOME}/include/solaris" ; then
 		JAVA_INCLUDES="$JAVA_INCLUDES -I${JAVA_HOME}/include/solaris"
 	fi
-	dnl The Sun FreeBSD JDK seems to use freebsd
-	if test -d ${JAVA_HOME}/include/freebsd ; then
+dnl The Sun FreeBSD JDK seems to use freebsd
+	if test -d "${JAVA_HOME}/include/freebsd" ; then
 		JAVA_INCLUDES="$JAVA_INCLUDES -I${JAVA_HOME}/include/freebsd"
 	fi
-	dnl The Sun Windows JDK seems to use win32
-	if test -d ${JAVA_HOME}/include/win32 ; then
+dnl The Sun Windows JDK seems to use win32
+	if test -d "${JAVA_HOME}/include/win32" ; then
 		JAVA_INCLUDES="$JAVA_INCLUDES -I${JAVA_HOME}/include/win32"
 	fi
-	if test -d ${JAVA_HOME}/include/bsd ; then
+	if test -d "${JAVA_HOME}/include/bsd" ; then
 		JAVA_INCLUDES="$JAVA_INCLUDES -I${JAVA_HOME}/include/bsd"
 	fi
-	dnl Modern Oracle JDK on OS X
-	if test -d ${JAVA_HOME}/include/darwin ; then
+dnl Modern Oracle JDK on OS X
+	if test -d "${JAVA_HOME}/include/darwin" ; then
 		JAVA_INCLUDES="$JAVA_INCLUDES -I${JAVA_HOME}/include/darwin"
 	fi
 dnl check for Mac OS X series of systems with old Apple JDKs
-elif test -d ${JAVA_HOME}/Headers; then
+elif test -d "${JAVA_HOME}/Headers" ; then
 	JAVA_INCLUDES=-I${JAVA_HOME}/Headers
 else
 	AC_MSG_ERROR('Unable to locate Java directories')
@@ -177,6 +188,9 @@ fi
 CPPFLAGS=${OLD_CPPFLAGS}
 
 dnl Determine where the Java interpreter is
+OLDPATH=${PATH}
+PATH=${JAVA_HOME}/bin:${PATH}
+export PATH
 AC_PATH_PROG(JAVA, java, not_found)
 if test ${JAVA} = not_found; then
 	AC_MSG_ERROR('No Java interpreter found')
@@ -233,6 +247,9 @@ dnl Determine if we have javadoc
 AC_PATH_PROG(JAVADOC, javadoc, )
 AC_SUBST(JAVADOC)
 
+PATH=${OLDPATH}
+export PATH
+
 dnl Check if javadoc destination specified
 JAVADOC_DIR='${prefix}/share/doc/jmagick'
 AC_ARG_WITH(javadoc-dir, --with-javadoc-dir=path where Javadoc is generated,
@@ -256,45 +273,116 @@ fi
 dnl Check if ImageMagick home specified
 AC_ARG_WITH(magick-home, --with-magick-home=path home directory of ImageMagick,
             MAGICK_HOME=${withval})
-for MPATH in /usr /usr/local /usr/local/ImageMagick /usr/local/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO} ${MAGICK_HOME} ; do
+for MPATH in ${MAGICK_HOME} /usr /usr/local /usr/local/ImageMagick /usr/local/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO} ; do
 	# Location before IM 6.3.8.something
-	if  test -f ${MPATH}/include/magick/api.h  ; then
+	if  test -f "${MPATH}/include/magick/api.h" ; then
 		MAGICK_LIB_PATH=${MPATH}/lib
-		MAGICK_LIBS="-L${MPATH}/lib -lMagick"
+		case "$target" in
+			*-*-cygwin|*-*-mingw32)
+				MAGICK_LIBS="-L${MPATH}/lib -lCORE_RL_wand_ -lCORE_RL_magick_"
+				MAGICK_CHECK_LIBS="CORE_RL_wand_ CORE_RL_magick_"
+				;;
+			*)
+				MAGICK_LIBS="-L${MPATH}/lib -lWand -lMagick"
+				MAGICK_CHECK_LIBS="Wand Magick"
+				;;
+		esac
 		MAGICK_INCLUDES=-I${MPATH}/include
 		MAGICK_REALHOME=${MPATH}
+		MAGICK_VERSION=6
 	fi
 	# Location after IM 6.3.8.something
-	if  test -f ${MPATH}/include/ImageMagick/magick/api.h  ; then
+	if  test -f "${MPATH}/include/ImageMagick/magick/api.h" ; then
 		MAGICK_LIB_PATH=${MPATH}/lib
-		MAGICK_LIBS="-L${MPATH}/lib -lMagick"
+		case "$target" in
+			*-*-cygwin|*-*-mingw32)
+				MAGICK_LIBS="-L${MPATH}/lib -lCORE_RL_wand_ -lCORE_RL_magick_"
+				MAGICK_CHECK_LIBS="CORE_RL_wand_ CORE_RL_magick_"
+				;;
+			*)
+				MAGICK_LIBS="-L${MPATH}/lib -lWand -lMagick"
+				MAGICK_CHECK_LIBS="Wand Magick"
+				;;
+		esac
 		MAGICK_INCLUDES=-I${MPATH}/include/ImageMagick
 		MAGICK_REALHOME=${MPATH}
+		MAGICK_VERSION=6
 	fi
-  # Location after Ubuntu 16.04
-	if  test -f ${MPATH}/include/ImageMagick-6/magick/api.h  ; then
+	# Location after Ubuntu 16.04
+	if  test -f "${MPATH}/include/ImageMagick-6/magick/api.h" ; then
 		MAGICK_LIB_PATH=${MPATH}/lib
-		MAGICK_LIBS="-L${MPATH}/lib -lMagick"
+		case "$target" in
+			*-*-cygwin|*-*-mingw32)
+				MAGICK_LIBS="-L${MPATH}/lib -lCORE_RL_wand_ -lCORE_RL_magick_"
+				MAGICK_CHECK_LIBS="CORE_RL_wand_ CORE_RL_magick_"
+				;;
+			*)
+				MAGICK_LIBS="-L${MPATH}/lib -lWand -lMagick"
+				MAGICK_CHECK_LIBS="Wand Magick"
+				;;
+		esac
 		MAGICK_INCLUDES=-I${MPATH}/include/ImageMagick-6
 		MAGICK_REALHOME=${MPATH}
+		MAGICK_VERSION=6
+	fi
+	# Location after IM 7.something
+	if  test -f "${MPATH}/include/MagickCore/MagickCore.h" ; then
+		MAGICK_LIB_PATH=${MPATH}/lib
+		case "$target" in
+			*-*-cygwin|*-*-mingw32)
+				MAGICK_LIBS="-L${MPATH}/lib -lCORE_RL_MagickWand_ -lCORE_RL_MagickCore_"
+				MAGICK_CHECK_LIBS="CORE_RL_MagickWand_ CORE_RL_MagickCore_"
+				;;
+			*)
+				MAGICK_LIBS="-L${MPATH}/lib -lMagickWand -lMagickCore"
+				MAGICK_CHECK_LIBS="MagickWand MagickCore"
+				;;
+		esac
+		MAGICK_INCLUDES=-I${MPATH}/include
+		MAGICK_REALHOME=${MPATH}
+		MAGICK_VERSION=7
+	fi
+	# Location for some Linux distros
+	if  test -f "${MPATH}/include/ImageMagick-7/MagickCore/MagickCore.h" ; then
+		MAGICK_LIB_PATH=${MPATH}/lib
+		case "$target" in
+			*-*-cygwin|*-*-mingw32)
+				MAGICK_LIBS="-L${MPATH}/lib -lCORE_RL_MagickWand_ -lCORE_RL_MagickCore_"
+				MAGICK_CHECK_LIBS="CORE_RL_MagickWand_ CORE_RL_MagickCore_"
+				;;
+			*)
+				MAGICK_LIBS="-L${MPATH}/lib -lMagickWand -lMagickCore"
+				MAGICK_CHECK_LIBS="MagickWand MagickCore"
+				;;
+		esac
+		MAGICK_INCLUDES=-I${MPATH}/include/ImageMagick-7
+		MAGICK_REALHOME=${MPATH}
+		MAGICK_VERSION=7
 	fi
 done
 
-dnl Check if MagickCore-conf exists
+dnl Check if MagickWand-conf exists
 OLDPATH=${PATH}
-# MagickCore-config isn't installed in /usr/bin in Ubuntu 16.04+ due
+# MagickWand-config isn't installed in /usr/bin in Ubuntu 16.04+ due
 # to changes in libmagickcore-dev package.
-PATH=${MAGICK_REALHOME}/bin:/usr/lib/x86_64-linux-gnu/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}/bin-Q16:${PATH}
+PATH=${MAGICK_REALHOME}/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q64HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q64/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q32HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q32/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q16HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q16/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q8HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q8/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}/bin:${PATH}
 export PATH
-AC_PATH_PROG(MAGICKCONF, MagickCore-config, not_found)
+
+AC_PATH_PROG(MAGICKCONF, MagickWand-config, not_found)
+
 PATH=${OLDPATH}
 export PATH
+
 dnl Added $MAGICK_LIB_PATH and $MAGICK_INCLUDES here because of
 dnl a possible bug in Magick-conf for ImageMagick 5.4.6
 if (test $MAGICKCONF != not_found); then
 	LDFLAGS="${LDFLAGS} `$MAGICKCONF --ldflags`"
-	MAGICK_LIBS=`$MAGICKCONF --libs`
-	MAGICK_INCLUDES="`$MAGICKCONF --cppflags`"
+	MAGICK_LIB_PATH=`$MAGICKCONF --exec-prefix`/lib
+	MAGICK_LIBS="`$MAGICKCONF --libs`"
+	MAGICK_INCLUDES=`$MAGICKCONF --cppflags`
+	MAGICK_REALHOME=`$MAGICKCONF --exec-prefix`
+	MAGICK_VERSION=`$MAGICKCONF --version | cut -c1`
+	MAGICK_CHECK_LIBS=`$MAGICKCONF --libs | awk 'function ltrim(s) { sub(/^[ \t\r\n]+/, "", s); return s } function rtrim(s) { sub(/[ \t\r\n]+$/, "", s); return s } function trim(s) { return rtrim(ltrim(s)); } END { for (i = 1; i <= NF; i++) { if ( substr($i, 0, 2) != "-l") {$i=""} else {$i=substr($i,3)}} print trim($0)}'`
 fi
 
 dnl Check if ImageMagick library path specified
@@ -307,34 +395,58 @@ dnl Check if ImageMagick include path specified
 AC_ARG_WITH(magick-inc-dir,
             --with-magick-inc-dir=path include path of ImageMagick,
             MAGICK_INCLUDES=-I${withval})
+
 if ( test -f ${MAGICK_INCLUDE_PATH}/magick/api.h ) ; then
 	MAGICK_INCLUDES=-I${MAGICK_INCLUDE_PATH}
+	MAGICK_VERSION=6
+fi
+if ( test -f ${MAGICK_INCLUDE_PATH}/MagickCore/MagickCore.h ) ; then
+	MAGICK_INCLUDES=-I${MAGICK_INCLUDE_PATH}
+	MAGICK_VERSION=7
 fi
 
-dnl Check for the ImageMagick header file magick/api.h
+dnl Ensure proper includes in source files
+CFLAGS="${CFLAGS} -DIMAGEMAGICK_HEADER_STYLE_${MAGICK_VERSION}"
+
+dnl Check for the ImageMagick headers
 OLD_CPPFLAGS=${CPPFLAGS}
 if test -n "${MAGICK_INCLUDES}"; then
 	CPPFLAGS="${MAGICK_INCLUDES} ${CPPFLAGS}"
 fi
-AC_CHECK_HEADER(magick/api.h, HAVE_MAGICK_HEADER=yes, HAVE_MAGICK_HEADER=no)
-if test ${HAVE_MAGICK_HEADER} = no ; then
-	AC_MSG_ERROR('Unable to find ImageMagick header files')
-fi
-CPPFLAGS=${OLD_CPPFLAGS}
 
-dnl Check for the ImageMagick library
+if test ${MAGICK_VERSION} = 7 ; then
+	MAGICK_CHECK_HEADERS="MagickWand/MagickWand.h MagickCore/MagickCore.h"
+elif test ${MAGICK_VERSION} = 6 ; then
+	MAGICK_CHECK_HEADERS="wand/magick-wand.h magick/api.h"
+fi
+
+for MHEADER in ${MAGICK_CHECK_HEADERS} ; do
+	AC_CHECK_HEADER(${MHEADER}, HAVE_MAGICK_HEADER=yes, HAVE_MAGICK_HEADER=no)
+	if test ${HAVE_MAGICK_HEADER} = no ; then
+		AC_MSG_ERROR('Unable to find ImageMagick header file: ${MHEADER}')
+	fi
+done
+
+dnl Check for the ImageMagick libraries
 OLD_LDFLAGS=${LDFLAGS}
 if test -n "${MAGICK_LIBS}"; then
 	LDFLAGS="${MAGICK_LIBS} ${LDFLAGS}"
 fi
-AC_CHECK_LIB(Magick, ConstituteImage,
+
+MAGICK_CHECK_LIB_FUNCTIONS="NewPixelWand ConstituteImage"
+MLIB_INDEX=1
+for MLIB in ${MAGICK_CHECK_LIBS} ; do
+	MLIBFUNCTION=`echo ${MAGICK_CHECK_LIB_FUNCTIONS} | awk "{print \\$$MLIB_INDEX}"`
+	AC_CHECK_LIB(${MLIB}, ${MLIBFUNCTION},
              HAVE_MAGICK_LIB=yes, HAVE_MAGICK_LIB=no)
-if test ${HAVE_ImageMagick-6.2.4MAGICK_LIB} = no; then
-	AC_MSG_ERROR('Unable to find ImageMagick library')
-fi
+	if test ${HAVE_MAGICK_LIB} = no; then
+		AC_MSG_ERROR('Unable to find ImageMagick library: ${MLIB}')
+	fi
+	(( MLIB_INDEX++ ))
+done
+
+CPPFLAGS=${OLD_CPPFLAGS}
 LDFLAGS=${OLD_LDFLAGS}
-
-
 
 dnl Configure libtool
 AC_DISABLE_STATIC

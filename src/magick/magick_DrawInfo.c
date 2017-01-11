@@ -4,10 +4,13 @@
 #include <stdio.h>
 #include <time.h>
 #include <sys/types.h>
-#include <magick/api.h>
+#if defined (IMAGEMAGICK_HEADER_STYLE_7)
+#    include <MagickCore/MagickCore.h>
+#else
+#    include <magick/api.h>
+#endif
 #include "jmagick.h"
 #include "magick_DrawInfo.h"
-
 
 /*
  * Class:     magick_DrawInfo
@@ -96,7 +99,7 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setPrimitive
     }
 
     if (info->primitive != NULL) {
-	RelinquishMagickMemory(info->primitive);
+       RelinquishMagickMemory(info->primitive);
     }
 
     jstr = (*env)->GetStringChars(env, primitive, 0);
@@ -209,7 +212,7 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setText
     }
 
     if (info->text != NULL) {
-	RelinquishMagickMemory(info->text);
+        RelinquishMagickMemory(info->text);
     }
 
     jstr = (*env)->GetStringChars(env, text, 0);
@@ -238,7 +241,7 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setText
         fprintf(stderr,"String: %s\n", str);
 #endif
         if (info->encoding != NULL) {
-	    RelinquishMagickMemory(info->encoding);
+            RelinquishMagickMemory(info->encoding);
         }
     }
 
@@ -256,7 +259,7 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setText
             throwMagickException(env, "Unable to allocate memory");
         }
         if (info->encoding != NULL) {
-	    RelinquishMagickMemory(info->encoding);
+            RelinquishMagickMemory(info->encoding);
         }
         info->encoding = AcquireString("UTF-8");
         if (info->encoding == NULL) {
@@ -369,7 +372,11 @@ getIntMethod(Java_magick_DrawInfo_getGravity,
  * Signature: (I)V
  */
 setIntMethod(Java_magick_DrawInfo_setOpacity,
+#if MagickLibVersion < 0x700
 	     opacity,
+#else
+	     alpha,
+#endif
 	     "drawInfoHandle",
 	     DrawInfo)
 
@@ -379,7 +386,11 @@ setIntMethod(Java_magick_DrawInfo_setOpacity,
  * Signature: ()I
  */
 getIntMethod(Java_magick_DrawInfo_getOpacity,
+#if MagickLibVersion < 0x700
 	     opacity,
+#else
+	     alpha,
+#endif
 	     "drawInfoHandle",
 	     DrawInfo)
 
@@ -599,9 +610,10 @@ getPixelPacketMethod(Java_magick_DrawInfo_getBorderColor,
 JNIEXPORT void JNICALL Java_magick_DrawInfo_setTile
   (JNIEnv *env, jobject self, jobject tileImage)
 {
+#if MagickLibVersion < 0x700
     DrawInfo *drawInfo;
     Image *image, *imgCopy;
-    ExceptionInfo exception;
+    ExceptionInfo *exception;
 
     drawInfo = (DrawInfo*) getHandle(env, self, "drawInfoHandle", NULL);
     if (drawInfo == NULL) {
@@ -615,20 +627,21 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setTile
         return;
     }
 
-    GetExceptionInfo(&exception);
-    imgCopy = CloneImage(image, 0, 0, 1, &exception);
+    exception = AcquireExceptionInfo();
+    imgCopy = CloneImage(image, 0, 0, 1, exception);
     if (imgCopy == NULL) {
         throwMagickApiException(env, "Unable to clone MagickImage",
-                                &exception);
-        DestroyExceptionInfo(&exception);
+                                exception);
+        DestroyExceptionInfo(exception);
         return;
     }
-    DestroyExceptionInfo(&exception);
+    DestroyExceptionInfo(exception);
 
     if (drawInfo->tile != NULL) {
         DestroyImages(drawInfo->tile);
     }
     drawInfo->tile = imgCopy;
+#endif
 }
 
 /*
@@ -639,9 +652,10 @@ JNIEXPORT void JNICALL Java_magick_DrawInfo_setTile
 JNIEXPORT jobject JNICALL Java_magick_DrawInfo_getTile
   (JNIEnv *env, jobject self)
 {
+#if MagickLibVersion < 0x700
     DrawInfo *drawInfo;
     Image *image;
-    ExceptionInfo exception;
+    ExceptionInfo *exception;
     jobject imgObj;
 
     drawInfo = (DrawInfo*) getHandle(env, self, "drawInfoHandle", NULL);
@@ -650,14 +664,14 @@ JNIEXPORT jobject JNICALL Java_magick_DrawInfo_getTile
         return NULL;
     }
 
-    GetExceptionInfo(&exception);
-    image = CloneImage(drawInfo->tile, 0, 0, 1, &exception);
+    exception = AcquireExceptionInfo();
+    image = CloneImage(drawInfo->tile, 0, 0, 1, exception);
     if (image == NULL) {
-        throwMagickApiException(env, "Unable to clone image", &exception);
-        DestroyExceptionInfo(&exception);
+        throwMagickApiException(env, "Unable to clone image", exception);
+        DestroyExceptionInfo(exception);
         return NULL;
     }
-    DestroyExceptionInfo(&exception);
+    DestroyExceptionInfo(exception);
 
     imgObj = newImageObject(env, image);
     if (imgObj == NULL) {
@@ -666,7 +680,8 @@ JNIEXPORT jobject JNICALL Java_magick_DrawInfo_getTile
         return NULL;
     }
     return imgObj;
+#else
+	return NULL;
+#endif
 }
-
-
 

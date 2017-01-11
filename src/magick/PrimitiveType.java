@@ -3,26 +3,26 @@ package magick;
 /**
  * Corresponds to the ImageMagick enumerated type of the same name.
  * Important! Constant values should correspond to:
- * http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.7.7/magick/draw.h
+ * http://git.imagemagick.org/repos/ImageMagick/blob/master/MagickCore/draw.h
  * @author Eric Yeo
  */
 public interface PrimitiveType {
 
-    public final static int UndefinedPrimitive = 0;
-    public final static int PointPrimitive = 1;
-    public final static int LinePrimitive = 2;
-    public final static int RectanglePrimitive = 3;
-    public final static int RoundRectanglePrimitive = 4;
-    public final static int ArcPrimitive = 5;
-    public final static int EllipsePrimitive = 6;
-    public final static int CirclePrimitive = 7;
-    public final static int PolylinePrimitive = 8;
-    public final static int PolygonPrimitive = 9;
-    public final static int BezierPrimitive = 10;
-    public final static int ColorPrimitive = 11;
-    public final static int MattePrimitive = 12;
-    public final static int TextPrimitive = 13;
-    public final static int ImagePrimitive = 14;
-    public final static int PathPrimitive = 15;
+    public static final int UndefinedPrimitive = 0;
+    public static final int AlphaPrimitive = 1;
+    public static final int ArcPrimitive = 2;
+    public static final int BezierPrimitive = 3;
+    public static final int CirclePrimitive = 4;
+    public static final int ColorPrimitive = 5;
+    public static final int EllipsePrimitive = 6;
+    public static final int ImagePrimitive = 7;
+    public static final int LinePrimitive = 8;
+    public static final int PathPrimitive = 9;
+    public static final int PointPrimitive = 10;
+    public static final int PolygonPrimitive = 11;
+    public static final int PolylinePrimitive = 12;
+    public static final int RectanglePrimitive = 13;
+    public static final int RoundRectanglePrimitive = 14;
+    public static final int TextPrimitive = 15;
 
 }

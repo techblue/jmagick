@@ -1,9 +1,15 @@
 # Copyright (C) 1999 Eric Yeo. All rights reserved.
 
+CYGPATH := $(shell command -v cygpath 2> /dev/null)
+
+# Fix obscure libtool issue
+ifdef CYGPATH
+export echo=echo
+endif
+
 ifeq ($(strip $(OS)),Darwin)
 DARWIN = true
 endif
-
 
 # This is the main Java sources.
 ifndef JAVA_SRC_DIR
@@ -56,7 +62,7 @@ CURRENT_DIR = $(shell pwd)
 JAVA_PACKAGE_REL_PATH = $(subst $(JAVA_SRC_DIR)/,,$(CURRENT_DIR))
 JAVA_PACKAGE = $(subst /,.,$(JAVA_PACKAGE_REL_PATH))
 JAVA_PACKAGE_DIR = $(JAVA_CLASSES_DIR)/$(JAVA_PACKAGE_REL_PATH)
-PACKAGE_GENERATED_DIR = $(GENERATED_DIR)/$(JAVA_PACKAGE_REL_PATH)
+PACKAGE_GENERATED_INPUT_DIR = $(GENERATED_DIR)/$(JAVA_PACKAGE_REL_PATH)
 PACKAGE_OBJ_DIR = $(OBJ_DIR)/$(JAVA_PACKAGE_REL_PATH)
 
 # Workout if we need the class path from the environment
@@ -65,13 +71,24 @@ TRAILING_CLASSPATH = $(CLASSSEP)$(CLASSPATH)
 else
 TRAILING_CLASSPATH =
 endif
-JAVA_CLASS_PATH=$(JAVA_CLASSES_DIR)$(TRAILING_CLASSPATH)
+
+ifdef CYGPATH
+JAVA_SRC_PATH = "$(shell cygpath -C UTF8 -s -w "$(JAVA_SRC_DIR)")"
+JAVA_CLASSES_PATH = "$(shell cygpath -C UTF8 -s -w "$(JAVA_CLASSES_DIR)")"
+PACKAGE_GENERATED_OUTPUT_DIR = "$(shell cygpath -C UTF8 -s -w "$(PACKAGE_GENERATED_INPUT_DIR)")"
+JAVA_CLASS_PATH = "$(shell cygpath -c UTF8 -s -w "$(JAVA_CLASSES_DIR)")$(TRAILING_CLASSPATH)"
+else
+JAVA_SRC_PATH = "$(JAVA_SRC_DIR)"
+JAVA_CLASSES_PATH = "$(JAVA_CLASSES_DIR)"
+PACKAGE_GENERATED_OUTPUT_DIR = "$(PACKAGE_GENERATED_INPUT_DIR)"
+JAVA_CLASS_PATH = "$(JAVA_CLASSES_DIR)$(TRAILING_CLASSPATH)"
+endif
 
 # The rule to make class files from java files.
 $(JAVA_PACKAGE_DIR)/%.class: %.java
 	@-mkdir -p $(dir $@)
-	$(JAVAC) $(JFLAGS) -d $(JAVA_CLASSES_DIR) 	\
-		-sourcepath $(JAVA_SRC_DIR)		\
+	$(JAVAC) $(JFLAGS) -d $(JAVA_CLASSES_PATH) 	\
+		-sourcepath $(JAVA_SRC_PATH)		\
 		-classpath $(JAVA_CLASS_PATH) $<
 
 
@@ -99,7 +116,7 @@ JNI_LIB = $(LIB_DIR)/lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_E
 # Java source files can be used to generate JNI headers.
 JNI_BASE_HEADERS = $(subst .java,.h,$(JNI_SRC_FILES))
 JNI_HEADER_PREFIX = $(subst .,_,$(JAVA_PACKAGE_REL_PATH))
-JNI_HEADERS = $(foreach f,$(JNI_BASE_HEADERS),$(PACKAGE_GENERATED_DIR)/$(JNI_HEADER_PREFIX)_$(f))
+JNI_HEADERS = $(foreach f,$(JNI_BASE_HEADERS),$(PACKAGE_GENERATED_INPUT_DIR)/$(JNI_HEADER_PREFIX)_$(f))
 JNI_CLASS_BASE_FILES = $(subst .java,.class,$(JNI_SRC_FILES))
 JNI_CLASS_FILES = $(foreach f,$(JNI_CLASS_BASE_FILES),$(JAVA_PACKAGE_DIR)/$(f))
 
@@ -119,17 +136,17 @@ CFLAGS += $(INCLUDES)
 # The rule to make JNI header files from java files.
 # Rule to make header files from java class files.
 # The originating java source must contain native method specifications.
-$(PACKAGE_GENERATED_DIR)/$(JNI_HEADER_PREFIX)_%.h: $(JAVA_PACKAGE_DIR)/%.class
+$(PACKAGE_GENERATED_INPUT_DIR)/$(JNI_HEADER_PREFIX)_%.h: $(JAVA_PACKAGE_DIR)/%.class
 	@-rm $@ > /dev/null 2>&1
 	@-mkdir -p $(dir $@)
-	"$(JAVAH)" -d $(PACKAGE_GENERATED_DIR) -jni			\
+	"$(JAVAH)" -d $(PACKAGE_GENERATED_OUTPUT_DIR) -jni			\
 		-classpath $(JAVA_CLASS_PATH)				\
 		$(JAVA_PACKAGE).$(subst .class,,$(notdir $<))
 
 # Rule to compile JNI C files
-$(PACKAGE_OBJ_DIR)/%.lo: %.c $(PACKAGE_GENERATED_DIR)/%.h
+$(PACKAGE_OBJ_DIR)/%.lo: %.c $(PACKAGE_GENERATED_INPUT_DIR)/%.h
 	@-mkdir -p $(dir $@)
-	$(LIBTOOL) --mode=compile $(CC) -I$(PACKAGE_GENERATED_DIR) $(CFLAGS) -c $< -o $@
+	$(LIBTOOL) --mode=compile $(CC) -I$(PACKAGE_GENERATED_INPUT_DIR) $(CFLAGS) -c $< -o $@
 
 $(PACKAGE_OBJ_DIR)/%.lo: %.c
 	@-mkdir -p $(dir $@)
@@ -141,7 +158,7 @@ $(JNI_DEP_FILE): $(JNI_HEADERS) $(JNI_IMPL) Makefile
 	@case $(CC) in                                                    \
 	*gcc)                                                             \
             echo Autogenerating C dependencies.;                          \
-	    $(CC) -M $(CFLAGS) -I$(PACKAGE_GENERATED_DIR)                 \
+	    $(CC) -M $(CFLAGS) -I$(PACKAGE_GENERATED_INPUT_DIR)                 \
 			$(JNI_IMPL) > .jnidep.tmp;                        \
 	    sed -e "s;\(.*\)\.o:;$(PACKAGE_OBJ_DIR)/\1.lo:;"              \
                                                     < .jnidep.tmp > $@;   \
@@ -168,6 +185,8 @@ $(JNI_LIB): $(JNI_OBJ)
 		$(JNI_OBJ) $(JNI_LINK_LIBS) $(EXTRA_LIBS)
 
 	# Change install name shown by otool -L if tool available.
+	@-mkdir -p "$(JAVA_CLASSES_DIR)/resources"
+	@-cp $(JNI_LIB) "$(JAVA_CLASSES_DIR)/resources/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)"
 	@-ln -s ./lib$(JNI_LIB_NAME)-$(MAJOR).$(MINOR).$(MICRO)$(SHARED_LIB_EXT) $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)
 	@-ln -s ./jmagick-$(MAJOR).$(MINOR).$(MICRO).jar $(PROJ_BASE_DIR)/lib/jmagick.jar
 ifdef DARWIN
@@ -221,7 +240,7 @@ clean:
 	@echo Cleaning `pwd` ...
 	@-rm -rf $(CLEAN_LIST) > /dev/null 2>&1
 ifdef JNI_LIB_NAME
-	@-rm $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT)
+	@-rm -f $(PROJ_BASE_DIR)/lib/lib$(JNI_LIB_NAME)$(SHARED_LIB_EXT) > /dev/null 2>&1
 endif
 ##	@-rm $(libdir)/lib
 ifdef DIRS

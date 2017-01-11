@@ -3,22 +3,21 @@ package magick;
 /**
  * Corresponds to the ImageMagick enumerated type of the same name.
  * Important! Constant values should correspond to:
- * http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.7.7/magick/geometry.h
+ * http://git.imagemagick.org/repos/ImageMagick/blob/master/MagickCore/geometry.h
  *
  * @author Eric Yeo
  */
 public interface GravityType {
 
-    public final static int UndefinedGravity = 0;
-    public final static int ForgetGravity = 0;
-    public final static int NorthWestGravity = 1;
-    public final static int NorthGravity = 2;
-    public final static int NorthEastGravity = 3;
-    public final static int WestGravity = 4;
-    public final static int CenterGravity = 5;
-    public final static int EastGravity = 6;
-    public final static int SouthWestGravity = 7;
-    public final static int SouthGravity = 8;
-    public final static int SouthEastGravity = 9;
-    public final static int StaticGravity = 10;
+    public static final int UndefinedGravity = 0;
+    public static final int ForgetGravity = 0;
+    public static final int NorthWestGravity = 1;
+    public static final int NorthGravity = 2;
+    public static final int NorthEastGravity = 3;
+    public static final int WestGravity = 4;
+    public static final int CenterGravity = 5;
+    public static final int EastGravity = 6;
+    public static final int SouthWestGravity = 7;
+    public static final int SouthGravity = 8;
+    public static final int SouthEastGravity = 9;
 }

@@ -4,9 +4,67 @@
 #include <stdio.h>
 #include <time.h>
 #include <sys/types.h>
-#include <magick/api.h>
+#if defined (IMAGEMAGICK_HEADER_STYLE_7)
+#    include <MagickCore/MagickCore.h>
+#else
+#    include <magick/api.h>
+#endif
 #include "jmagick.h"
 
+#if MagickLibVersion >= 0x700
+MagickBooleanType LevelImageShim(Image *image,const char *levels)
+{
+    double black_point, gamma, white_point;
+
+    GeometryInfo geometry_info;
+
+    MagickBooleanType status;
+
+    MagickStatusType flags;
+
+    /*
+     Parse levels.
+     */
+    if (levels == (char *) NULL)
+        return(MagickFalse);
+
+    flags=ParseGeometry(levels,&geometry_info);
+    black_point=geometry_info.rho;
+    white_point=(double) QuantumRange;
+    if ((flags & SigmaValue) != 0)
+        white_point=geometry_info.sigma;
+
+    gamma=1.0;
+    if ((flags & XiValue) != 0)
+        gamma=geometry_info.xi;
+
+    if ((flags & PercentValue) != 0)
+    {
+        black_point*=(double) image->columns*image->rows/100.0;
+        white_point*=(double) image->columns*image->rows/100.0;
+    }
+
+    if ((flags & SigmaValue) == 0)
+        white_point=(double) QuantumRange-black_point;
+
+    ExceptionInfo *exception = AcquireExceptionInfo();
+
+    if ((flags & AspectValue ) == 0)
+    {
+        ChannelType channel_mask=SetImageChannelMask(image, DefaultChannels);
+        status=LevelImage(image,black_point,white_point,gamma,exception);
+        (void) SetImageChannelMask(image,channel_mask);
+    }
+    else
+    {
+        status=LevelizeImage(image,black_point,white_point,gamma,exception);
+    }
+
+    DestroyExceptionInfo(exception);
+
+    return status;
+}
+#endif
 
 
 /*
@@ -560,7 +618,7 @@ unsigned char* getByteArrayFieldValue(JNIEnv *env,
 
     /* Get and copy the array elements */
     byteArray = (jbyte *) (*env)->GetByteArrayElements(env, byteArrayObj, 0);
-    byteArrayCpy = (unsigned char *) AcquireMemory(*size);
+    byteArrayCpy = (unsigned char *) AcquireMagickMemory(*size);
     if (byteArray == NULL) {
         return NULL;
     }
@@ -612,36 +670,55 @@ int getRectangle(JNIEnv *env, jobject jRect, RectangleInfo *iRect)
  *
  * Input:
  *   env           Java VM environment
- *   jPixelPacket  an instance of magick.PixelPacket
+ *   jPixel  an instance of magick.PixelPacket
  *
  * Output:
- *   iPixelPacket  to be initilised by values in jPixelPacket
+ *   iPixel  to be initilised by values in jPixel
  *
  * Return:
  *   non-zero   if successful
  *   zero       if failed
  */
 int getPixelPacket(JNIEnv *env,
-		   jobject jPixelPacket,
-		   PixelPacket *iPixelPacket)
+		   jobject jPixel,
+#if MagickLibVersion < 0x700
+		   PixelPacket *iPixel)
+#else
+		   PixelInfo *iPixel)
+#endif
 {
-  jint red, green, blue, opacity;
+  jint red, green, blue, transparency;
+
   int successful =
-	getIntFieldValue(env, jPixelPacket, "red", NULL,
+    getIntFieldValue(env, jPixel, "red", NULL,
                          &red) &&
-	getIntFieldValue(env, jPixelPacket, "green", NULL,
+    getIntFieldValue(env, jPixel, "green", NULL,
                          &green) &&
-        getIntFieldValue(env, jPixelPacket, "blue", NULL,
+    getIntFieldValue(env, jPixel, "blue", NULL,
                          &blue) &&
-	getIntFieldValue(env, jPixelPacket, "opacity", NULL,
-                         &opacity);
+#if MagickLibVersion < 0x700
+    getIntFieldValue(env, jPixel, "opacity", NULL,
+                         &transparency);
+#else
+    getIntFieldValue(env, jPixel, "alpha", NULL,
+                         &transparency);
+#endif
+
   if (!successful) {
       return successful;
   }
-  iPixelPacket->red = (Quantum) red;
-  iPixelPacket->green = (Quantum) green;
-  iPixelPacket->blue = (Quantum) blue;
-  iPixelPacket->opacity = (Quantum) opacity;
+
+
+  iPixel->red = (Quantum) red;
+  iPixel->green = (Quantum) green;
+  iPixel->blue = (Quantum) blue;
+#if MagickLibVersion < 0x700
+  iPixel->opacity =
+#else
+  iPixel->alpha =
+#endif
+    (Quantum) transparency;
+
   return successful;
 }
 
@@ -713,7 +790,7 @@ void setHandleAttribute(JNIEnv *env, char **attribVar, jstring jstr)
 {
     const char *cstr = NULL;
     if (*attribVar != NULL) {
-	RelinquishMagickMemory(*attribVar);
+        RelinquishMagickMemory(*attribVar);
     }
     cstr = (*env)->GetStringUTFChars(env, jstr, 0);
     *attribVar = (char *) AcquireString(cstr);
