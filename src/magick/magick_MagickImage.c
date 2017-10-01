@@ -83,7 +83,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_initMultiImage
         if (image == NULL) {
             throwMagickApiException(env, "Unable to clone image", exception);
             DestroyExceptionInfo(exception);
-            DestroyImages(newImage);
+            DestroyImageList(newImage);
             return;
         }
 
@@ -105,7 +105,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_initMultiImage
     /* Set the image handle */
     image = (Image*) getHandle(env, self, "magickImageHandle", &fieldID);
     if (image != NULL) {
-        DestroyImages(image);
+        DestroyImageList(image);
     }
     setHandle(env, self, "magickImageHandle", (void*) newImage, &fieldID);
 }
@@ -139,7 +139,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_allocateImage
     /* Get the old image handle and deallocate it (if required). */
     oldImage = (Image*) getHandle(env, self, "magickImageHandle", &fieldID);
     if (oldImage != NULL) {
-	DestroyImages(oldImage);
+	DestroyImageList(oldImage);
     }
 
     /* Store the image into the handle. */
@@ -189,7 +189,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_readImage
     /* Get the old image handle and deallocate it (if required). */
     oldImage = (Image*) getHandle(env, self, "magickImageHandle", &fieldID);
     if (oldImage != NULL) {
-	DestroyImages(oldImage);
+	DestroyImageList(oldImage);
     }
 
     /* Store the image into the handle. */
@@ -242,7 +242,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_pingImage
     // Get the old image handle and deallocate it (if required).
     oldImage = (Image*) getHandle(env, self, "magickImageHandle", &fieldID);
     if (oldImage != NULL) {
-	DestroyImages(oldImage);
+	DestroyImageList(oldImage);
     }
 
     // Store the image into the handle.
@@ -453,7 +453,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_addNoiseImage
 
     newImage = newImageObject(env, noisyImage);
     if (newImage == NULL) {
-	DestroyImages(noisyImage);
+	DestroyImageList(noisyImage);
 	throwMagickException(env, "Cannot create new MagickImage object");
 	return NULL;
     }
@@ -513,7 +513,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_blurImage
 
     newObj = newImageObject(env, blurredImage);
     if (newObj == NULL) {
-	DestroyImages(blurredImage);
+	DestroyImageList(blurredImage);
 	throwMagickException(env, "Unable to create new blurred image");
 	return NULL;
     }
@@ -594,7 +594,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_charcoalImage
 
     newObj = newImageObject(env, charcoalImage);
     if (newObj == NULL) {
-	DestroyImages(charcoalImage);
+	DestroyImageList(charcoalImage);
 	throwMagickException(env, "Unable to create new charcoal image");
 	return NULL;
     }
@@ -640,7 +640,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_borderImage
 
     newObj = newImageObject(env, borderedImage);
     if (newObj == NULL) {
-	DestroyImages(borderedImage);
+	DestroyImageList(borderedImage);
 	throwMagickException(env, "Unable to create border image");
 	return NULL;
     }
@@ -714,7 +714,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_chopImage
 
     newObj = newImageObject(env, choppedImage);
     if (newObj == NULL) {
-	DestroyImages(choppedImage);
+	DestroyImageList(choppedImage);
 	throwMagickException(env, "Unable to chop image");
 	return NULL;
     }
@@ -771,7 +771,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_colorizeImage
 
     newObj = newImageObject(env, newImage);
     if (newObj == NULL) {
-	DestroyImages(newImage);
+	DestroyImageList(newImage);
 	throwMagickException(env, "Unable to create colorized image");
 	return NULL;
     }
@@ -927,7 +927,7 @@ JNIEXPORT void JNICALL
     /* Get the old image handle and deallocate it (if required). */
     oldImage = (Image*) getHandle(env, self, "magickImageHandle", &fieldID);
     if (oldImage != NULL) {
-	DestroyImages(oldImage);
+	DestroyImageList(oldImage);
     }
 
     /* Store the image into the handle. */
@@ -989,7 +989,7 @@ JNIEXPORT void JNICALL
     /* Get the old image handle and deallocate it (if required). */
     oldImage = (Image*) getHandle(env, self, "magickImageHandle", &fieldID);
     if (oldImage != NULL) {
-	DestroyImages(oldImage);
+	DestroyImageList(oldImage);
     }
 
     /* Store the image into the handle. */
@@ -1050,7 +1050,7 @@ JNIEXPORT void JNICALL
     /* Get the old image handle and deallocate it (if required). */
     oldImage = (Image*) getHandle(env, self, "magickImageHandle", &fieldID);
     if (oldImage != NULL) {
-	DestroyImages(oldImage);
+	DestroyImageList(oldImage);
     }
 
     /* Store the image into the handle. */
@@ -1098,7 +1098,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_cropImage
 
     newObj = newImageObject(env, croppedImage);
     if (newObj == NULL) {
-	DestroyImages(croppedImage);
+	DestroyImageList(croppedImage);
 	throwMagickException(env, "Unable to crop image");
 	return NULL;
     }
@@ -1158,7 +1158,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_edgeImage
 
     newObj = newImageObject(env, edgedImage);
     if (newObj == NULL) {
-	DestroyImages(edgedImage);
+	DestroyImageList(edgedImage);
 	throwMagickException(env, "Unable to create new edged image");
 	return NULL;
     }
@@ -1197,7 +1197,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_embossImage
 
     newObj = newImageObject(env, embossedImage);
     if (newObj == NULL) {
-	DestroyImages(embossedImage);
+	DestroyImageList(embossedImage);
 	throwMagickException(env, "Unable to create new embossed image");
 	return NULL;
     }
@@ -1236,7 +1236,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_enhanceImage
 
     newImage = newImageObject(env, enhancedImage);
     if (newImage == NULL) {
-	DestroyImages(enhancedImage);
+	DestroyImageList(enhancedImage);
 	throwMagickException(env, "Cannot create new MagickImage object");
 	return NULL;
     }
@@ -1260,7 +1260,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_destroyImages
 
     image = (Image*) getHandle(env, self, "magickImageHandle", &handleFid);
     if (image != NULL) {
-	DestroyImages(image);
+	DestroyImageList(image);
     }
     setHandle(env, self, "magickImageHandle", NULL, &handleFid);
 }
@@ -1422,7 +1422,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_flipImage
 
     newImage = newImageObject(env, flippedImage);
     if (newImage == NULL) {
-	DestroyImages(flippedImage);
+	DestroyImageList(flippedImage);
 	throwMagickException(env, "Cannot create new MagickImage object");
 	return NULL;
     }
@@ -1462,7 +1462,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_flopImage
 
     newImage = newImageObject(env, floppedImage);
     if (newImage == NULL) {
-	DestroyImages(floppedImage);
+	DestroyImageList(floppedImage);
 	throwMagickException(env, "Cannot create new MagickImage object");
 	return NULL;
     }
@@ -1502,7 +1502,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_gaussianBlurImage
 
     newObj = newImageObject(env, blurredImage);
     if (newObj == NULL) {
-	DestroyImages(blurredImage);
+	DestroyImageList(blurredImage);
 	throwMagickException(env, "Unable to create Gaussian blurred image");
 	return NULL;
     }
@@ -1541,7 +1541,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_implodeImage
 
     newObj = newImageObject(env, implodedImage);
     if (newObj == NULL) {
-	DestroyImages(implodedImage);
+	DestroyImageList(implodedImage);
 	throwMagickException(env, "Unable to create imploded image");
 	return NULL;
     }
@@ -1664,7 +1664,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_magnifyImage
 
     newImage = newImageObject(env, magnifiedImage);
     if (newImage == NULL) {
-	DestroyImages(magnifiedImage);
+	DestroyImageList(magnifiedImage);
 	throwMagickException(env, "Cannot create new MagickImage object");
 	return NULL;
     }
@@ -1730,7 +1730,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_medianFilterImage
 
     newObj = newImageObject(env, filteredImage);
     if (newObj == NULL) {
-	DestroyImages(filteredImage);
+	DestroyImageList(filteredImage);
 	throwMagickException(env, "Unable to create median-filtered image");
 	return NULL;
     }
@@ -1806,7 +1806,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_minifyImage
 
     newImage = newImageObject(env, minifiedImage);
     if (newImage == NULL) {
-	DestroyImages(minifiedImage);
+	DestroyImageList(minifiedImage);
 	throwMagickException(env, "Cannot create new MagickImage object");
 	return NULL;
     }
@@ -1873,7 +1873,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_oilPaintImage
 
     newObj = newImageObject(env, paintedImage);
     if (newObj == NULL) {
-	DestroyImages(paintedImage);
+	DestroyImageList(paintedImage);
 	throwMagickException(env, "Unable to create oil-paint image");
 	return NULL;
     }
@@ -1933,7 +1933,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_reduceNoiseImage
 
     newObj = newImageObject(env, filteredImage);
     if (newObj == NULL) {
-	DestroyImages(filteredImage);
+	DestroyImageList(filteredImage);
 	throwMagickException(env, "Unable to create peak-filtered image");
 	return NULL;
     }
@@ -2045,7 +2045,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_rollImage
 
     newImage = newImageObject(env, rolledImage);
     if (newImage == NULL) {
-	DestroyImages(rolledImage);
+	DestroyImageList(rolledImage);
 	throwMagickException(env, "Cannot create new MagickImage object");
 	return NULL;
     }
@@ -2085,7 +2085,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_sampleImage
 
     newImage = newImageObject(env, sampledImage);
     if (newImage == NULL) {
-	DestroyImages(sampledImage);
+	DestroyImageList(sampledImage);
 	throwMagickException(env, "Cannot create new MagickImage object");
 	return NULL;
     }
@@ -2254,7 +2254,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_scaleImage
 
     returnedImage = newImageObject(env, scaledImage);
     if (returnedImage == NULL) {
-	DestroyImages(scaledImage);
+	DestroyImageList(scaledImage);
 	throwMagickException(env, "Unable to construct magick.MagickImage");
 	return NULL;
     }
@@ -2305,7 +2305,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_resizeImage
 
     returnedImage = newImageObject(env, resizedImage);
     if (returnedImage == NULL) {
-        DestroyImages(resizedImage);
+        DestroyImageList(resizedImage);
         throwMagickException(env, "Unable to construct magick.MagickImage");
         return NULL;
     }
@@ -2357,7 +2357,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_extentImage
 
     returnedImage = newImageObject(env, extendedImage);
     if (returnedImage == NULL) {
-    DestroyImages(extendedImage);
+    DestroyImageList(extendedImage);
     throwMagickException(env, "Unable to construct magick.MagickImage");
     return NULL;
     }
@@ -2399,7 +2399,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_spreadImage
 
     newObj = newImageObject(env, randomizedImage);
     if (newObj == NULL) {
-	DestroyImages(randomizedImage);
+	DestroyImageList(randomizedImage);
 	throwMagickException(env, "Unable to create spread image");
 	return NULL;
     }
@@ -2438,7 +2438,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_swirlImage
 
     newObj = newImageObject(env, swirledImage);
     if (newObj == NULL) {
-	DestroyImages(swirledImage);
+	DestroyImageList(swirledImage);
 	throwMagickException(env, "Unable to create swirled image");
 	return NULL;
     }
@@ -2620,7 +2620,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_unsharpMaskImage
 
     newObj = newImageObject(env, unsharpedImage);
     if (newObj == NULL) {
-	DestroyImages(unsharpedImage);
+	DestroyImageList(unsharpedImage);
 	throwMagickException(env, "Unable to create unsharped image");
 	return NULL;
     }
@@ -2659,7 +2659,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_waveImage
 
     newObj = newImageObject(env, wavedImage);
     if (newObj == NULL) {
-	DestroyImages(wavedImage);
+	DestroyImageList(wavedImage);
 	throwMagickException(env, "Unable to create waved image");
 	return NULL;
     }
@@ -2744,7 +2744,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_uniqueImageColors
 
     newObj = newImageObject(env, newImage);
     if (newObj == NULL) {
-        DestroyImages(newImage);
+        DestroyImageList(newImage);
         throwMagickException(env, "Unable to create a new MagickImage object");
         return NULL;
     }
@@ -2784,7 +2784,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_zoomImage
 
     newObj = newImageObject(env, newImage);
     if (newObj == NULL) {
-	DestroyImages(newImage);
+	DestroyImageList(newImage);
 	throwMagickException(env, "Unable to create a new MagickImage object");
 	return NULL;
     }
@@ -3118,7 +3118,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_rotateImage
 
     newObj = newImageObject(env, newImage);
     if (newObj == NULL) {
-	DestroyImages(newImage);
+	DestroyImageList(newImage);
 	throwMagickException(env, "Unable to create a new MagickImage object");
 	return NULL;
     }
@@ -3156,7 +3156,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_shearImage
 
     newObj = newImageObject(env, newImage);
     if (newObj == NULL) {
-	DestroyImages(newImage);
+	DestroyImageList(newImage);
 	throwMagickException(env, "Unable to create a new MagickImage object");
 	return NULL;
     }
@@ -3244,7 +3244,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_sharpenImage
 
     newObj = newImageObject(env, sharpenedImage);
     if (newObj == NULL) {
-	DestroyImages(sharpenedImage);
+	DestroyImageList(sharpenedImage);
 	throwMagickException(env, "Unable to create sharpened image");
 	return NULL;
     }
@@ -3282,7 +3282,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_despeckleImage
 
     newObj = newImageObject(env, despeckledImage);
     if (newObj == NULL) {
-	DestroyImages(despeckledImage);
+	DestroyImageList(despeckledImage);
 	throwMagickException(env, "Unable to create despeckle image");
 	return NULL;
     }
@@ -3324,7 +3324,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_convolveImage
 
     newObj = newImageObject(env, convolvedImage);
     if (newObj == NULL) {
-	DestroyImages(convolvedImage);
+	DestroyImageList(convolvedImage);
 	throwMagickException(env, "Unable to create convolved image");
 	return NULL;
     }
@@ -3448,7 +3448,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_blobToImage
     /* Get the old image handle and deallocate it (if required). */
     oldImage = (Image*) getHandle(env, self, "magickImageHandle", &fieldID);
     if (oldImage != NULL) {
-        DestroyImages(oldImage);
+        DestroyImageList(oldImage);
     }
 
     /* Store the image into the handle. */
@@ -3609,7 +3609,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_coalesceImages
 
     returnedImage = newImageObject(env, coalescedImage);
     if (returnedImage == NULL) {
-        DestroyImages(coalescedImage);
+        DestroyImageList(coalescedImage);
         throwMagickException(env, "Unable to construct magick.MagickImage");
         return NULL;
     }
@@ -3651,7 +3651,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_disposeImages
 
     returnedImage = newImageObject(env, disposedImage);
     if (returnedImage == NULL) {
-        DestroyImages(disposedImage);
+        DestroyImageList(disposedImage);
         throwMagickException(env, "Unable to construct magick.MagickImage");
         return NULL;
     }
@@ -4188,7 +4188,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_montageImages
 
     newObj = newImageObject(env, montage);
     if (newObj == NULL) {
-        DestroyImages(montage);
+        DestroyImageList(montage);
         throwMagickException(env, "Unable to create montage");
         return NULL;
     }
@@ -4272,7 +4272,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_autoOrientImage
 
     newObj = newImageObject(env, image);
     if (newObj == NULL) {
-        DestroyImages(image);
+        DestroyImageList(image);
         throwMagickException(env, "Unable to auto-orient image");
         return NULL;
     }
@@ -4310,7 +4310,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_averageImages
 
     newObj = newImageObject(env, average);
     if (newObj == NULL) {
-        DestroyImages(average);
+        DestroyImageList(average);
         throwMagickException(env, "Unable to create average image");
         return NULL;
     }
@@ -4763,7 +4763,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_trimImage
 
     newObj = newImageObject(env, trimmedImage);
     if (newObj == NULL) {
-	DestroyImages(trimmedImage);
+	DestroyImageList(trimmedImage);
 	throwMagickException(env, "Unable to create trimmed image");
 	return NULL;
     }
@@ -4830,7 +4830,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_blurImageChannel
 
     newObj = newImageObject(env, blurredImage);
     if (newObj == NULL) {
-	DestroyImages(blurredImage);
+	DestroyImageList(blurredImage);
 	throwMagickException(env, "Unable to create new blurred image");
 	return NULL;
     }
