@@ -15,7 +15,7 @@
 Summary: open source Java interface of ImageMagick
 Name: jmagick
 # check configure.in, too !
-Version: %(rpm -q --queryformat '%{version}\n' ImageMagick)
+Version: %(awk -F[\.] '{print $1"."$2"."$3}' <<< `rpm -q --queryformat '%{version}\n' ImageMagick`)
 Release: 6
 License: GPL 
 Group: Application/Java
