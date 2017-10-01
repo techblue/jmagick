@@ -502,7 +502,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_blurImage
 	return NULL;
     }
 
-    GetExceptionInfo(exception);
+    exception=AcquireExceptionInfo();
     blurredImage = BlurImage(image, radius, sigma, exception);
     if (blurredImage == NULL) {
 	throwMagickApiException(env, "Cannot blur image", exception);
@@ -2180,7 +2180,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_setColorFuzz
 JNIEXPORT jobject JNICALL Java_magick_MagickImage_getBoundingBox
   (JNIEnv *env, jobject self)
 {
-    ExceptionInfo exception;
+    ExceptionInfo *exception;
     Image *image = NULL;
     jclass rectangleClass;
     jmethodID consMethodID;
@@ -2204,16 +2204,16 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_getBoundingBox
     return NULL;
     }
 
-    GetExceptionInfo(&exception);
-    RectangleInfo info = GetImageBoundingBox(image, &exception);
+    exception=AcquireExceptionInfo();
+    RectangleInfo info = GetImageBoundingBox(image, exception);
     rectangle = (*env)->NewObject(env, rectangleClass, consMethodID,
                   info.x, info.y, info.width, info.height);
     if (rectangle == NULL) {
     throwMagickException(env, "Unable to construct java.awt.Rectangle");
-	DestroyExceptionInfo(&exception);
+    DestroyExceptionInfo(exception);
     return NULL;
     }
-	DestroyExceptionInfo(&exception);
+    DestroyExceptionInfo(exception);
 
     return rectangle;
 }
@@ -2330,7 +2330,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_extentImage
     Image *extendedImage = NULL;
     jobject returnedImage;
     jfieldID magickImageHandleFid = NULL;
-    ExceptionInfo exception;
+    ExceptionInfo *exception;
     int i, numImages;
 
     image = (Image*) getHandle(env, self, "magickImageHandle",
@@ -2346,14 +2346,14 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_extentImage
     geometry.height=rows;
     GravityAdjustGeometry(image->columns,image->rows,gravity,&geometry);
 
-    GetExceptionInfo(&exception);
-    extendedImage = ExtentImage(image, &geometry, &exception);
+    exception=AcquireExceptionInfo();
+    extendedImage = ExtentImage(image, &geometry, exception);
     if (extendedImage == NULL) {
-    throwMagickApiException(env, "Unable to extent image", &exception);
-    DestroyExceptionInfo(&exception);
+    throwMagickApiException(env, "Unable to extent image", exception);
+    DestroyExceptionInfo(exception);
     return NULL;
     }
-    DestroyExceptionInfo(&exception);
+    DestroyExceptionInfo(exception);
 
     returnedImage = newImageObject(env, extendedImage);
     if (returnedImage == NULL) {
@@ -4408,7 +4408,7 @@ JNIEXPORT jint JNICALL Java_magick_MagickImage_getImageType
        throwMagickException(env, "Cannot obtain image handle");
        return -1;
     }
-    GetExceptionInfo(exception);
+    exception=AcquireExceptionInfo();
     imageType = GetImageType( image, exception);
     DestroyExceptionInfo(exception);
     return imageType;
