@@ -1559,6 +1559,26 @@ public class MagickImage extends Magick {
 
 
     /**
+     * GetNextImageProfile() gets the next profile name associated with an image.
+     *
+     * @return the profile name
+     * @author Jonathan Horowitz
+     * @throws MagickException if an error occurs
+     * @see <a href="http://www.imagemagick.org/api/profile.php#GetNextImageProfile">The ImageMagick GetNextImageProfile documentation</a>
+     */
+    public native String getNextImageProfile()
+        throws MagickException;
+
+     /**
+      * Resets the image profile iterator.
+      *
+      * @author Jonathan Horowitz
+      * @throws MagickException if an error occurs
+      */
+     public native void resetImageProfileIterator()
+       throws MagickException;
+
+    /**
      * Create a montage of all the images in the list.
      * @param montageInfo parameter used in the creation of the montage
      * @return a montage of all images in the list
@@ -1936,4 +1956,16 @@ public class MagickImage extends Magick {
     	}
     	return retTypeMetric;
     }
+
+    /**
+     * Sets the colorspace member of the Image structure.
+     *
+     * @param colorspace An unsigned integer value defines which \
+                         colorspace to transform the image to
+     * @return a boolean value indicating success
+     * @author Jonathan Horowitz
+     * @throws MagickException on error
+     */
+    public native boolean setImageColorspace(int colorspace)
+      throws MagickException;
 }

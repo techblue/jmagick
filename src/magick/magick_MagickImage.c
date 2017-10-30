@@ -4149,6 +4149,49 @@ JNIEXPORT jbyteArray JNICALL Java_magick_MagickImage_getImageProfile
 }
 
 
+/*
+ * Class:     magick_MagickImage
+ * Method:    getNextImageProfile
+ */
+JNIEXPORT jstring JNICALL Java_magick_MagickImage_getNextImageProfile
+	(JNIEnv *env, jobject self)
+{
+	Image *image = NULL;
+	const char *profileName;
+
+	image = (Image *) getHandle(env, self, "magickImageHandle", NULL);
+	if (image == NULL) {
+		throwMagickException(env, "No image to set file name");
+		return JNI_FALSE;
+	}
+
+	profileName = GetNextImageProfile(image);
+
+	if (profileName == (char *) NULL) {
+		return NULL;
+	}
+	
+	return (*env)->NewStringUTF(env, profileName);
+}
+
+
+/*
+ * Class:     magick_MagickImage
+ * Method:    resetImageProfileIterator
+ */
+JNIEXPORT void JNICALL Java_magick_MagickImage_resetImageProfileIterator
+ (JNIEnv *env, jobject self)
+{
+    Image               *image = NULL;
+
+    image = (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+        throwMagickException(env, "No image to set reset page");
+        return;
+    }
+
+    ResetImageProfileIterator(image);
+}
 
 
 /*
@@ -4961,4 +5004,21 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_strip
 
     retVal = StripImage(image);
     return(retVal);
+}
+
+/*
+ * Class:     magick_MagickImage
+ * Method:    setImageColorspace
+ * Signature: (I)Z
+ */
+JNIEXPORT jboolean JNICALL Java_magick_MagickImage_setImageColorspace
+    (JNIEnv *env, jobject self, jint colorspace)
+{
+    Image *image =
+        (Image*) getHandle(env, self, "magickImageHandle", NULL);
+    if (image == NULL) {
+        throwMagickException(env, "Cannot obtain image handle");
+        return JNI_FALSE;
+    }
+    return SetImageColorspace(image, colorspace);
 }
