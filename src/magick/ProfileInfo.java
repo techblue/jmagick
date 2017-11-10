@@ -44,7 +44,7 @@ public class ProfileInfo {
 
     /**
      * Get the profile name.
-		 * @Deprecated After ImageMagick 5.5.7 (?) names are not available
+     * @deprecated After ImageMagick 5.5.7 (?) names are not available
      * @return the profile name
      */
     public String getName()
@@ -54,6 +54,8 @@ public class ProfileInfo {
 
     /**
      * Set the profile name.
+     *
+     * @param name the new profile name attribute value
      */
     public void setName(String name)
     {
@@ -62,6 +64,7 @@ public class ProfileInfo {
 
     /**
      * Get the profile info.
+     *
      * @return the profile info
      */
     public byte[] getInfo()
@@ -71,6 +74,8 @@ public class ProfileInfo {
 
     /**
      * Set the profile info.
+     *
+     * @param info the new profile info attribute value
      */
     public void setInfo(byte[] info)
     {

@@ -3,7 +3,7 @@ package magick;
 public interface GeometryFlags {
 	/*
 		Important! Constant values should correspond to:
-		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.7.7/magick/geometry.h
+		http://git.imagemagick.org/repos/ImageMagick/blob/master/MagickCore/geometry.h
 	*/
 
 	public static final int NoValue = 0x0000;
@@ -21,15 +21,15 @@ public interface GeometryFlags {
 	public static final int PsiNegative = 0x0040;
 	public static final int YNegative = 0x0040;
 	public static final int ChiNegative = 0x0080;
-	public static final int PercentValue = 0x1000;
-	public static final int AspectValue = 0x2000;
-	public static final int NormalizeValue = 0x2000;
-	public static final int LessValue = 0x4000;
-	public static final int GreaterValue = 0x8000;
-	public static final int MinimumValue = 0x10000;
-	public static final int CorrelateNormalizeValue = 0x10000;
-	public static final int AreaValue = 0x20000;
-	public static final int DecimalValue = 0x40000;
+	public static final int PercentValue = 0x1000;				/* '%'  percentage of something */
+	public static final int AspectValue = 0x2000;				/* '!'  resize no-aspect - special use flag */
+	public static final int NormalizeValue = 0x2000;			/* '!'  ScaleKernelValue() in morphology.c */
+	public static final int LessValue = 0x4000;					/* '<'  resize smaller - special use flag */
+	public static final int GreaterValue = 0x8000;				/* '>'  resize larger - spacial use flag */
+	public static final int MinimumValue = 0x10000;				/* '^'  special handling needed */
+	public static final int CorrelateNormalizeValue = 0x10000;	/* '^' see ScaleKernelValue() */
+	public static final int AreaValue = 0x20000;				/* '@'  resize to area - special use flag */
+	public static final int DecimalValue = 0x40000;				/* '.'  floating point numbers found */
+	public static final int SeparatorValue = 0x80000;			/* 'x'  separator found  */
 	public static final int AllValues = 0x7fffffff;
-
 }

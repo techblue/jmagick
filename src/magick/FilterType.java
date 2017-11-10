@@ -3,42 +3,40 @@ package magick;
 public interface FilterType {
 	/*
 		Important! Constant values should correspond to:
-		http://trac.imagemagick.org/browser/ImageMagick/branches/ImageMagick-6.7.7/magick/resample.h
+		http://git.imagemagick.org/repos/ImageMagick/blob/master/MagickCore/resample.h
 	*/
-	public final static int UndefinedFilter = 0;
-	public final static int PointFilter = 1;
-	public final static int BoxFilter = 2;
-	public final static int TriangleFilter = 3;
-	public final static int HermiteFilter = 4;
-	public final static int HanningFilter = 5;
-	public final static int HammingFilter = 6;
-	public final static int BlackmanFilter = 7;
-	public final static int GuassianFilter = 8;
-	public final static int QuadraticFilter = 9;
-	public final static int CubicFilter = 10;
-	public final static int CatromFilter = 11;
-	public final static int MitchellFilter = 12;
-	// Values after this point were changed in an incompatible fashion in IM 6.6.5.
-	public final static int JincFilter = 13;
-	@Deprecated
-	public final static int BesselFilter = 13;
-	public final static int SincFilter = 14;
-	public final static int SincFastFilter = 15;
-	public final static int KaiserFilter = 16;
-	public final static int WelshFilter = 17;
-	public final static int ParzenFilter = 18;
-	public final static int BohmanFilter = 19;
-	public final static int BartlettFilter = 20;
-	public final static int LagrangeFilter = 21;
-	public final static int LanczosFilter = 22;
-	public final static int LanczosSharpFilter = 23;
-	public final static int Lanczos2Filter = 24;
-	public final static int Lanczos2SharpFilter = 25;
-	public final static int RobidouxFilter = 26;
-	public final static int RobidouxSharpFilter = 27;  // Added in IM 6.7.7
-	public final static int CosineFilter = 28;  // Added in IM 6.7.7
-	// a count of all the filters, not a real filter
-	public final static int SentinelFilter = 29;
+	public static final int UndefinedFilter = 0;
+	public static final int PointFilter = 1;
+	public static final int BoxFilter = 2;
+	public static final int TriangleFilter = 3;
+	public static final int HermiteFilter = 4;
+	public static final int HannFilter = 5;
+	public static final int HammingFilter = 6;
+	public static final int BlackmanFilter = 7;
+	public static final int GaussianFilter = 8;
+	public static final int QuadraticFilter = 9;
+	public static final int CubicFilter = 10;
+	public static final int CatromFilter = 11;
+	public static final int MitchellFilter = 12;
+	public static final int JincFilter = 13;
+	public static final int SincFilter = 14;
+	public static final int SincFastFilter = 15;
+	public static final int KaiserFilter = 16;
+	public static final int WelchFilter = 17;
+	public static final int ParzenFilter = 18;
+	public static final int BohmanFilter = 19;
+	public static final int BartlettFilter = 20;
+	public static final int LagrangeFilter = 21;
+	public static final int LanczosFilter = 22;
+	public static final int LanczosSharpFilter = 23;
+	public static final int Lanczos2Filter = 24;
+	public static final int Lanczos2SharpFilter = 25;
+	public static final int RobidouxFilter = 26;
+	public static final int RobidouxSharpFilter = 27;
+	public static final int CosineFilter = 28;
+	public static final int SplineFilter = 29;
+	public static final int LanczosRadiusFilter = 30;
+	public static final int SentinelFilter = 31;		/* a count of all the filters, not a real filter */
 }
 
 

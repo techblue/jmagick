@@ -14,6 +14,9 @@ public class MagickInfo extends Magick {
 
     /**
      * Constructor.
+     *
+     * @param name the name
+     * @throws MagickException on error
      */
     public MagickInfo(String name)
 	throws MagickException
@@ -32,6 +35,9 @@ public class MagickInfo extends Magick {
 
     /**
      * Initialise the MagickInfo structure.
+     *
+     * @param name the name
+     * @throws MagickException on error
      */
     public native void init(String name)
 	throws MagickException;
@@ -44,6 +50,9 @@ public class MagickInfo extends Magick {
 
     /**
      * Return the description  attribute of the handle.
+     *
+     * @return the description
+     * @throws MagickException on error
      */
     public native String getDescription()
 	throws MagickException;

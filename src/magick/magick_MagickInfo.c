@@ -4,10 +4,13 @@
 #include <stdio.h>
 #include <time.h>
 #include <sys/types.h>
-#include <magick/api.h>
+#if defined (IMAGEMAGICK_HEADER_STYLE_7)
+#    include <MagickCore/MagickCore.h>
+#else
+#    include <magick/api.h>
+#endif
 #include "magick_MagickInfo.h"
 #include "jmagick.h"
-
 
 /*
  * Class:     magick_MagickInfo
@@ -19,28 +22,28 @@ JNIEXPORT void JNICALL Java_magick_MagickInfo_init
 {
     MagickInfo *magickInfo = NULL;
     jfieldID fid = 0;
-    ExceptionInfo exception;
+    ExceptionInfo *exception;
     const char *cstr = NULL;
     
     magickInfo = (MagickInfo*) getHandle(env, self, "magickInfoHandle", &fid);
 
-    GetExceptionInfo(&exception);
+    exception = AcquireExceptionInfo();
 
     cstr = (*env)->GetStringUTFChars(env, modname, 0);
     if (cstr == NULL)
         return; // out of memory
     
-    magickInfo = (MagickInfo*) GetMagickInfo(cstr, &exception);
+    magickInfo = (MagickInfo*) GetMagickInfo(cstr, exception);
        
     // release the string
     (*env)->ReleaseStringUTFChars(env, modname, cstr);
 
     if (magickInfo == NULL) {
-        throwMagickApiException(env, "Unable to read magick info", &exception);
-        DestroyExceptionInfo(&exception);
+        throwMagickApiException(env, "Unable to read magick info", exception);
+        DestroyExceptionInfo(exception);
         return;
     }
-    DestroyExceptionInfo(&exception);
+    DestroyExceptionInfo(exception);
 
     setHandle(env, self, "magickInfoHandle", (void*) magickInfo, &fid);
 }

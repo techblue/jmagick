@@ -15,27 +15,30 @@ import java.awt.Rectangle;
 public class Magick {
 
     static {
-        String clprop = System.getProperty("jmagick.systemclassloader");
-        if (clprop == null || clprop.equalsIgnoreCase("yes")) {
-            try {
-                ClassLoader.getSystemClassLoader()
-                    .loadClass("magick.MagickLoader").newInstance();
+        String bprop = System.getProperty("jmagick.usingbundledlib");
+        if (!"yes".equalsIgnoreCase(bprop)) {
+            String clprop = System.getProperty("jmagick.systemclassloader");
+            if (clprop == null || clprop.equalsIgnoreCase("yes")) {
+                try {
+                    ClassLoader.getSystemClassLoader()
+                        .loadClass("magick.MagickLoader").newInstance();
+                }
+                catch(ClassNotFoundException e) {
+                    throw new RuntimeException("Can't load MagickLoader " +
+                                               "(class not found)");
+                }
+                catch(IllegalAccessException e) {
+                    throw new RuntimeException("Access to SystemClassLoader "+
+                                               "denied (IllegalAccessException)");
+                }
+                catch(InstantiationException e) {
+                    throw new RuntimeException("Can't instantiate MagicLoader " +
+                                               "(InstantiationException)");
+                }
             }
-            catch(ClassNotFoundException e) {
-                throw new RuntimeException("Can't load MagickLoader " +
-                                           "(class not found)");
+            else {
+                System.loadLibrary("JMagick");
             }
-            catch(IllegalAccessException e) {
-                throw new RuntimeException("Access to SystemClassLoader "+
-                                           "denied (IllegalAccessException)");
-            }
-            catch(InstantiationException e) {
-                throw new RuntimeException("Can't instantiate MagicLoader " +
-                                           "(InstantiationException)");
-            }
-        }
-        else {
-            System.loadLibrary("JMagick");
         }
         init();
     }
@@ -54,7 +57,7 @@ public class Magick {
      * four values (width, height, xoffset, yoffset) were
      * located in the string, and whether the x and y values
      * are negative.  In addition, there are flags to report
-     * any meta characters (%, !, <, and >).
+     * any meta characters (%, !, &lt;, and &gt;).
      * @param geometry String containing the geometry specifications
      * @param rect The rectangle of values x, y, width and height
      * @return bitmask indicating the values in the geometry string
@@ -65,6 +68,10 @@ public class Magick {
 
     /**
      * Gets an array of the names of the fonts that ImageMagick has that match the pattern
+     *
+     * @param pattern The query pattern
+     *
+     * @return array of font names.
      */
     public static native String[] queryFonts(String pattern);
 }
