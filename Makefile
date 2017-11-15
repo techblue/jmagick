@@ -29,6 +29,7 @@ dir:
 distclean: clean
 	@-rm Make.def config.cache config.log config.status
 	@-rm -rf $(JAVADOC_DIR)
+	@-rm -rf classes
 	@-rm -rf autom4te.cache
 
 javadoc:

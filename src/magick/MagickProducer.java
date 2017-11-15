@@ -25,7 +25,7 @@ public class MagickProducer
      */
     private MagickImage image = null;
 
-    private Vector consumers = null;
+    private Vector<ImageConsumer> consumers = null;
 
     /**
      * Constructor.
@@ -35,7 +35,7 @@ public class MagickProducer
     public MagickProducer(MagickImage image)
     {
 	this.image = image;
-	consumers = new Vector();
+	consumers = new Vector<ImageConsumer>();
     }
 
     /**
@@ -126,7 +126,7 @@ public class MagickProducer
 	}
 	for (int i = 0; i < consumers.size(); i++) {
 	    ImageConsumer aConsumer =
-		(ImageConsumer) consumers.elementAt(i);
+		consumers.elementAt(i);
 	    aConsumer.setHints(ImageConsumer.TOPDOWNLEFTRIGHT|
 			      ImageConsumer.COMPLETESCANLINES|
 			      ImageConsumer.SINGLEPASS|
