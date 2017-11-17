@@ -7,4 +7,10 @@ classes
 generated
 lib
 obj
-src/magick/.jnidep
+/aclocal.m4
+/config.log
+/config.status
+/configure
+/ltmain.sh
+/config.guess
+/config.sub
