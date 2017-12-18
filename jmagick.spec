@@ -57,7 +57,8 @@ into the ImageMagick API.
 #%patch2 -p1
 
 %build
-autoconf
+autoreconf --force --install
+automake --add-missing
 %{configure} --with-magick-home=%{magick_home} --with-magick-version=%{version}
 %{__make}
 
@@ -76,6 +77,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Mon Dec 18 2017 Jonathan Horowitz <jhorowitz@firedrum.com>
+- Switch autoconf to autoreconf and automake
+
 * Thu Jun  4 2009 John Morris <jman@ablesky.com> - 6.4.0-3
 - Try to compute magick_home macro automatically
 - Remove configure --jdk-home switch to grab JAVA_HOME from environment
