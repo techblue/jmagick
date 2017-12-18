@@ -1,7 +1,32 @@
 #ifndef __JMAGICK__
 #define __JMAGICK__
 
-#include <magick/image.h>
+#include <float.h>
+#include <string.h>
+#if defined (IMAGEMAGICK_HEADER_STYLE_7)
+#    include <MagickCore/image.h>
+#else
+#    include <magick/image.h>
+#endif
+#if MagickLibVersion >= 0x700
+MagickBooleanType LevelImageShim(Image *image,const char *levels);
+
+// This should be kept in sync with the struct defined in MagickCore/profile.c
+struct _ProfileInfo
+{
+  char
+    *name;
+
+  size_t
+    length;
+
+  unsigned char
+    *info;
+
+  size_t
+    signature;
+};
+#endif
 
 
 /*
@@ -167,7 +192,11 @@ int getRectangle(JNIEnv *env, jobject jRect, RectangleInfo *iRect);
  */
 int getPixelPacket(JNIEnv *env,
 		   jobject jPixelPacket,
+#if MagickLibVersion < 0x700
 		   PixelPacket *iPixelPacket);
+#else
+		   PixelInfo *iPixelInfo);
+#endif
 
 /*
  * Construct a new Java magick.MagickImage object and set the
@@ -230,7 +259,46 @@ void setProfileInfo(JNIEnv *env,
  */
 jobject getProfileInfo(JNIEnv *env, ProfileInfo *profileInfo);
 
+// Return whether a string represents the given double.
+static inline int aisd(double f, char* s) {
+  double r;
+  sscanf(s, "%lf", &r);
+  return r == f;
+}
+// Return the shortest lossless string representation of an IEEE double.
+// Guaranteed to fit in 23 characters (including the final '\0').
+static inline char* dtoa(char* res, double f) {
+  int i, j, lenF = 1e9;
+  char fmt[8];
+  int e = floor(log10(f)) + 1;
 
+  if (f > DBL_MAX) { sprintf(res, "1e999"); return res; }  // converts to Inf
+  if (f < -DBL_MAX) { sprintf(res, "-1e999"); return res; }  // converts to -Inf
+  if (isnan(f)) { sprintf(res, "NaN"); return res; }  // NaNs don't work under MSVCRT
+
+  // compute the shortest representation without exponent ("123000", "0.15")
+  if (!f || e>-4 && e<21) {
+    for (i=0; i<=20; i++) {
+      sprintf(fmt, "%%.%dlf", i);
+      sprintf(res, fmt, f);
+      if (aisd(f, res)) { lenF = strlen(res); break; }
+    }
+  }
+
+  if (!f) return res;
+
+  // compute the shortest representation with exponent ("123e3", "15e-2")
+  for (i=0; i<19; i++) {
+    sprintf(res, "%.0lfe%d", f * pow(10,-e), e); if (aisd(f, res)) break;
+    j = strlen(res); if (j >= lenF) break;
+    while (res[j] != 'e') j--;
+    res[j-1]--; if (aisd(f, res)) break;   // try mantissa -1
+    res[j-1]+=2; if (aisd(f, res)) break;  // try mantissa +1
+    e--;
+  }
+  if (lenF <= strlen(res)) sprintf(res, fmt, f);
+  return res;
+}
 
 /*
  * Convenience macro to set an attribute in the object handle.
@@ -369,6 +437,33 @@ JNIEXPORT void JNICALL funcName                                               \
     (*env)->ReleaseStringUTFChars(env, value, cstr);                          \
 }
 
+/*
+ * Convenience macro which does nothing. Used for removed attributes with no analog.
+ */
+#define setDeprecatedMethod(funcName, fieldName, handleName, handleType, fieldType)          \
+JNIEXPORT void JNICALL funcName                                               \
+    (JNIEnv *env, jobject self, fieldType value)                                \
+{}
+
+/*
+ * Convenience macro to get a string attribute which has been removed with no analog.
+ */
+#define getStringDeprecatedMethod(funcName, fieldName, handleName, handleType) \
+JNIEXPORT jstring JNICALL funcName                                            \
+    (JNIEnv *env, jobject self)                                               \
+{                                                                             \
+    return NULL;                                                              \
+}
+
+/*
+ * Convenience macro to get a string attribute which has been removed with no analog.
+ */
+#define getDeprecatedMethod(funcName, fieldName, handleName, handleType, fieldType)          \
+JNIEXPORT fieldType JNICALL funcName                                          \
+    (JNIEnv *env, jobject self)                                               \
+{                                                                             \
+    return (fieldType) 0;                                                     \
+}
 
 /*
  * Convenience macro to get a string attribute in the object handle.
@@ -426,6 +521,7 @@ JNIEXPORT void JNICALL funcName                                               \
 /*
  * Convenience macro to get a PixelPacket attribute in the object handle.
  */
+#if MagickLibVersion < 0x700
 #define getPixelPacketMethod(funcName, fieldName, handleName, handleType)     \
 JNIEXPORT jobject JNICALL funcName                                            \
     (JNIEnv *env, jobject self)                                               \
@@ -467,6 +563,49 @@ JNIEXPORT jobject JNICALL funcName                                            \
                                                                               \
     return jPixelPacket;                                                      \
 }
+#else
+#define getPixelPacketMethod(funcName, fieldName, handleName, handleType)     \
+JNIEXPORT jobject JNICALL funcName                                            \
+    (JNIEnv *env, jobject self)                                               \
+{                                                                             \
+    handleType *info = NULL;                                                  \
+    jobject jPixelPacket = NULL;                                              \
+    jclass pixelPacketClass;                                                  \
+    jmethodID consMethodID;                                                   \
+                                                                              \
+    info = (handleType *) getHandle(env, self, handleName, NULL);             \
+    if (info == NULL) {                                                       \
+	throwMagickException(env, "Unable to retrieve handle");               \
+	return NULL;                                                          \
+    }                                                                         \
+                                                                              \
+    pixelPacketClass = (*env)->FindClass(env, "magick/PixelPacket");          \
+    if (pixelPacketClass == 0) {                                              \
+	throwMagickException(env,                                             \
+			     "Unable to locate class magick.PixelPacket");    \
+	return NULL;                                                          \
+    }                                                                         \
+                                                                              \
+    consMethodID = (*env)->GetMethodID(env, pixelPacketClass,                 \
+				       "<init>", "(IIII)V");                  \
+    if (consMethodID == 0) {                                                  \
+	throwMagickException(env, "Unable to construct magick.PixelPacket");  \
+	return NULL;                                                          \
+    }                                                                         \
+                                                                              \
+    jPixelPacket = (*env)->NewObject(env, pixelPacketClass, consMethodID,     \
+		                     (jint) info->fieldName.red,              \
+		                     (jint) info->fieldName.green,            \
+		                     (jint) info->fieldName.blue,             \
+		                     (jint) info->fieldName.alpha);         \
+    if (jPixelPacket == NULL) {                                               \
+	throwMagickException(env, "Unable to construct magick.PixelPacket");  \
+	return NULL;                                                          \
+    }                                                                         \
+                                                                              \
+    return jPixelPacket;                                                      \
+}
+#endif
 
 
 

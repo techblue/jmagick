@@ -47,6 +47,8 @@ public class MagickWindow extends Frame {
 
     /**
      * Constructor.
+     *
+     * @param image the image to display in the window
      */
     public MagickWindow(MagickImage image)
     {

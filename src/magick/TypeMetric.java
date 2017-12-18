@@ -4,7 +4,7 @@ import java.awt.Point;
 
 /**
  * Encapsulation of the TypeMetric structure.
- * magick/draw.h
+ * MagickCore/draw.h
  */
 public class TypeMetric extends Magick {
 
