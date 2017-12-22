@@ -55,6 +55,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_initMultiImage
         DestroyExceptionInfo(exception);
         return;
     }
+    DestroyExceptionInfo(exception);
 
     /* Move the lastImage pointer to the last image of the list. */
     for (lastImage = newImage;
@@ -94,6 +95,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_initMultiImage
 #endif
             return;
         }
+        DestroyExceptionInfo(exception);
 
         /* Find the head of the list */
         for (p = image; p->previous != NULL; p = p->previous)
