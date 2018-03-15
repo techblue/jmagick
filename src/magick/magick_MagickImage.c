@@ -3182,7 +3182,7 @@ JNIEXPORT void JNICALL Java_magick_MagickImage_transformImage
         RectangleInfo geometry;
         MagickStatusType flags=ParseRegionGeometry(transformImage,imageStr,&geometry,exception);
         (void) flags;
-        if ((transformImage->columns != geometry.width) && (transformImage->rows == geometry.height))
+        if ((transformImage->columns != geometry.width) || (transformImage->rows != geometry.height))
         {
             resizeImage=ResizeImage(transformImage,geometry.width,geometry.height,transformImage->filter,exception);
             if (resizeImage != (Image *) NULL)
