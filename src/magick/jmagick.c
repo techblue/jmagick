@@ -696,13 +696,8 @@ int getPixelPacket(JNIEnv *env,
                          &green) &&
         getIntFieldValue(env, jPixel, "blue", NULL,
                          &blue) &&
-#if MagickLibVersion < 0x700
 	getIntFieldValue(env, jPixel, "opacity", NULL,
                          &transparency);
-#else
-	getIntFieldValue(env, jPixel, "alpha", NULL,
-                         &transparency);
-#endif
   if (!successful) {
       return successful;
   }
