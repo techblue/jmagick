@@ -266,9 +266,9 @@ AC_SUBST(C_DEBUG)
 AC_ARG_WITH(magick-version, --with-magick-version=ImageMagick version,
             MAGICK_VERSION=${withval})
 if (test -n "$MAGICK_VERSION"); then
-  VER_MAJOR=$(echo "$MAGICK_VERSION" | cut --delimiter=. -f 1)
-  VER_MINOR=$(echo "$MAGICK_VERSION" | cut --delimiter=. -f 2)
-  VER_MICRO=$(echo "$MAGICK_VERSION" | cut --delimiter=. -f 3)
+  VER_MAJOR=$(echo "$MAGICK_VERSION" | cut -d . -f 1)
+  VER_MINOR=$(echo "$MAGICK_VERSION" | cut -d . -f 2)
+  VER_MICRO=$(echo "$MAGICK_VERSION" | cut -d . -f 3)
 fi
 
 dnl Check if ImageMagick home specified
