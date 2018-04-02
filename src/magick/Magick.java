@@ -20,7 +20,7 @@ public class Magick {
             String clprop = System.getProperty("jmagick.systemclassloader");
             if (clprop == null || clprop.equalsIgnoreCase("yes")) {
                 try {
-                    ClassLoader.getSystemClassLoader()
+                    Magick.class.getClassLoader() // previously: ClassLoader.getSystemClassLoader() - see https://github.com/techblue/jmagick/issues/49
                         .loadClass("magick.MagickLoader").newInstance();
                 }
                 catch(ClassNotFoundException e) {
