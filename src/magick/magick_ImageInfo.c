@@ -72,7 +72,7 @@ JNIEXPORT void JNICALL Java_magick_ImageInfo_setImageOption
         return;                                                               
     }                        
              
-    SetImageOption(info, (char *)AcquireString(cstr1), (char *)AcquireString(cstr2));
+    SetImageOption(info, cstr1, cstr2);
     
     (*env)->ReleaseStringUTFChars(env, option, cstr1);
     (*env)->ReleaseStringUTFChars(env, value, cstr2);                          
