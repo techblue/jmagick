@@ -948,7 +948,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_colorizeImage
 #if MagickLibVersion < 0x700
     PixelPacket pixel;
 #else
-    PixelInfo *pixel;
+    PixelInfo pixel;
 #endif
     jobject newObj;
 
@@ -958,11 +958,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_colorizeImage
 	return NULL;
     }
 
-#if MagickLibVersion < 0x700
     if (!getPixelPacket(env, target, &pixel)) {
-#else
-    if (!getPixelPacket(env, target, pixel)) {
-#endif
 	throwMagickException(env, "Unable to get pixel values");
 	return NULL;
     }
@@ -974,7 +970,7 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_colorizeImage
     }
 
     exception=AcquireExceptionInfo();
-    newImage = ColorizeImage(image, cstrOpacity, pixel, exception);
+    newImage = ColorizeImage(image, cstrOpacity, &pixel, exception);
     (*env)->ReleaseStringUTFChars(env, opacity, cstrOpacity);
     if (newImage == NULL) {
 	throwMagickApiException(env, "Unable to colorize image", exception);
