@@ -479,7 +479,7 @@ public class ImageInfo extends Magick {
 					 Samples/Pixel: 3
 					 Rows/Strip: 26
 					 Planar Configuration: single image plane
-					 ICC Profile: <present>, 560 bytes
+					 ICC Profile: &gt;present&lt;, 560 bytes
 					 Software: ImageMagick 6.2.6 10/06/06 Q8 http://www.imagemagick.org
 	 * </pre>
 				 * <p>
