@@ -472,12 +472,15 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_addNoiseImage__I
     }
 
     switch (noiseType) {
-        default: noiseEnum = UniformNoise;                break;
-        case 1:  noiseEnum = GaussianNoise;               break;
-        case 2:  noiseEnum = MultiplicativeGaussianNoise; break;
-        case 3:  noiseEnum = ImpulseNoise;                break;
-        case 4:  noiseEnum = LaplacianNoise;              break;
-        case 5:  noiseEnum = PoissonNoise;                break;
+        case 0:  noiseEnum = UndefinedNoise;              break;
+        case 1:  noiseEnum = UniformNoise;                break;
+        case 2:  noiseEnum = GaussianNoise;               break;
+        case 3:  noiseEnum = MultiplicativeGaussianNoise; break;
+        case 4:  noiseEnum = ImpulseNoise;                break;
+        case 5:  noiseEnum = LaplacianNoise;              break;
+        case 6:  noiseEnum = PoissonNoise;                break;
+        case 7:  noiseEnum = RandomNoise;                 break;
+        default: noiseEnum = UndefinedNoise;              break;
     }
 
     exception=AcquireExceptionInfo();
@@ -533,12 +536,15 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_addNoiseImage__ID
     }
 
     switch (noiseType) {
-        default: noiseEnum = UniformNoise;                break;
-        case 1:  noiseEnum = GaussianNoise;               break;
-        case 2:  noiseEnum = MultiplicativeGaussianNoise; break;
-        case 3:  noiseEnum = ImpulseNoise;                break;
-        case 4:  noiseEnum = LaplacianNoise;              break;
-        case 5:  noiseEnum = PoissonNoise;                break;
+        case 0:  noiseEnum = UndefinedNoise;              break;
+        case 1:  noiseEnum = UniformNoise;                break;
+        case 2:  noiseEnum = GaussianNoise;               break;
+        case 3:  noiseEnum = MultiplicativeGaussianNoise; break;
+        case 4:  noiseEnum = ImpulseNoise;                break;
+        case 5:  noiseEnum = LaplacianNoise;              break;
+        case 6:  noiseEnum = PoissonNoise;                break;
+        case 7:  noiseEnum = RandomNoise;                 break;
+        default: noiseEnum = UndefinedNoise;              break;
     }
 
     exception = AcquireExceptionInfo();
