@@ -231,11 +231,22 @@ fi
 AC_SUBST(JAVAC)
 
 dnl Determine if we have the Java header file generator
-AC_PATH_PROG(JAVAH, javah, not_found)
-if test ${JAVAH} = not_found; then
-	AC_MSG_ERROR('No Java header generator (javah) found')
+dnl if Java major version >= 9, use `javac -h` instead of `javah -d`
+AC_SUBST([JAVA_MAJOR_VERSION],
+        [$( ${JAVAC} -version 2>&1 | awk '{print $2}' | awk -F. '{print $1}' )])
+
+if test $JAVA_MAJOR_VERSION -ge 9; then
+	JAVAH="${JAVAC}"
+	JAVAH_OPT="-h"
+else
+	AC_PATH_PROG(JAVAH, javah, not_found)
+	if test ${JAVAH} = not_found; then
+		AC_MSG_ERROR('No Java header generator (javah) found')
+	fi
+	JAVAH_OPT="-d"
 fi
 AC_SUBST(JAVAH)
+AC_SUBST(JAVAH_OPT)
 
 dnl Determine if we have jar
 AC_PATH_PROG(JAR, jar, not_found)
@@ -366,7 +377,7 @@ dnl Check if MagickWand-conf exists
 OLDPATH=${PATH}
 # MagickWand-config isn't installed in /usr/bin in Ubuntu 16.04+ due
 # to changes in libmagickcore-dev package.
-PATH=${MAGICK_REALHOME}/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q64HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q64/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q32HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q32/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q16HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q16/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q8HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q8/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}/bin:${PATH}
+PATH=${MAGICK_REALHOME}/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q64HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q64/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q32HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q32/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q16HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q16/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q8HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q8/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}/bin:/usr/lib/x86_64-linux-gnu/ImageMagick-6.9.11/bin-q16:${PATH}
 export PATH
 AC_PATH_PROG(MAGICKCONF, MagickWand-config, not_found)
 PATH=${OLDPATH}

@@ -142,11 +142,15 @@ CFLAGS += $(INCLUDES)
 # Rule to make header files from java class files.
 # The originating java source must contain native method specifications.
 $(PACKAGE_GENERATED_INPUT_DIR)/$(JNI_HEADER_PREFIX)_%.h: $(JAVA_PACKAGE_DIR)/%.class
-	@-rm $@ > /dev/null 2>&1
+	@-rm -f $@ > /dev/null 2>&1
 	@-mkdir -p $(dir $@)
-	"$(JAVAH)" -d $(PACKAGE_GENERATED_OUTPUT_DIR) -jni			\
-		-classpath $(JAVA_CLASS_PATH)				\
-		$(JAVA_PACKAGE).$(subst .class,,$(notdir $<))
+ifeq ($(notdir $(JAVAH)),javah)
+	"$(JAVAH)" $(JAVAH_OPT) $(PACKAGE_GENERATED_OUTPUT_DIR) \
+	     -classpath $(JAVA_CLASS_PATH) $(JAVA_PACKAGE).$(subst .class,,$(notdir $<))
+else
+	"$(JAVAH)" $(JAVAH_OPT) $(PACKAGE_GENERATED_OUTPUT_DIR) \
+	     -classpath $(JAVA_CLASS_PATH) $(subst .class,.java,$(notdir $<))
+endif
 
 # Rule to compile JNI C files
 $(PACKAGE_OBJ_DIR)/%.lo: %.c $(PACKAGE_GENERATED_INPUT_DIR)/%.h
