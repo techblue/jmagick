@@ -55,7 +55,7 @@ endif
 # Define where libtool is
 ifndef LIBTOOL
 top_builddir = $(PROJ_BASE_DIR)
-LIBTOOL = /bin/sh $(PROJ_BASE_DIR)libtool
+LIBTOOL = /bin/bash $(PROJ_BASE_DIR)libtool
 endif
 
 # We have to work out the which package we are in
