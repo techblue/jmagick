@@ -231,11 +231,22 @@ fi
 AC_SUBST(JAVAC)
 
 dnl Determine if we have the Java header file generator
-AC_PATH_PROG(JAVAH, javah, not_found)
-if test ${JAVAH} = not_found; then
-	AC_MSG_ERROR('No Java header generator (javah) found')
+dnl if Java major version >= 9, use `javac -h` instead of `javah -d`
+AC_SUBST([JAVA_MAJOR_VERSION],
+        [$( ${JAVAC} -version 2>&1 | awk '{print $2}' | awk -F. '{print $1}' )])
+
+if test $JAVA_MAJOR_VERSION -ge 9; then
+	JAVAH="${JAVAC}"
+	JAVAH_OPT="-h"
+else
+	AC_PATH_PROG(JAVAH, javah, not_found)
+	if test ${JAVAH} = not_found; then
+		AC_MSG_ERROR('No Java header generator (javah) found')
+	fi
+	JAVAH_OPT="-d"
 fi
 AC_SUBST(JAVAH)
+AC_SUBST(JAVAH_OPT)
 
 dnl Determine if we have jar
 AC_PATH_PROG(JAR, jar, not_found)

@@ -37,7 +37,12 @@ JAVA = @JAVA@
 JAVAC = @JAVAC@
 
 # The Java header file generator.
+# If Java major version >= 9, use `javac` else `javah`.
 JAVAH = @JAVAH@
+
+# javah command was superseded by "javac -h" in jdk9.
+# If Java major version >= 9, use `javac -h` else `javah -d`.
+JAVAH_OPT = @JAVAH_OPT@
 
 # The Java archive maintainer
 JAR = @JAR@
