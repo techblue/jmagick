@@ -1,16 +1,9 @@
 # Copyright (C) 1999 Eric Yeo. All rights reserved.
 
-CYGPATH := $(shell command -v cygpath 2> /dev/null)
-
 # Fix obscure libtool issue
 ifdef CYGPATH
 export echo=echo
 endif
-
-ifeq ($(strip $(OS)),Darwin)
-DARWIN = true
-endif
-
 
 # This is the main Java sources.
 ifndef JAVA_SRC_DIR

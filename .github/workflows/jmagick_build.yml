@@ -1,0 +1,42 @@
+name: jmagick Makefile CI (multiple jdk versions)
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # jammy
+
+    container:
+      image: dpokidov/imagemagick:7.1.1-10-ubuntu
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Package update
+        run: apt-get update -y && apt-get install -y sudo curl wget
+
+      - name: Install build tools
+        uses: awalsh128/cache-apt-pkgs-action@v1.3.0
+        with:
+          packages: autoconf automake libtool build-essential pkg-config openjdk-11-jdk
+          version: 1.0
+
+      - name: Prepare autotools
+        run: |
+          touch NEWS AUTHORS ChangeLog
+          autoreconf -ifv
+
+      - name: Configure
+        run: |
+          ./configure --with-java-home=/usr/lib/jvm/java-11-openjdk-amd64
+
+      - name: Make
+        run: make
+
+      #- name: Test
+      #  run: make test

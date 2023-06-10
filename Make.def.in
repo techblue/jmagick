@@ -2,8 +2,6 @@
 # Some macro definitions.
 #
 
-OS    = @OS@
-
 # Versions
 MAJOR = @VER_MAJOR@
 MINOR = @VER_MINOR@
@@ -71,5 +69,8 @@ MAGICK_LIB_PATH = @MAGICK_LIB_PATH@
 # Java include directories
 JAVA_INCLUDES = @JAVA_INCLUDES@
 
-#Shared library extension
+# Shared library extension
 SHARED_LIB_EXT = @SHARED_LIB_EXT@
+
+# osx or not
+DARWIN = @DARWIN@
