@@ -6,8 +6,9 @@ RUN apt-get install -y autoconf automake libtool build-essential pkg-config open
 COPY . .
 
 RUN touch NEWS AUTHORS ChangeLog
-RUN autoreconf -ifv
+RUN autoreconf --force --install
 RUN automake --add-missing
+
 RUN ./configure --with-java-home=/usr/lib/jvm/java-11-openjdk-amd64
 RUN make
 
