@@ -30,10 +30,7 @@ jobs:
         run: apt-get update -y && apt-get install -y sudo curl wget apt-utils
 
       - name: Install build tools
-        uses: awalsh128/cache-apt-pkgs-action@v1.3.0
-        with:
-          packages: autoconf automake libtool build-essential pkg-config openjdk-${{ matrix.jdk }}-jdk
-          version: 1.0
+        run: apt-get install -y autoconf automake libtool build-essential pkg-config openjdk-${{ matrix.jdk }}-jdk
 
       - name: Prepare autotools
         run: |
@@ -47,6 +44,3 @@ jobs:
 
       - name: Make
         run: make
-
-      #- name: Test
-      #  run: make test
