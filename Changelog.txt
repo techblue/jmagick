@@ -37,6 +37,12 @@ IM Before version 6.2.9 does not support the DivideCompositeOp CompositeOperator
 
 ========== Changelog ===========
 
+2023-11-23
+    * Added CI workflow support, configure.ac improved, see https://github.com/techblue/jmagick/commits/master for recent changes
+
+2023-06-09
+    * Added build support for Java 11, 17
+
 2014-08-02 Christian Ferbar
 	* Add Kerning, InterwordSpacing, InterlineSpacing, getTypeMetrics, FormatMagickCaption
 
