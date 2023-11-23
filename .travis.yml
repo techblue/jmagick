@@ -1,4 +1,0 @@
-language: c
-script:
-    - jdk_switcher use openjdk7
-

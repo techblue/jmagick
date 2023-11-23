@@ -11,6 +11,13 @@ obj
 /config.log
 /config.status
 /configure
+/configure~
 /ltmain.sh
 /config.guess
 /config.sub
+/missing
+/Makefile
+/Makefile.in
+/compile
+
+.idea/

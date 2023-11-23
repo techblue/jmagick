@@ -1,0 +1,46 @@
+name: jmagick Makefile CI (multiple jdk versions)
+
+on:
+  push:
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # jammy
+
+    name:  ${{ matrix.jdk }} on ${{ matrix.os }}
+    strategy:
+      fail-fast: true
+      matrix:
+        jdk: ['8', '11']
+        os: ['ubuntu', 'bullseye']
+        exclude:
+          - jdk: '8'
+            os: 'bullseye'
+
+    container:
+      image: dpokidov/imagemagick:7.1.1-10-${{ matrix.os }}
+      options: --user root
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Package update
+        run: apt-get update -y && apt-get install -y sudo curl wget apt-utils
+
+      - name: Install build tools
+        run: apt-get install -y autoconf automake libtool build-essential pkg-config openjdk-${{ matrix.jdk }}-jdk
+
+      - name: Prepare autotools
+        run: |
+          touch NEWS AUTHORS ChangeLog
+          autoreconf --force --install
+          automake --add-missing
+
+      - name: Configure
+        run: |
+          ./configure --with-java-home=/usr/lib/jvm/java-${{ matrix.jdk }}-openjdk-amd64
+
+      - name: Make
+        run: make

@@ -11,19 +11,17 @@
 MAKE_PATH = .
 include $(MAKE_PATH)/Make.def
 
-CYGPATH := $(shell command -v cygpath 2> /dev/null)
-
 DIRS = src
-ifdef CYGPATH
-JAR_FILE = "$(shell cygpath -C UTF8 -w "$(LIB_DIR)/jmagick-$(MAJOR).$(MINOR).$(MICRO).jar")"
-CLEAN_LIST = $(LIB_DIR)/jmagick-$(MAJOR).$(MINOR).$(MICRO).jar
-JAVADOC_DEST = "$(shell cygpath -C UTF8 -s -w "$(DEST)$(JAVADOC_DIR)")"
-JAVADOC_SRC = "$(shell cygpath -C UTF8 -s -w "$(JAVA_SRC_DIR)")"
+if USE_CYGPATH
+    JAR_FILE = "$(shell cygpath -C UTF8 -w "$(LIB_DIR)/jmagick-$(MAJOR).$(MINOR).$(MICRO).jar")"
+    CLEAN_LIST = $(LIB_DIR)/jmagick-$(MAJOR).$(MINOR).$(MICRO).jar
+    JAVADOC_DEST = "$(shell cygpath -C UTF8 -s -w "$(DEST)$(JAVADOC_DIR)")"
+    JAVADOC_SRC = "$(shell cygpath -C UTF8 -s -w "$(JAVA_SRC_DIR)")"
 else
-JAR_FILE = $(LIB_DIR)/jmagick-$(MAJOR).$(MINOR).$(MICRO).jar
-CLEAN_LIST = $(JAR_FILE)
-JAVADOC_DEST = $(DEST)$(JAVADOC_DIR)
-JAVADOC_SRC = $(JAVA_SRC_DIR)
+    JAR_FILE = $(LIB_DIR)/jmagick-$(MAJOR).$(MINOR).$(MICRO).jar
+    CLEAN_LIST = $(JAR_FILE)
+    JAVADOC_DEST = $(DEST)$(JAVADOC_DIR)
+    JAVADOC_SRC = $(JAVA_SRC_DIR)
 endif
 
 all: dir default-target

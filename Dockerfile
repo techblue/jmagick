@@ -1,14 +1,16 @@
-FROM ubuntu:14.04
+FROM dpokidov/imagemagick:7.1.1-10-ubuntu
 
-RUN apt-get update
-RUN apt-get install -y openjdk-7-jdk libmagickcore-dev libmagickwand-dev make
+RUN apt-get update -y
+RUN apt-get install -y autoconf automake libtool build-essential pkg-config openjdk-11-jdk
 
-ADD docker/build.sh /
-RUN chmod +x /build.sh
-WORKDIR /src
-VOLUME /src
-VOLUME /build
-CMD /build.sh
+COPY . .
 
+RUN touch NEWS AUTHORS ChangeLog
+RUN autoreconf --force --install
+RUN automake --add-missing
 
+RUN ./configure --with-java-home=/usr/lib/jvm/java-11-openjdk-amd64
+RUN make
 
+# override "dpokidov/imagemagick" default entrypoint
+ENTRYPOINT [""]

@@ -1,36 +1,32 @@
 dnl Copyright (C) 1999-2005 Eric Yeo. All rights reserved.
 dnl This is the autoconf input file for Java Magick.
+AC_PREREQ(2.6.1)
 
-AC_INIT(src/magick/MagickImage.java)
-AC_CANONICAL_SYSTEM
+dnl The version number must change with every release
+AC_INIT([jmagick], [7.0.4])
+AC_CANONICAL_BUILD
+AC_CANONICAL_HOST
+AC_CANONICAL_TARGET
 
-dnl Get the OS name
+AM_INIT_AUTOMAKE([-Wno-portability])
+VER_MAJOR=$(echo "$PACKAGE_VERSION" | cut -d . -f 1)
+VER_MINOR=$(echo "$PACKAGE_VERSION" | cut -d . -f 2)
+VER_MICRO=$(echo "$PACKAGE_VERSION" | cut -d . -f 3)
+VER_JMSUB="0"
 
-if test -x "/bin/uname" ; then
-  UNAME=/bin/uname
-elif test -x "/usr/bin/uname" ; then
-  UNAME=/usr/bin/uname
-elif test -x "/usr/local/bin/uname" ; then
-  UNAME=/usr/local/bin/uname
-else
-  echo configure: cannot find uname
-  exit 1
-fi
+AC_SUBST(VER_MAJOR, ${VER_MAJOR})
+AC_SUBST(VER_MINOR, ${VER_MINOR})
+AC_SUBST(VER_MICRO, ${VER_MICRO})
+AC_SUBST(VER_JMSUB, ${VER_JMSUB})
 
 LIB=lib
 if test -x "/usr/lib64" ; then
   LIB=lib64
 fi
 
-OS=`$UNAME -s`
-
-dnl The version number must change with every release
-VER_MAJOR=7
-VER_MINOR=0
-VER_MICRO=4
-VER_JMSUB=0
-
 SHARED_LIB_EXT=.so
+DARWIN=false
+AM_CONDITIONAL(USE_CYGPATH, false)
 
 dnl Need the -G flag on Solaris when creating shared libraries.
 case "$target" in
@@ -44,20 +40,25 @@ dnl Make sure we use -dynamiclib parameter for OS X Leopard
 *darwin9.*|*darwin10.*)
 	SHARED_LDFLAGS="-dynamiclib"
 	SHARED_LIB_EXT=.jnilib
+	DARWIN=true
 	;;
 *darwin1.[0-2])
+	DARWIN=true
 	;;
 *darwin*)
 	LIBTOOL_LINK_FLAG='-module'
+	DARWIN=true
 	;;
 *-*-cygwin|*-*-mingw32)
 	SHARED_LDFLAGS="-shared"
 	SHARED_LIB_EXT=.dll
 	JFLAGS="-Xlint:deprecation -Xlint:unchecked"
+	AM_CONDITIONAL(USE_CYGPATH, true)
 	JAVA_HOME=$(cygpath -C UTF8 "$(cygpath -C UTF8 -d "${JAVA_HOME}")")
 	MAGICK_HOME=$(cygpath -C UTF-8 "$(cygpath -C UTF-8 -d "$(dirname "$(which convert)")")")
 	;;
 esac
+AC_SUBST(DARWIN)
 
 dnl By default, we look at /usr/local. Need to explicitly do this because
 dnl some compilers don't.
@@ -87,28 +88,7 @@ AC_PROG_INSTALL
 dnl Check for large file support. This test was taken from ImageMagick.
 dnl If this step is removed, there will be a mismatch of structures in
 dnl the ImageMagick headers.
-AC_PATH_PROG(GETCONF, getconf, not_found)
-if (test $GETCONF != not_found); then
-    AC_MSG_CHECKING(whether large file support needs explicit enabling)
-    result='no'
-    NEW_CFLAGS=`$GETCONF LFS_CFLAGS 2> /dev/null`
-    if (test -n "$NEW_CFLAGS"); then
-        CFLAGS="$CFLAGS $NEW_CFLAGS"
-        result='yes'
-    fi
-    NEW_LDFLAGS=`$GETCONF LFS_LDFLAGS 2> /dev/null`
-    if (test -n "$NEW_LDFLAGS"); then
-        LDFLAGS="$LDFLAGS $NEW_LDFLAGS"
-        result='yes'
-    fi
-    NEW_LIBS=`$GETCONF LFS_LIBS 2> /dev/null`
-    if (test -n "$NEW_LIBS"); then
-        LIBS="$LIBS $NEW_LIBS"
-        result='yes'
-    fi
-    AC_MSG_RESULT($result)
-fi
-
+AC_SYS_LARGEFILE
 
 dnl Determine the X11 install paths. We don't really need this
 dnl if we are using shared libraries.
@@ -132,10 +112,15 @@ esac
 AC_SUBST(CLASSSEP)
 
 dnl Determine if we have a decent Java distribution
-AC_ARG_WITH(java-home, --with-java-home Java installation path,
-            JAVA_HOME=${withval})
-AC_ARG_WITH(java-includes, --with-java-includes Java includes path,
-            JAVA_INCLUDE_PATH="${withval}")
+AC_ARG_WITH([java-home],
+  AS_HELP_STRING([--with-java-home=PATH],
+    [Java installation path]),
+    [JAVA_HOME="${withval}"])
+AC_ARG_WITH([java-includes],
+  AS_HELP_STRING([--with-java-includes=PATH],
+    [Java includes path]),
+    [JAVA_INCLUDE_PATH="${withval}"])
+
 if test -n "${JAVA_INCLUDE_PATH}" -a -d "${JAVA_INCLUDE_PATH}" ; then
 	dnl Java include path supplied
 	JAVA_INCLUDES=-I${JAVA_INCLUDE_PATH}
@@ -176,8 +161,11 @@ else
 fi
 
 dnl Determine if there is a shared library extension supplied
-AC_ARG_WITH(shared_lib_ext, --with-shared-lib-ext Shared library file extension,
-            SHARED_LIB_EXT=${withval}, SHARED_LIB_EXT=${SHARED_LIB_EXT})
+AC_ARG_WITH([shared_lib_ext],
+  AS_HELP_STRING([--with-shared-lib-ext],
+    [Shared library file extension]),
+    [SHARED_LIB_EXT="${withval}"],
+    [SHARED_LIB_EXT="${SHARED_LIB_EXT}"])
 
 dnl Determine if jni.h is available
 OLD_CPPFLAGS=${CPPFLAGS}
@@ -199,9 +187,12 @@ fi
 AC_SUBST(JAVA)
 
 dnl Determine if we prefer to use Jikes.
-AC_ARG_WITH(jikes, --with-jikes	use the IBM Jikes compiler,
-            PREFER_JIKES=yes,
-            PREFER_JIKES=no)
+AC_ARG_WITH([jikes],
+  AS_HELP_STRING([--with-jikes],
+    [use the IBM Jikes compiler]),
+    [PREFER_JIKES="yes"],
+    [PREFER_JIKES="no"])
+
 if test ${PREFER_JIKES} = yes; then
 	dnl Determine if Jikes is available.
 	AC_PATH_PROG(JIKES, jikes, not_found)
@@ -264,18 +255,25 @@ export PATH
 
 dnl Check if javadoc destination specified
 JAVADOC_DIR='${prefix}/share/doc/jmagick'
-AC_ARG_WITH(javadoc-dir, --with-javadoc-dir=path where Javadoc is generated,
-            JAVADOC_DIR=${withval})
+AC_ARG_WITH([javadoc-dir],
+  AS_HELP_STRING([--with-javadoc-dir=PATH],
+    [where Javadoc is generated]),
+    [JAVADOC_DIR="${withval}"],
+    [JAVADOC_DIR="${withval}"])
 AC_SUBST(JAVADOC_DIR)
 
 dnl Do you print extra diagnostic?
-AC_ARG_ENABLE(diagnostic,
-              --enable-diagnostic enable C diagnostic output (default off),
-              C_DEBUG=-DDIAGNOSTIC,C_DEBUG=)
+AC_ARG_ENABLE([diagnostic],
+  AS_HELP_STRING([--enable-diagnostic],
+    [enable C diagnostic output (default off)]),
+    [C_DEBUG=-DDIAGNOSTIC],
+    [C_DEBUG=])
 AC_SUBST(C_DEBUG)
 
-AC_ARG_WITH(magick-version, --with-magick-version=ImageMagick version,
-            MAGICK_VERSION=${withval})
+AC_ARG_WITH([magick-version],
+  AS_HELP_STRING([--with-magick-version=VERSION],
+    [ImageMagick version]),
+    [MAGICK_VERSION="${withval}"])
 if (test -n "$MAGICK_VERSION"); then
   VER_MAJOR=$(echo "$MAGICK_VERSION" | cut -d . -f 1)
   VER_MINOR=$(echo "$MAGICK_VERSION" | cut -d . -f 2)
@@ -283,8 +281,11 @@ if (test -n "$MAGICK_VERSION"); then
 fi
 
 dnl Check if ImageMagick home specified
-AC_ARG_WITH(magick-home, --with-magick-home=path home directory of ImageMagick,
-            MAGICK_HOME=${withval})
+AC_ARG_WITH([magick-home],
+  AS_HELP_STRING([--with-magick-home=PATH],
+    [home directory of ImageMagick]),
+    [MAGICK_HOME="${withval}"])
+
 for MPATH in ${MAGICK_HOME} /usr /usr/local /usr/local/ImageMagick /usr/local/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO} ; do
 	# Location before IM 6.3.8.something
 	if  test -f "${MPATH}/include/magick/api.h" ; then
@@ -377,11 +378,22 @@ dnl Check if MagickWand-conf exists
 OLDPATH=${PATH}
 # MagickWand-config isn't installed in /usr/bin in Ubuntu 16.04+ due
 # to changes in libmagickcore-dev package.
-PATH=${MAGICK_REALHOME}/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q64HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q64/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q32HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q32/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q16HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q16/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q8HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q8/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}/bin:${PATH}
-export PATH
-AC_PATH_PROG(MAGICKCONF, MagickWand-config, not_found)
-PATH=${OLDPATH}
-export PATH
+AC_ARG_WITH([magickwand-config],
+  AS_HELP_STRING([--with-magickwand-config=PATH],
+    [path to magickwand-config tool]),
+  [magickwand_config="$withval"],
+  [magickwand_config=""])
+
+if test -n "$magickwand_config"; then
+    MAGICKCONF="$magickwand_config"
+else
+    PATH=${MAGICK_REALHOME}/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q64HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q64/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q32HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q32/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q16HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q16/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q8HDRI/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}-Q8/bin:/usr/${LIB}/${build_os}/ImageMagick-${VER_MAJOR}.${VER_MINOR}.${VER_MICRO}/bin:${PATH}
+    export PATH
+    AC_PATH_PROG(MAGICKCONF, MagickWand-config, not_found)
+    PATH=${OLDPATH}
+    export PATH
+fi
+
 dnl Added $MAGICK_LIB_PATH and $MAGICK_INCLUDES here because of
 dnl a possible bug in Magick-conf for ImageMagick 5.4.6
 if (test $MAGICKCONF != not_found); then
@@ -395,15 +407,18 @@ if (test $MAGICKCONF != not_found); then
 fi
 
 dnl Check if ImageMagick library path specified
-AC_ARG_WITH(magick-lib-dir,
-            --with-magick-lib-dir=path library path of ImageMagick,
-            MAGICK_LIB_PATH=${withval}
-            MAGICK_LIBS=-L${withval})
+AC_ARG_WITH([magick-lib-dir],
+  AS_HELP_STRING([--with-magick-lib-dir=PATH],
+    [library path of ImageMagick]),
+    [MAGICK_LIB_PATH="${withval}"],
+    [MAGICK_LIBS="-L${withval}"])
 
 dnl Check if ImageMagick include path specified
-AC_ARG_WITH(magick-inc-dir,
-            --with-magick-inc-dir=path include path of ImageMagick,
-            MAGICK_INCLUDES=-I${withval})
+AC_ARG_WITH([magick-inc-dir],
+  AS_HELP_STRING([--with-magick-inc-dir=PATH],
+    [path include path of ImageMagick]),
+    [MAGICK_INCLUDES="-I${withval}"])
+
 if ( test -f "${MAGICK_INCLUDE_PATH}/magick/api.h" ) ; then
 	MAGICK_INCLUDES=-I${MAGICK_INCLUDE_PATH}
 	MAGICK_VERSION=6
@@ -460,7 +475,7 @@ LDFLAGS=${OLD_LDFLAGS}
 
 dnl Configure libtool
 AC_DISABLE_STATIC
-AC_PROG_LIBTOOL
+LT_INIT
 
 AC_SUBST(JAVA_INCLUDES)
 AC_SUBST(X11_LIBS)
@@ -474,11 +489,7 @@ AC_SUBST(JFLAGS)
 AC_SUBST(LIBS)
 AC_SUBST(SHARED_LDFLAGS)
 AC_SUBST(LIBTOOL_LINK_FLAG)
-AC_SUBST(VER_MAJOR)
-AC_SUBST(VER_MINOR)
-AC_SUBST(VER_MICRO)
-AC_SUBST(VER_JMSUB)
 AC_SUBST(SHARED_LIB_EXT)
-AC_SUBST(OS)
 
-AC_OUTPUT([Make.def])
+AC_CONFIG_FILES([Makefile Make.def])
+AC_OUTPUT
