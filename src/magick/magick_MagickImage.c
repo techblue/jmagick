@@ -976,7 +976,11 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_colorizeImage
     }
 
     exception=AcquireExceptionInfo();
+#if MagickLibVersion < 0x700
+    newImage = ColorizeImage(image, cstrOpacity, pixel, exception);
+#else
     newImage = ColorizeImage(image, cstrOpacity, &pixel, exception);
+#endif
     (*env)->ReleaseStringUTFChars(env, opacity, cstrOpacity);
     if (newImage == NULL) {
 	throwMagickApiException(env, "Unable to colorize image", exception);
@@ -3114,12 +3118,15 @@ JNIEXPORT jboolean JNICALL Java_magick_MagickImage_thresholdImage
 
 #if MagickLibVersion <= 0x557
     return ThresholdImage(image, threshold);
+#elif MagickLibVersion <= 0x700
+    return BilevelImage(image, threshold);
 #else
     ExceptionInfo *exception = AcquireExceptionInfo();
     jboolean result = BilevelImage(image, threshold, exception);
     DestroyExceptionInfo(exception);
     return result;
 #endif
+
 }
 
 
@@ -6109,7 +6116,11 @@ JNIEXPORT jobject JNICALL Java_magick_MagickImage_optimizeLayer
     clone_info = CloneImageInfo(image_info);
     quantize_info = AcquireQuantizeInfo(clone_info);
 
+#if MagickLibVersion < 0x700
+    RemapImages(quantize_info, layers, NULL);
+#else
     RemapImages(quantize_info, layers, NULL, exception);
+#endif
 
     DestroyExceptionInfo(exception);
 
