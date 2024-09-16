@@ -111,7 +111,7 @@ NOTES
 
 HINT FOR BUILD IN DEBIAN/UBUNTU
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-For building under Debian 16, targeting ImageMagick 6 (provided patch #73 is applied):
+For building under Debian 16, targeting ImageMagick 6:
 
     sudo apt install build-essential libmagickcore-dev libmagickwand-dev imagemagick default-jdk
     touch AUTHORS NEWS ChangeLog   # not sure why automake does not generate these
